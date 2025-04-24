@@ -18,7 +18,7 @@ function App() {
 				/>
 				<Route path="/multiple" element={<Multiple />} />
 				<Route path="/single" element={<Single />} />
-				<Route path="/service/:serviceName" element={<BookingForm />} />
+				<Route path="/booking/:serviceName" element={<BookingForm />} />
 			</Routes>
 		</Router>
 	);
