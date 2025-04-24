@@ -4,26 +4,63 @@ const BookingForm = () => {
 	const { serviceName } = useParams<{ serviceName: string }>();
 
 	return (
-		<div style={{ textAlign: 'center', padding: '20px' }}>
-			<h1>Book a Time for {serviceName}</h1>
-			<form style={{ display: 'inline-block', textAlign: 'left', marginTop: '20px' }}>
-				<div style={{ marginBottom: '10px' }}>
-					<label htmlFor="name">Name:</label>
-					<input type="text" id="name" name="name" style={{ marginLeft: '10px' }} required />
+		<div className="text-center p-5">
+			<h1 className="text-2xl font-bold">Book a Time for {serviceName}</h1>
+			<form className="inline-block text-left mt-5">
+				<div className="mb-4">
+					<label htmlFor="name" className="block font-medium">
+						Name:
+					</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						className="border border-gray-300 rounded p-2 w-full"
+						required
+					/>
 				</div>
-				<div style={{ marginBottom: '10px' }}>
-					<label htmlFor="email">Email:</label>
-					<input type="email" id="email" name="email" style={{ marginLeft: '10px' }} required />
+				<div className="mb-4">
+					<label htmlFor="email" className="block font-medium">
+						Email:
+					</label>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						className="border border-gray-300 rounded p-2 w-full"
+						required
+					/>
 				</div>
-				<div style={{ marginBottom: '10px' }}>
-					<label htmlFor="date">Date:</label>
-					<input type="date" id="date" name="date" style={{ marginLeft: '10px' }} required />
+				<div className="mb-4">
+					<label htmlFor="date" className="block font-medium">
+						Date:
+					</label>
+					<input
+						type="date"
+						id="date"
+						name="date"
+						className="border border-gray-300 rounded p-2 w-full"
+						required
+					/>
 				</div>
-				<div style={{ marginBottom: '10px' }}>
-					<label htmlFor="time">Time:</label>
-					<input type="time" id="time" name="time" style={{ marginLeft: '10px' }} required />
+				<div className="mb-4">
+					<label htmlFor="time" className="block font-medium">
+						Time:
+					</label>
+					<input
+						type="time"
+						id="time"
+						name="time"
+						className="border border-gray-300 rounded p-2 w-full"
+						required
+					/>
 				</div>
-				<button type="submit" style={{ display: 'block', margin: '20px auto' }}>Book Now</button>
+				<button
+					type="submit"
+					className="block mx-auto mt-5 px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+				>
+					Book Now
+				</button>
 			</form>
 		</div>
 	);
