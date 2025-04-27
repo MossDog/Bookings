@@ -1,0 +1,201 @@
+/* === Header and General Layout === */
+.HeaderBlock {
+    padding: 3rem 1rem 2rem 1rem;
+    text-align: center;
+  }
+  
+  .ServicesWidget {
+    padding: 4rem 1rem;
+  }
+  
+  .WeeklyTimeSlotSection {
+    padding: 4rem 1rem;
+    max-width: 1000px;
+    margin: 4rem auto;
+  }
+  
+  /* === Titles === */
+  .title {
+    font-weight: 600;
+    text-align: center;
+    color: #1f2937;
+    margin: 2rem 0;
+  }
+  
+  .title-sm {
+    font-size: 1.5rem;
+  }
+  
+  .title-md {
+    font-size: 2.5rem;
+  }
+  
+  .title-lg {
+    font-size: 3.5rem;
+  }
+  
+  @media (max-width: 600px) {
+    .title-sm {
+      font-size: 1.2rem;
+    }
+    .title-md {
+      font-size: 2rem;
+    }
+    .title-lg {
+      font-size: 2.8rem;
+    }
+  }
+  
+  /* === Banner === */
+  .banner {
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    background-color: rgb(5, 128, 200);
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  /* === Details Row === */
+  .details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1rem;
+    color: #4b5563;
+    font-weight: 500;
+  }
+  
+  /* === Services Menu === */
+  .service-menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .menu-item {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+    padding: 0.7rem 1.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .menu-item:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .menu-item.active {
+    background-color: #111827;
+    color: #ffffff;
+  }
+  
+  /* === Services Grid === */
+  .services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 2rem;
+  }
+  
+  /* === Service Card === */
+  .service-tile {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .service-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .service-name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #111827;
+  }
+  
+  .service-price {
+    color: rgb(5, 128, 200);
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  
+  /* === View All Link === */
+  .view-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .view-all a {
+    color: rgb(5, 128, 200);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .view-all a:hover {
+    text-decoration: underline;
+  }
+  
+  /* === TimeSlot Carousel (extra polish) === */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  /* Chevrons Buttons */
+  .left-button, .right-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #2563eb; /* Tailwind blue-600 */
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  
+  .left-button {
+    left: 0;
+  }
+  
+  .right-button {
+    right: 0;
+  }
