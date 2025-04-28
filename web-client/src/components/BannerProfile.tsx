@@ -1,5 +1,3 @@
-import React from 'react';
-
 const BannerProfile = ({ bannerImage, profileImage, name = "Your Boy", bio = "A passionate professional and a proud member of the goon squad." }: { bannerImage: string; profileImage: string; name?: string; bio?: string }) => {
 	return (
 

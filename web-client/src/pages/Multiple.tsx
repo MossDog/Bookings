@@ -1,11 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import BannerProfile from '../components/BannerProfile';
+import BookingForm from './BookingForm';
 
 const bannerImage = "src/images/placeholder_banner.webp";
 const profileImage = "src/images/placeholder_profile.jpg";
 
 const Multiple = () => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [selectedService, setSelectedService] = useState<string | null>(null);
+
+	const openModal = (serviceName: string) => {
+		setSelectedService(serviceName);
+		setIsModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setSelectedService(null);
+		setIsModalOpen(false);
+	};
+
 	return (
 		<div className="text-center p-5">
 			<BannerProfile bannerImage={bannerImage} profileImage={profileImage} />
@@ -39,15 +52,36 @@ const Multiple = () => {
 						</div>
 						<div className="text-right">
 							<p className="text-lg font-bold text-gray-800">{service.price}</p>
-							<button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-								<Link to={`/booking/${service.name}`} className="text-white no-underline">
+								<button
+									onClick={() => openModal(service.name)}
+									className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+								>
 									Book Now
-								</Link>
-							</button>
+								</button>
 						</div>
 					</li>
 				))}
 			</ul>
+
+			{isModalOpen && selectedService && (
+				<div
+					className="fixed inset-0 flex justify-center items-center modal-background"
+					onClick={closeModal}
+				>
+					<div
+						className="bg-white p-5 rounded shadow-lg w-96"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<button
+							onClick={closeModal}
+							className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+						>
+							&times;
+						</button>
+						<BookingForm serviceName={selectedService} />
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

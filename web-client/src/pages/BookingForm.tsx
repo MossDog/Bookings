@@ -1,8 +1,4 @@
-import { useParams } from 'react-router-dom';
-
-const BookingForm = () => {
-	const { serviceName } = useParams<{ serviceName: string }>();
-
+const BookingForm = ({ serviceName }: { serviceName: string }) => {
 	return (
 		<div className="text-center p-5">
 			<h1 className="text-2xl font-bold">Book a Time for {serviceName}</h1>
