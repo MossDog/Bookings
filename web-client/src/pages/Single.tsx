@@ -13,7 +13,7 @@ const Single = () => {
 				This is the single page. Here you can create a booking for a single service.
 			</p>
 			<Link
-				to="/service/single"
+				to="/booking/single"
 				className="inline-block mt-5 px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
 			>
 				Create Booking
