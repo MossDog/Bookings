@@ -14,7 +14,7 @@ const ProtectedRoute = ({
 
   useEffect(() => {
     supabase.auth.getSession().then(( {data: {session}} ) => {
-      if(!session) navigate('/sign-up');
+      if(!session) navigate('/login');
       else setLoading(false);
     })
   }, []);

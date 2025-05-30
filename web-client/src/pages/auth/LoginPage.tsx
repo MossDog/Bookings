@@ -1,7 +1,12 @@
 import React from 'react'
+import LoginForm from '../../components/auth/LoginForm'
+import AuthLayout from './AuthLayout'
 
 export default function LoginPage() {
   return (
-    <div>LoginPage</div>
+    <AuthLayout>
+      <p>Login</p>
+      <LoginForm />
+    </AuthLayout>
   )
 }
