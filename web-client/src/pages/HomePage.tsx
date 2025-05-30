@@ -1,7 +1,10 @@
 import React from 'react'
+import ProtectedRoute from '../components/ProtectedRoute'
 
 export default function HomePage() {
   return (
-    <div>HomePage</div>
+    <ProtectedRoute>
+      <div>HomePage</div>
+    </ProtectedRoute>
   )
 }
