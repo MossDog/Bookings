@@ -18,9 +18,15 @@ const AccountCreationPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-6">
-      {      <h1 className="text-2xl font-bold">Account Creation</h1>}
-      <HorizontalSteps currentStep={currentStep} /> Include your details below
+    <div className="flex flex-col items-center p-6 space-y-6 bg-white min-h-screen">
+
+      <HorizontalSteps currentStep={currentStep} />
+      <div className="w-full max-w-lg">
+        {currentStep && (
+          <div className="text-center">
+<p className="text-gray-800 text-lg">Step {currentStep} content goes here.</p>          </div>
+        )}
+      </div>
       <div className="flex space-x-4">
         <button
           onClick={handleBack}
