@@ -11,7 +11,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button 
-      className='bg-slate-700 text-white rounded-md px-4 py-2 cursor-pointer hover:bg-slate-500'
+      className='btn'
       onClick={onClick}  
     >
       {children}
