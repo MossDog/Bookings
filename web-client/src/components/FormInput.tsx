@@ -14,6 +14,6 @@ export default function FormInput({
   onChange
 }: FormInputProps) {
   return (
-    <input type={type} placeholder={placeholder} className='border rounded-md border-gray-300 px-2 py-2' value={value} onChange={onChange}/>
+    <input type={type} placeholder={placeholder} className='input' value={value} onChange={onChange}/>
   )
 }

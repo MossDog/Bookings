@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface HorizontalStepsProps {
-  currentStep: number;
+  steps: string[];
+  children: React.ReactNode;
 }
 
-const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ currentStep }) => {
-  const steps = ["Register", "Choose Plan", "Purchase", "Receive Product"];
+const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4; // Total number of milestones
+  
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+  
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   return (
+    <div className="flex flex-col items-center p-6 space-y-6 bg-white w-screen min-h-screen">
     <div className="relative w-full max-w-4xl mx-auto px-6 py-8">
       {/* Steps */}
       <ul className="flex justify-between items-center">
@@ -51,6 +66,34 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ currentStep }) => {
           );
         })}
       </ul>
+    </div>
+    <div className="w-full max-w-lg">
+        {React.Children.toArray(children)[currentStep - 1]}
+      </div>
+      <div className="flex space-x-4">
+        <button
+          onClick={handleBack}
+          disabled={currentStep === 1}
+          className={`px-4 py-2 rounded ${
+            currentStep === 1
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+        >
+          Back
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={currentStep === totalSteps}
+          className={`px-4 py-2 rounded ${
+            currentStep === totalSteps
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
