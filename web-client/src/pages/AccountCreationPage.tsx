@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import HorizontalSteps from "../components/HorizontalSteps"; // Adjust the path based on your file structure
+import HorizontalSteps from "../components/HorizontalSteps";
 
 const AccountCreationPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4; // Total number of milestones
+  const totalSteps = 4; 
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -24,7 +24,8 @@ const AccountCreationPage: React.FC = () => {
       <div className="w-full max-w-lg">
         {currentStep && (
           <div className="text-center">
-<p className="text-gray-800 text-lg">Step {currentStep} content goes here.</p>          </div>
+          <p className="text-gray-800 text-lg">Step {currentStep} content goes here.</p>          
+          </div>
         )}
       </div>
       <div className="flex space-x-4">
