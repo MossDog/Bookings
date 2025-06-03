@@ -2,23 +2,27 @@ import React, { useState } from 'react'
 import FormInput from '../FormInput'
 import Button from '../Button'
 import supabase from '../../utils/supabase';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpForm() {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const navigate = useNavigate();
+
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const {data, error} = await supabase.auth.signUp({
       email, password
-    });
+    }); 
 
     if(error){
       console.error("Error signing up: ", error);
     } else {
       console.log("Successful sign-up: ", data);
+      navigate('/confirm');
     }
   }
 
