@@ -22,7 +22,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children }) =>
   };
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-6 bg-white w-screen min-h-screen">
+    <div className="flex flex-col justify-between items-center p-6 space-y-6 bg-white w-screen min-h-screen">
     <div className="relative w-full max-w-4xl mx-auto px-6 py-8">
       {/* Steps */}
       <ul className="flex justify-between items-center">
@@ -67,7 +67,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children }) =>
         })}
       </ul>
     </div>
-    <div className="w-full max-w-lg">
+    <div className="w-full flex items-center justify-center">
         {React.Children.toArray(children)[currentStep - 1]}
       </div>
       <div className="flex space-x-4">
