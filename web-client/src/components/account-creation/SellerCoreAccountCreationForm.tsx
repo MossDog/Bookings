@@ -51,65 +51,48 @@ export default function SellerCoreAccountCreationForm() {
   };
 
   return (
-        <div className="card w-full max-w-md bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title text-2xl font-bold text-center">Create Seller Account</h2>
-            <p className="text-center text-base-content/60 mb-4">
-              Fill in your business details to get started
-            </p>
-
-            <div className="form-control w-full">
-              <input
-                type="text"
-                placeholder="Enter business name"
-                className="input input-bordered w-full"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <textarea
-                className="textarea textarea-bordered h-24"
-                placeholder="Describe your business"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <input
-                type="text"
-                placeholder="Enter business address"
-                className="input input-bordered w-full"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <select 
-                className="select select-bordered w-full"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="">Select a category</option>
-                <option value="restaurant">Restaurant</option>
-                <option value="retail">Retail</option>
-                <option value="service">Service</option>
-                <option value="health">Health & Beauty</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <button 
-              className={`btn btn-primary w-full ${isLoading ? 'loading' : ''}`}
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Creating...' : 'Create Seller Account'}
-            </button>
-          </div>
-        </div>
+    <div className="flex flex-col gap-3 min-w-[480px]">
+      <h1 className='text-2xl font-bold'>Basic Info</h1>
+      <div className="form-control w-full">
+        <input
+          type="text"
+          placeholder="Enter business name"
+          className="input input-bordered w-full"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div className="form-control w-full">
+        <textarea
+          className="textarea textarea-bordered w-full h-24"
+          placeholder="Describe your business"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      <div className="form-control w-full">
+        <input
+          type="text"
+          placeholder="Enter business address"
+          className="input input-bordered w-full"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </div>
+      <div className="form-control w-full">
+        <select 
+          className="select select-bordered w-full"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Select a category</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="retail">Retail</option>
+          <option value="service">Service</option>
+          <option value="health">Health & Beauty</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
   )
 }
