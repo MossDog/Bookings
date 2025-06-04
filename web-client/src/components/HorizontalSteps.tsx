@@ -3,18 +3,22 @@ import React, { useState } from "react";
 interface HorizontalStepsProps {
   steps: string[];
   children: React.ReactNode;
+  validateStep?: (stepIdx: number) => boolean;
 }
 
-const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children }) => {
+const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, validateStep }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4; // Total number of milestones
-  
+  const totalSteps = steps.length;
+
   const handleNext = () => {
+    if (validateStep && !validateStep(currentStep - 1)) {
+      return;
+    }
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
   };
-  
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
