@@ -1,7 +1,7 @@
 import { Edit, Plus } from 'lucide-react'
 import { cn } from '../../../utils/cn';
 
-interface GallerySlotProps {
+interface GridImageSlot {
   x?: number;
   y?: number;
   width?: number;
@@ -9,13 +9,13 @@ interface GallerySlotProps {
   path?: string;
 }
 
-export default function GallerySlot({
+export default function GridImageSlot({
   x = 1,
   y = 1,
   width = 1,
   height = 1,
-  path
-}: GallerySlotProps) {
+  path,
+}: GridImageSlot) {
   
   if(path) {
     return (
