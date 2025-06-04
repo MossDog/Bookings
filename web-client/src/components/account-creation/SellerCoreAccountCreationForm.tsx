@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 //import supabase from '../../utils/supabase'; //Will be refactored alongside handleSubmit()
 import ImageSlot from '../widgets/Gallery/ImageSlot';
+import { z } from 'zod';
 
 //NOT CURRENTLY IN USE
 /* 
@@ -29,6 +30,14 @@ interface SellerCoreAccountCreationFormProps {
   }>>;
 }
 
+// Zod schema for validation
+const SellerFormSchema = z.object({
+  name: z.string().min(1, 'Business name is required'),
+  description: z.string().min(1, 'Description is required'),
+  address: z.string().min(1, 'Address is required'),
+  category: z.string().min(1, 'Category is required'),
+});
+
 const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreationFormRef, SellerCoreAccountCreationFormProps>(
   (props, ref) => {
     const { formData, setFormData } = props;
@@ -37,8 +46,9 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
 
     React.useImperativeHandle(ref, () => ({
       validateForm: () => {
-        if (!formData.name.trim() || !formData.description.trim() || !formData.address.trim() || !formData.category.trim()) {
-          setError('Please fill in all fields');
+        const result = SellerFormSchema.safeParse(formData);
+        if (!result.success) {
+          setError(result.error.errors[0]?.message || 'Please fill in all fields');
           return false;
         }
         setError(null);
