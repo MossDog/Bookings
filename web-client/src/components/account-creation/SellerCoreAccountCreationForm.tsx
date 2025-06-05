@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
+import ImageSlot from '../image/ImageSlot';
 //import supabase from '../../utils/supabase'; //Will be refactored alongside handleSubmit()
-import ImageSlot from '../widgets/Gallery/ImageSlot';
 
 //NOT CURRENTLY IN USE
 /* 
