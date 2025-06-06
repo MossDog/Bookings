@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { z } from 'zod';
 import ImageSlot from '../../image/ImageSlot';
-import supabase from '../../../utils/supabase';
 import { User } from '@supabase/supabase-js';
 import { getUser } from '../../../utils/authUtils';
 
