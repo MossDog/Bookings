@@ -4,15 +4,15 @@ import { Edit, Plus } from 'lucide-react';
 import { fileExistsInBucket, getPublicUrl } from '../../utils/bucketUtils';
 
 interface ImageSlotProps {
-  gridOptions?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+  gridOptions?: {             // Assumes the container element uses a grid layout.
+    x: number;                // Starting column for the image (1 = first col)
+    y: number;                // Starting row for the image (1 = first row)
+    width: number;            // How many columns to span
+    height: number;           // How many rows to span
   };
-  circle?: boolean;
-  bucketName: string;
-  filePath: string;
+  circle?: boolean;           // Makes the image a circle
+  bucketName: string;         // Name of the supabase bucket
+  filePath: string;           // Path within the bucket for uploading and downloading (e.g, userid/profilepicture)
 }
 
 export default function ImageSlot({
@@ -25,6 +25,8 @@ export default function ImageSlot({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    // This function checks if the image exists in the bucket. 
+    // If so, the imageUrl is set and the image will be displayed.
     const fetchImage = async () => {
       setIsLoading(true);
       
@@ -47,6 +49,7 @@ export default function ImageSlot({
 
   const rounding = circle ? 'rounded-full' : 'rounded-md';
 
+  // Sets the grid position of the image if the gridOptions prop is present
   const gridStyles = gridOptions ? {
     gridColumn: `${gridOptions.x} / span ${gridOptions.width}`,
     gridRow: `${gridOptions.y} / span ${gridOptions.height}`,
@@ -79,6 +82,9 @@ interface ImagePartProps {
   imageUrl: string;
   rounding: string;
 }
+
+// Subcomponent to display the image when it is present in the bucket.
+// TODO: Implement edit functionality.
 
 function ImagePart ({
   imageUrl,
