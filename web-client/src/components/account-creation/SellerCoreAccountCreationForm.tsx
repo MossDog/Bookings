@@ -1,14 +1,6 @@
 import React, { useState } from 'react'
-//import supabase from '../../utils/supabase'; //Will be refactored alongside handleSubmit()
-import ImageSlot from '../image/ImageSlot';
 import { z } from 'zod';
 
-//NOT CURRENTLY IN USE
-/* 
-import GridImageSlot from '../widgets/Gallery/GridImageSlot';
-import ProtectedRoute from '../ProtectedRoute'
-import FormInput from '../FormInput'
- */
 
 export type SellerCoreAccountCreationFormRef = {
   validateForm: () => boolean;
@@ -42,7 +34,6 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
   (props, ref) => {
     const { formData, setFormData } = props;
     const [error, setError] = useState<string | null>(null);
-    //const [isLoading, setIsLoading] = useState(false); //CURRENTLY UNUSED
 
     React.useImperativeHandle(ref, () => ({
       validateForm: () => {
@@ -55,51 +46,6 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
         return true;
       }
     }));
-
-/* THIS NEEDS TO BE REFACTORED.
-WE SHOULDN'T INSERT TO SUPABASE AT EACH STEP OF THE FORM,
-RATHER ONLY WHEN THE ENTIRE STEPS PROCESS HAS BEEN VALIDATED AND COMPLETED. */
-/*     const handleSubmit = async () => {
-      try {
-        setError(null);
-        setIsLoading(true);
-        console.log("HANDLING SUBMISSION")
-
-        if (!formData.name || !formData.description || !formData.address || !formData.category) {
-          throw new Error('Please fill in all fields');
-        }else{
-          console.log("Form Data - ", formData.name, formData.description, formData.address, formData.category)
-        }
-
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError || !sessionData.session) {
-          throw new Error('Authentication error. Please try again.');
-        }
-
-        const { error: insertError } = await supabase
-          .from('Seller')
-          .insert({
-            user_id: sessionData.session.user.id,
-            description: formData.description,
-            name: formData.name,
-            address: formData.address,
-            category: formData.category
-          });
-
-        if (insertError) {
-          throw new Error('Failed to create seller account');
-        }
-
-        // Handle success
-        console.log('Seller account created successfully');
-        
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-        console.error('Error:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }; */
 
     return (
       <div className="flex flex-col gap-3 min-w-[480px]">
@@ -156,7 +102,7 @@ RATHER ONLY WHEN THE ENTIRE STEPS PROCESS HAS BEEN VALIDATED AND COMPLETED. */
           </div>
           
           <div className='flex w-[240px]'>
-            <ImageSlot path='' circle/>
+            {/* <ImageSlot path='' circle/> */}
           </div>
         </div>
       </div>
