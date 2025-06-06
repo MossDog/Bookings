@@ -54,7 +54,7 @@ export default function EditSellerProfile() {
     const { error } = await supabase
       .from('Seller')
       .update(updateData)
-      .eq('user_id', seller.id);
+      .eq('user_id', seller.user_id);
 
     if (error) {
       setError('Update failed.');
@@ -74,7 +74,7 @@ export default function EditSellerProfile() {
     const { error } = await supabase
       .from('Seller')
       .update(updateData)
-      .eq('user_id', seller.id);
+      .eq('user_id', seller.user_id);
 
     if (error) {
       setError('Failed to clear field.');
