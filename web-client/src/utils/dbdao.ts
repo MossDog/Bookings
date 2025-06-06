@@ -4,8 +4,8 @@ import { Service } from '../types/services';
 export const fetchServices = async (): Promise<{ data: Service[]; error: string | null }> => {
   try {
     const { data, error } = await supabase
-      .from("Service")
-      .select("id, name, description, price") as { data: Service[]; error: Error | null };
+      .from<Service>("Service")
+      .select("id, name, description, price");
 
     if (error) {
       throw new Error("Failed to fetch services. Please try again later.");
