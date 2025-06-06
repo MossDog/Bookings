@@ -1,7 +1,10 @@
+// TODO: Implement edit functionality.
+// TODO: Disable upload if necessary
+
 import { useEffect, useState } from 'react';
 import { cn } from '../../utils/cn';
 import { Edit, Plus } from 'lucide-react';
-import { fileExistsInBucket, getPublicUrl } from '../../utils/bucketUtils';
+import { fileExistsInBucket, getPublicUrl, upload } from '../../utils/bucketUtils';
 
 interface ImageSlotProps {
   gridOptions?: {             // Assumes the container element uses a grid layout.
@@ -11,7 +14,7 @@ interface ImageSlotProps {
     height: number;           // How many rows to span
   };
   circle?: boolean;           // Makes the image a circle
-  bucketName: string;         // Name of the supabase bucket
+  bucketName: string;
   filePath: string;           // Path within the bucket for uploading and downloading (e.g, userid/profilepicture)
 }
 
@@ -24,25 +27,34 @@ export default function ImageSlot({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    // This function checks if the image exists in the bucket. 
-    // If so, the imageUrl is set and the image will be displayed.
-    const fetchImage = async () => {
-      setIsLoading(true);
-      
-      try {
-        const imageExists = await fileExistsInBucket(bucketName, filePath);
-
-        if(imageExists){
-          const url = await getPublicUrl(bucketName, filePath);
-          setImageUrl(url);
-        } else {
-          setImageUrl(null);
-        }
-      } finally {
-        setIsLoading(false);
+  // This function checks if the image exists in the bucket. 
+  // If so, the imageUrl is set and the image will be displayed.
+  const fetchImage = async () => {
+    setIsLoading(true);
+    
+    try {
+      const imageExists = await fileExistsInBucket(bucketName, filePath);
+      if(imageExists){
+        const url = await getPublicUrl(bucketName, filePath);
+        setImageUrl(url);
+      } else {
+        setImageUrl(null);
       }
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if(file){
+      await upload(bucketName, filePath, file);
+      await fetchImage();
+    }
+  }
+
+  useEffect(() => {
     fetchImage();
   }, [bucketName, filePath]);
 
@@ -71,7 +83,7 @@ export default function ImageSlot({
         imageUrl != null ? (
           <ImagePart imageUrl={imageUrl} rounding={rounding} />
         ) : (
-          <Plus size={35} className='text-gray-400'/>
+          <UploadPart onChange={handleFileUpload}/> 
         )
       )}
     </div>
@@ -84,7 +96,6 @@ interface ImagePartProps {
 }
 
 // Subcomponent to display the image when it is present in the bucket.
-// TODO: Implement edit functionality.
 
 function ImagePart ({
   imageUrl,
@@ -107,6 +118,23 @@ function ImagePart ({
       >
         <Edit size={24} className='text-white drop-shadow-md' />
       </button>
+    </>
+  )
+}
+
+interface UploadPartProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => any;
+}
+
+function UploadPart ({
+  onChange
+}: UploadPartProps) {
+  return (
+    <>
+      <input type='file' id='fileInput' hidden onChange={onChange}/>
+      <label htmlFor='fileInput'>
+        <Plus size={35} className='text-gray-400'/>
+      </label>
     </>
   )
 }

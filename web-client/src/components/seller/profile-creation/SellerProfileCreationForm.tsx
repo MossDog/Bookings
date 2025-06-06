@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod';
+import ImageSlot from '../../image/ImageSlot';
+import supabase from '../../../utils/supabase';
+import { User } from '@supabase/supabase-js';
+import { getUser } from '../../../utils/authUtils';
 
 
 export type SellerProfileCreationFormRef = {
@@ -30,10 +34,18 @@ const SellerFormSchema = z.object({
   category: z.string().min(1, 'Category is required'),
 });
 
-const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef, SellerProfileCreationFormProps>(
-  (props, ref) => {
+const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef, SellerProfileCreationFormProps>((props, ref) => {
     const { formData, setFormData } = props;
     const [error, setError] = useState<string | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    
+    useEffect(() => {
+      const fetchUser = async () => {
+        setUser(await getUser());
+      };
+
+      fetchUser();
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
       validateForm: () => {
@@ -102,7 +114,7 @@ const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef,
           </div>
           
           <div className='flex w-[240px]'>
-            {/* <ImageSlot path='' circle/> */}
+            <ImageSlot bucketName='public.images' filePath={`${user?.id}/profilepicture`} circle/>
           </div>
         </div>
       </div>
