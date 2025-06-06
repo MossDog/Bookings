@@ -10,7 +10,7 @@ import SignUpPage from './pages/auth/SignUpPage.tsx'
 import AccountCreationPage from './pages/AccountCreationPage.tsx'
 import ConfirmEmailPage from './pages/ConfirmEmailPage.tsx'
 import SellerHomePage from './pages/seller/SellerHomePage.tsx'
-import SellerProfile from './pages/SellerProfile.tsx'
+import SellerProfilePage from './pages/SellerProfilePage.tsx'
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   { path : "/account-creation", element: <AccountCreationPage /> },
   { path: "/confirm", element: <ConfirmEmailPage />},
   { path: "/seller-shop", element: <SellerHomePage />},
-  { path: "/edit-seller-profile", element: <SellerProfile />}
+  { path: "/edit-seller-profile", element: <SellerProfilePage />}
 ]);
 
 createRoot(document.getElementById('root')!).render(
