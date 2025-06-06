@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { z } from 'zod';
 
 
-export type SellerCoreAccountCreationFormRef = {
+export type SellerProfileCreationFormRef = {
   validateForm: () => boolean;
 };
 
 // Add props for formData and setFormData
-interface SellerCoreAccountCreationFormProps {
+interface SellerProfileCreationFormProps {
   formData: {
     name: string;
     description: string;
@@ -30,7 +30,7 @@ const SellerFormSchema = z.object({
   category: z.string().min(1, 'Category is required'),
 });
 
-const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreationFormRef, SellerCoreAccountCreationFormProps>(
+const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef, SellerProfileCreationFormProps>(
   (props, ref) => {
     const { formData, setFormData } = props;
     const [error, setError] = useState<string | null>(null);
@@ -110,6 +110,6 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
   }
 );
 
-SellerCoreAccountCreationForm.displayName = 'SellerCoreAccountCreationForm';
+SellerProfileCreationForm.displayName = 'SellerProfileCreationForm';
 
-export default SellerCoreAccountCreationForm;
+export default SellerProfileCreationForm;

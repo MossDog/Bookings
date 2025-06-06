@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import HorizontalSteps from "../components/HorizontalSteps";
-import SellerCoreAccountCreationForm, { SellerCoreAccountCreationFormRef } from "../components/account-creation/SellerCoreAccountCreationForm";
-import GalleryWidget from "../components/widgets/Gallery/GalleryWidget";
+import HorizontalSteps from "../../../components/HorizontalSteps";
+import SellerProfileCreationForm, { SellerProfileCreationFormRef } from "../../../components/seller/profile-creation/SellerProfileCreationForm";
 
-const AccountCreationPage: React.FC = () => {
-  const sellerFormRef = useRef<SellerCoreAccountCreationFormRef>(null);
+
+const ProfileSetupPage: React.FC = () => {
+  const sellerFormRef = useRef<SellerProfileCreationFormRef>(null);
 
   // LIFTED STATE: Store form data in parent so it persists between steps
   const [sellerFormData, setSellerFormData] = useState({
@@ -25,18 +25,14 @@ const AccountCreationPage: React.FC = () => {
   return (
     <div className="">
       <HorizontalSteps steps={["Basic Info", "Availability", "Add Images"]} validateStep={validateStep}>
-        <SellerCoreAccountCreationForm
+        <SellerProfileCreationForm
           ref={sellerFormRef}
           formData={sellerFormData}
           setFormData={setSellerFormData}
         />
-        <div>
-          TODO: Availability settings
-        </div>
-        <GalleryWidget />
       </HorizontalSteps>
     </div>
   );
 };
 
-export default AccountCreationPage;
+export default ProfileSetupPage;

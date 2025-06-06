@@ -1,11 +1,11 @@
 import AuthLayout from './AuthLayout'
-import SellerSignUpForm from '../../components/auth/SellerSignUpForm'
+import SignUpForm from '../../components/auth/SignUpForm'
 
 export default function SignUpPage() {
   return (
     <AuthLayout>
       <p>Sign Up</p>
-      <SellerSignUpForm />
+      <SignUpForm />
     </AuthLayout>
   )
 }
