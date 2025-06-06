@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
-import supabase from '../../utils/supabase';
-
-interface Service {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-}
+import { fetchServices } from '../../utils/dbdao';
+import { Service } from '../../types/services';
 
 const ServicesWidget: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -14,29 +8,23 @@ const ServicesWidget: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchServices = async () => {
-    try {
-        setIsLoading(true);
-        setError(null);
+    const getServices = async () => {
+      setIsLoading(true);
+      setError(null);
 
-        const { data, error } = await supabase
-            .from("Service")
-            .select("id, name, description, price") as { data: Service[]; error: Error | null };
+      const { data, error } = await fetchServices();
 
-        if (error) {
-            throw new Error("Failed to fetch services. Please try again later.");
-        }
-
-        setServices(data || []);
-    } catch (err) {
-        setError(err instanceof Error ? err.message : "An unexpected error occurred.");
-        console.error("Error fetching services:", err);
-      } finally {
-        setIsLoading(false);
+      if (error) {
+        setError(error);
+        console.error("Error fetching services:", error);
+      } else {
+        setServices(data);
       }
+
+      setIsLoading(false);
     };
 
-    fetchServices();
+    getServices();
   }, []);
 
   return (
@@ -52,13 +40,13 @@ const ServicesWidget: React.FC = () => {
 
       {services.map((service) => (
         <div
-        key={service.id}
-        className="grid grid-cols-3 gap-4 border rounded-lg p-4 shadow-md bg-white items-center"
-      >
-        <h3 className="text-gray-700 text-xl font-semibold">{service.name}</h3>
-        <p className="text-gray-700">{service.description}</p>
-        <p className="text-blue-600 font-bold text-right">${service.price.toFixed(2)}</p>
-      </div>
+          key={service.id}
+          className="grid grid-cols-3 gap-4 border rounded-lg p-4 shadow-md bg-white items-center"
+        >
+          <h3 className="text-gray-700 text-xl font-semibold">{service.name}</h3>
+          <p className="text-gray-700">{service.description}</p>
+          <p className="text-blue-600 font-bold text-right">${service.price.toFixed(2)}</p>
+        </div>
       ))}
     </div>
   );
