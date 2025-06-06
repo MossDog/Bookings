@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod';
+import ImageSlot from '../../image/ImageSlot';
+import { User } from '@supabase/supabase-js';
+import { getUser } from '../../../utils/authUtils';
 
 
-export type SellerCoreAccountCreationFormRef = {
+export type SellerProfileCreationFormRef = {
   validateForm: () => boolean;
 };
 
 // Add props for formData and setFormData
-interface SellerCoreAccountCreationFormProps {
+interface SellerProfileCreationFormProps {
   formData: {
     name: string;
     description: string;
@@ -30,10 +33,18 @@ const SellerFormSchema = z.object({
   category: z.string().min(1, 'Category is required'),
 });
 
-const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreationFormRef, SellerCoreAccountCreationFormProps>(
-  (props, ref) => {
+const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef, SellerProfileCreationFormProps>((props, ref) => {
     const { formData, setFormData } = props;
     const [error, setError] = useState<string | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    
+    useEffect(() => {
+      const fetchUser = async () => {
+        setUser(await getUser());
+      };
+
+      fetchUser();
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
       validateForm: () => {
@@ -102,7 +113,7 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
           </div>
           
           <div className='flex w-[240px]'>
-            {/* <ImageSlot path='' circle/> */}
+            <ImageSlot bucketName='public.images' filePath={`${user?.id}/profilepicture`} circle/>
           </div>
         </div>
       </div>
@@ -110,6 +121,6 @@ const SellerCoreAccountCreationForm = React.forwardRef<SellerCoreAccountCreation
   }
 );
 
-SellerCoreAccountCreationForm.displayName = 'SellerCoreAccountCreationForm';
+SellerProfileCreationForm.displayName = 'SellerProfileCreationForm';
 
-export default SellerCoreAccountCreationForm;
+export default SellerProfileCreationForm;

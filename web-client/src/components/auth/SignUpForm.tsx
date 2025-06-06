@@ -4,7 +4,7 @@ import Button from '../Button'
 import supabase from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
 
-export default function SellerSignUpForm() {
+export default function SignUpForm() {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

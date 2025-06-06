@@ -25,3 +25,11 @@ export const getPublicUrl = async (bucketName: string, filePath: string): Promis
 
   return data.publicUrl;
 }
+
+export const upload = async (bucketName: string, filePath: string, file: File) => {
+  const { error } = await supabase.storage.from(bucketName).upload(filePath, file);
+
+  if(error){
+    console.error(`Error uploading file in bucket '${bucketName}'`);
+  }
+}
