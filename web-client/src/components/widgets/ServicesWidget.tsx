@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchServices } from '../../utils/dbdao';
-import { Service } from '../../types/services';
+import { Service } from '../../types/types';
 
 const ServicesWidget: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);

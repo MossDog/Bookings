@@ -1,5 +1,5 @@
 import supabase from './supabase';
-import { Service } from '../types/services'; 
+import { Service } from '../types/types'; 
 
 export const fetchServices = async (): Promise<{ data: Service[]; error: string | null }> => {
   try {
