@@ -4,7 +4,7 @@ import supabase from '../utils/supabase';
 import { Seller } from '../types/types';
 import { getUser } from '../utils/authUtils';
 
-export default function EditSellerProfile() {
+export default function SellerProfilePage() {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [editingField, setEditingField] = useState<keyof Seller | null>(null);
   const [fieldValue, setFieldValue] = useState('');
