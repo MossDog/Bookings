@@ -1,4 +1,4 @@
-import { NavigateFunction } from 'react-router-dom';
+
 import supabase from "./supabase";
 
 export const getUser = async () => {
