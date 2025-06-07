@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../utils/supabase';
 import { Seller } from '../types/types';
+import { getUser } from '../utils/authUtils';
 
 export default function EditSellerProfile() {
   const [seller, setSeller] = useState<Seller | null>(null);
@@ -14,29 +15,29 @@ export default function EditSellerProfile() {
 
   useEffect(() => {
     const fetchSeller = async () => {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-      if (sessionError || !session?.user) {
+      const user = await getUser();
+  
+      if (!user) {
         navigate('/login');
         return;
       }
-
+  
       const { data, error } = await supabase
         .from('Seller')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .single();
-
+  
       if (error) {
         setError('Failed to load seller profile.');
         console.error(error);
       } else {
         setSeller(data);
       }
-
+  
       setLoading(false);
     };
-
+  
     fetchSeller();
   }, [navigate]);
 
