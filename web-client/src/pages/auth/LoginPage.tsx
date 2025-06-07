@@ -4,7 +4,7 @@ import AuthLayout from './AuthLayout'
 export default function LoginPage() {
   return (
     <AuthLayout>
-      <p>Login</p>
+      <p className='font-semibold'>Login</p>
       <LoginForm />
     </AuthLayout>
   )
