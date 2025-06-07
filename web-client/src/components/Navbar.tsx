@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserAvatar from './UserAvatar';
-import { getUser, isAuthenticated } from '../utils/authUtils';
-import supabase from '../utils/supabase';
+import { isAuthenticated } from '../utils/authUtils';
 
 export default function Navbar() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
