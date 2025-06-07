@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import FormInput from '../FormInput'
-import Button from '../Button'
 import supabase from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,15 +28,42 @@ export default function LoginForm() {
   }
 
   return (
-    <form className='flex flex-col w-[480px] gap-2'>
+    <form className="card-body w-full max-w-md gap-4">
       {error && (
-        <div className="alert alert-error text-red-600 bg-red-100 border border-red-400 rounded p-2 mb-2">
-          {error}
+        <div className="alert alert-error">
+          <span>{error}</span>
         </div>
       )}
-      <FormInput type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-      <FormInput type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-      <Button onClick={onSubmit}>Login</Button>
+      
+      <div className="form-control">
+        <input
+          type="email"
+          placeholder="Email"
+          className="input input-bordered w-full"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="form-control">
+        <input
+          type="password"
+          placeholder="Password"
+          className="input input-bordered w-full"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="form-control mt-4">
+        <button className="btn btn-primary w-full" onClick={onSubmit}>
+          Login
+        </button>
+      </div>
+
+      <div className='flex w-full items-center justify-center'>
+        <span>Don't have an account? <a href='/sign-up' className='underline'>Sign up</a></span>
+      </div>
     </form>
   )
 }
