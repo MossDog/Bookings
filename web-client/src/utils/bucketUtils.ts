@@ -23,6 +23,7 @@ export const getPublicUrl = async (bucketName: string, filePath: string): Promis
     return null;
   }
 
+  console.log(data.publicUrl);
   return data.publicUrl;
 }
 

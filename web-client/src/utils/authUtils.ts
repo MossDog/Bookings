@@ -1,3 +1,4 @@
+import { NavigateFunction } from 'react-router-dom';
 import supabase from "./supabase";
 
 export const getUser = async () => {
@@ -10,3 +11,18 @@ export const getUser = async () => {
 
   return user;
 };
+
+export const isAuthenticated = async () => {
+  const user = await getUser();
+
+  return user != null;
+}
+
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  
+  if (error) {
+    console.error('Error signing out:', error.message);
+    return;
+  }
+}
