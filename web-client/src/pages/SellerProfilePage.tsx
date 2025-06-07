@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import supabase from '../utils/supabase';
 import { Seller } from '../types/types';
 
-export default function EditSellerProfile() {
+export default function SellerProfilePage() {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [editingField, setEditingField] = useState<keyof Seller | null>(null);
   const [fieldValue, setFieldValue] = useState('');

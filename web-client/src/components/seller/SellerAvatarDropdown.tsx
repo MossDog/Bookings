@@ -1,8 +1,20 @@
-import { signOut } from '../../utils/authUtils'
+import { useEffect, useState } from 'react';
+import { getUser, signOut } from '../../utils/authUtils'
 import { useNavigate } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 
 export default function SellerAvatarDropdown() {
   const navigate = useNavigate();
+
+  const [user, setUser] = useState<User | null>();
+
+  useEffect(() => {
+    async function findUser(){
+      setUser(await getUser());
+    }
+
+    findUser();
+  })
 
   const handleSignOut = async () => {
     await signOut();
@@ -16,7 +28,7 @@ export default function SellerAvatarDropdown() {
   return (
     <>
       <li>
-        <button onClick={() => handleNavigation('/profile')}>
+        <button onClick={() => handleNavigation(`${user?.id}/profile`)}>
           Profile
         </button>
       </li>
