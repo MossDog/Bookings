@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Seller } from '../../types/types';
 import supabase from '../../utils/supabase';
+import Navbar from '../../components/Navbar';
 
 export default function SellerPage() {
   const { userId } = useParams();
@@ -35,10 +36,13 @@ export default function SellerPage() {
 
   return (
     <div>
+      <Navbar />
+    <div>
       <p>Name: {seller?.name}</p>
       <p>Address: {seller?.address}</p>
       <p>Category: {seller?.category}</p>
       <p>Address: {seller?.address}</p>
+    </div>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { isAuthenticated } from '../utils/authUtils';
@@ -14,9 +15,10 @@ export default function Navbar() {
     }
 
     authenticate();
-  });
+  }, []);
 
   return (
+
     <div
       className='navbar px-10 bg-[#f3f3f5] drop-shadow-sm min-h-[90px]'
     >
@@ -33,13 +35,14 @@ export default function Navbar() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function AuthPart() {
   const navigate = useNavigate();
 
   return (
+
     <Button 
       className='text-[#5d5aff] cursor-pointer'
       onClick={() => {navigate("/login")}}
