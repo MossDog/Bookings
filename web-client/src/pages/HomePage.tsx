@@ -69,7 +69,9 @@ export default function ExploreBusinesses() {
         </Link>
       ))}
     </div>
+
   </main>
 </div>
   );
+
 }

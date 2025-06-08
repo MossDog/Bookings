@@ -26,7 +26,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
   };
 
   return (
-    <div className="flex flex-col justify-between items-center p-6 space-y-6 bg-white w-screen min-h-screen">
+    <div className="flex flex-col justify-between items-center p-6 space-y-6 bg-white w-screen grow">
     <div className="relative w-full max-w-4xl mx-auto px-6 py-8">
       {/* Steps */}
       <ul className="flex justify-between items-center">

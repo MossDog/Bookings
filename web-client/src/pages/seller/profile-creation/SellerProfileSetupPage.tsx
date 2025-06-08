@@ -3,6 +3,7 @@ import HorizontalSteps from "../../../components/HorizontalSteps";
 import SellerProfileCreationForm, { SellerProfileCreationFormRef } from "../../../components/seller/profile-creation/SellerProfileCreationForm";
 import supabase from "../../../utils/supabase";
 import { getUser } from "../../../utils/authUtils";
+import Navbar from "@/components/Navbar";
 
 
 const SellerProfileSetupPage: React.FC = () => {
@@ -45,7 +46,8 @@ const SellerProfileSetupPage: React.FC = () => {
   };
 
   return (
-    <div className="">
+    <div className="min-h-screen overflow flex flex-col">
+      <Navbar />
       <HorizontalSteps steps={["Basic Info", "Availability", "Add Images"]} validateStep={validateStep}>
         <SellerProfileCreationForm
           ref={sellerFormRef}

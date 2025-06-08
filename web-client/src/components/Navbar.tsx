@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import UserAvatar from './UserAvatar';
+
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { isAuthenticated } from '../utils/authUtils';
+import { Calendar } from 'lucide-react';
+import NavbarDialogMenu from './NavbarDialogMenu';
+import { Button } from './ui/button';
 
 export default function Navbar() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -15,18 +18,21 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="navbar bg-base-100 shadow-sm min-h-[90px]">
-      <div className="navbar-start">
-        <Link
-          to="/"
-          className="text-xl font-semibold tracking-wide hover:opacity-80 transition"
-        >
-          Bookings
-        </Link>
+
+    <div
+      className='navbar px-10 bg-[#f3f3f5] drop-shadow-sm min-h-[90px]'
+    >
+      <div className='navbar-start flex gap-2'>
+        <Calendar size={35} className='text-[#5d5aff]' />
+        <h2 className='text-2xl font-mono text-[#484848] tracking-wide font-semibold'>bookeo</h2>
       </div>
 
-      <div className="navbar-end">
-        {authenticated ? <UserAvatar /> : <AuthPart />}
+      <div className='navbar-end'>
+        { authenticated ? (
+          <NavbarDialogMenu/>
+        ) : (
+          <AuthPart />
+        )}
       </div>
     </div>
   );
@@ -36,11 +42,13 @@ function AuthPart() {
   const navigate = useNavigate();
 
   return (
-    <button
-      className="text-sm font-medium text-gray-700 hover:text-black transition"
-      onClick={() => navigate('/login')}
+
+    <Button 
+      className='text-[#5d5aff] cursor-pointer'
+      onClick={() => {navigate("/login")}}
+      variant={"link"}
     >
-      Log in
-    </button>
-  );
+      Login
+    </Button>
+  )
 }
