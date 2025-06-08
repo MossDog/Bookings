@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../utils/supabase';
 import { Seller } from '../types/types';
-import { getUser } from '../utils/authUtils';
 
-export default function SellerProfilePage() {
+export default function EditSellerProfile() {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [editingField, setEditingField] = useState<keyof Seller | null>(null);
   const [fieldValue, setFieldValue] = useState('');
@@ -15,29 +14,29 @@ export default function SellerProfilePage() {
 
   useEffect(() => {
     const fetchSeller = async () => {
-      const user = await getUser();
-  
-      if (!user) {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.user) {
         navigate('/login');
         return;
       }
-  
+
       const { data, error } = await supabase
         .from('Seller')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', session.user.id)
         .single();
-  
+
       if (error) {
         setError('Failed to load seller profile.');
         console.error(error);
       } else {
         setSeller(data);
       }
-  
+
       setLoading(false);
     };
-  
+
     fetchSeller();
   }, [navigate]);
 
@@ -55,7 +54,7 @@ export default function SellerProfilePage() {
     const { error } = await supabase
       .from('Seller')
       .update(updateData)
-      .eq('user_id', seller.user_id);
+      .eq('user_id', seller.id);
 
     if (error) {
       setError('Update failed.');
@@ -75,7 +74,7 @@ export default function SellerProfilePage() {
     const { error } = await supabase
       .from('Seller')
       .update(updateData)
-      .eq('user_id', seller.user_id);
+      .eq('user_id', seller.id);
 
     if (error) {
       setError('Failed to clear field.');
