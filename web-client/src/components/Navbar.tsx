@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import UserAvatar from './UserAvatar';
 import { isAuthenticated } from '../utils/authUtils';
 import { Calendar } from 'lucide-react';
+import NavbarDialogMenu from './NavbarDialogMenu';
+import { Button } from './ui/button';
 
 export default function Navbar() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -26,7 +28,7 @@ export default function Navbar() {
 
       <div className='navbar-end'>
         { authenticated ? (
-          <UserAvatar/>
+          <NavbarDialogMenu/>
         ) : (
           <AuthPart />
         )}
@@ -39,11 +41,12 @@ function AuthPart() {
   const navigate = useNavigate();
 
   return (
-    <button 
-      className='btn'
-      onClick={() => navigate("/login")}
+    <Button 
+      className='text-[#5d5aff] cursor-pointer'
+      onClick={() => {navigate("/login")}}
+      variant={"link"}
     >
-      Log in
-    </button>
+      Login
+    </Button>
   )
 }
