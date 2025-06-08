@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import UserAvatar from './UserAvatar';
 import { isAuthenticated } from '../utils/authUtils';
 import { Calendar } from 'lucide-react';
 import NavbarDialogMenu from './NavbarDialogMenu';
