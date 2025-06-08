@@ -35,7 +35,7 @@ export default function UserAvatar() {
       <div 
         tabIndex={0} 
         role="button" 
-        className="w-14 avatar avatar-online cursor-pointer"
+        className="w-14 avatar cursor-pointer"
       >
         <div className="rounded-full">
           <img 
