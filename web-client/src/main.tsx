@@ -11,15 +11,17 @@ import ConfirmEmailPage from './pages/ConfirmEmailPage.tsx'
 import SellerProfilePage from './pages/SellerProfilePage.tsx'
 import SellerProfileSetupPage from './pages/seller/profile-creation/SellerProfileSetupPage.tsx'
 import SellerPage from './pages/seller/SellerPage.tsx'
+import Settings from './pages/Settings.tsx'
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/sign-up", element: <SignUpPage /> },
   { path: "/login", element: <LoginPage /> },
   { path : "/profile-creation", element: <SellerProfileSetupPage /> },
-  { path: "/:userId/profile", element: <SellerPage></SellerPage>},
+  { path: "/:userId/profile", element: <SellerPage />},
   { path: "/confirm", element: <ConfirmEmailPage />},
-  { path: "/edit-seller-profile", element: <SellerProfilePage />}
+  { path: "/edit-seller-profile", element: <SellerProfilePage />},
+  { path: "/settings", element: <Settings />}
 ]);
 
 createRoot(document.getElementById('root')!).render(
