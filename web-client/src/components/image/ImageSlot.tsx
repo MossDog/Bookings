@@ -71,7 +71,7 @@ export default function ImageSlot({
     <div
       className={cn(
         'relative group w-full h-full',
-        imageUrl != null ? '' : 'border-2 border-dotted border-gray-300 bg-gray-50 hover:bg-gray-100',
+        imageUrl != null ? '' : 'border-2 border-dotted border-base-300 bg-base-100 hover:bg-base-200',
         'flex items-center justify-center',
         rounding
       )}
@@ -111,12 +111,12 @@ function ImagePart ({
       <button
         className={cn(
           'absolute top-2 right-2 p-2 rounded-full',
-          'bg-black/40 hover:bg-black/60',
+          'bg-base-content/40 hover:bg-base-content/60',
           'transition-all duration-200 backdrop-blur-sm',
           'cursor-pointer opacity-0 group-hover:opacity-100'
         )}
       >
-        <Edit size={24} className='text-white drop-shadow-md' />
+        <Edit size={24} className='text-base-100 drop-shadow-md' />
       </button>
     </>
   )
@@ -133,7 +133,7 @@ function UploadPart ({
     <>
       <input type='file' id='fileInput' hidden onChange={onChange}/>
       <label htmlFor='fileInput'>
-        <Plus size={35} className='text-gray-400'/>
+        <Plus size={35} className='text-base-content/40'/>
       </label>
     </>
   )

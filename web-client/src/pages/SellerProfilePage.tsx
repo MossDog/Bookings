@@ -95,37 +95,30 @@ export default function EditSellerProfile() {
 
       {seller ? (
         <div
-          style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '1rem',
-            maxWidth: '500px',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-          }}
+          className="border border-base-300 rounded-lg p-4 max-w-[500px] mx-auto flex flex-col gap-4 bg-base-100 text-base-content"
         >
           {(['description', 'name', 'category', 'email', 'address'] as (keyof Seller)[]).map(
             (field) => (
-              <div key={field} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ flex: 1 }}>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong>
+              <div key={field} className="flex justify-between items-center gap-2">
+                <strong className="flex-1">{field.charAt(0).toUpperCase() + field.slice(1)}:</strong>
                 {editingField === field ? (
                   <input
                     type="text"
                     value={fieldValue}
                     onChange={(e) => setFieldValue(e.target.value)}
-                    style={{ flex: 2, marginRight: '0.5rem' }}
+                    className="flex-2 mr-2 input input-bordered"
+                    placeholder={`Edit ${field}`}
+                    title={`Edit ${field}`}
                   />
                 ) : (
-                  <span style={{ flex: 2 }}>{seller[field]}</span>
+                  <span className="flex-2">{seller[field]}</span>
                 )}
                 {editingField === field ? (
-                  <button onClick={handleSave} style={{ marginRight: '0.5rem' }}>Save</button>
+                  <button onClick={handleSave} className="mr-2 bg-primary text-primary-foreground px-2 py-1 rounded">Save</button>
                 ) : (
-                  <button onClick={() => handleEditClick(field)} style={{ marginRight: '0.5rem' }}>Edit</button>
+                  <button onClick={() => handleEditClick(field)} className="mr-2 bg-primary text-primary-foreground px-2 py-1 rounded">Edit</button>
                 )}
-                <button onClick={() => handleDeleteField(field)} style={{ backgroundColor: '#dc3545', color: '#fff' }}>
+                <button onClick={() => handleDeleteField(field)} className="bg-error text-error-content px-2 py-1 rounded">
                   Delete
                 </button>
               </div>
