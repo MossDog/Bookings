@@ -1,5 +1,5 @@
 // Import React hooks for state and effect management
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Key used for storing theme preference in localStorage
 const THEME_KEY = 'theme-preference';
