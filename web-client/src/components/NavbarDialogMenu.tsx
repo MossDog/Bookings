@@ -32,21 +32,21 @@ export default function NavbarDialogMenu() {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="bg-white rounded-full p-3 cursor-pointer">
-          <Menu className="text-[#484848]"/>
+        <div className="bg-base-100 rounded-full p-3 cursor-pointer">
+          <Menu className="text-base-content"/>
         </div>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader className="mb-5">
+      <DialogContent className="bg-base-100 border-base-100">
+        <DialogHeader className="mb-5 text-base-content">
           <DialogTitle>My Account</DialogTitle>
         </DialogHeader>
-        <div className="min-h-[200px] flex flex-col text-[#484848] justify-between">
-          <div className="flex flex-col gap-2">
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={() => navigate(`${user?.id}/profile`)}>Profile</button>
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={() => navigate(`/settings`)}>Settings</button>
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={handleSignout}>Sign out</button>
+        <div className="min-h-[200px] flex flex-col text-base-content justify-between">
+          <div className="flex flex-col gap-2 text-base-content">
+            <button className="w-fit cursor-pointer font-semibold" onClick={() => navigate(`${user?.id}/profile`)}>Profile</button>
+            <button className="w-fit cursor-pointer font-semibold" onClick={() => navigate(`/settings`)}>Settings</button>
+            <button className="w-fit cursor-pointer font-semibold" onClick={handleSignout}>Sign out</button>
           </div>
-          <Button className="w-full bg-[#5d5aff]">Add your business</Button>
+          <Button className="w-full bg-primary text-primary-foreground">Add your business</Button>
         </div>
       </DialogContent>
     </Dialog>

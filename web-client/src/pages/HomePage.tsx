@@ -34,7 +34,7 @@ export default function ExploreBusinesses() {
     <div>
   <Navbar />
 
-  <main className="p-6">
+  <main className="p-6 bg-base-100 text-base-content">
     <h1 className="text-3xl font-bold mb-6">Explore Businesses</h1>
 
     {loading && <p>Loading...</p>}
@@ -45,25 +45,25 @@ export default function ExploreBusinesses() {
         <Link
           key={seller.user_id}
           to={`/${seller.user_id}/profile`}
-          className="block border rounded-lg p-4 shadow hover:shadow-md transition hover:bg-gray-50"
+          className="block border rounded-lg p-4 shadow hover:shadow-md transition hover:bg-base-200 bg-base-100 text-base-content"
         >
           <h2 className="text-xl font-semibold mb-1">
             {seller.name || 'Unnamed Business'}
           </h2>
 
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-base-content/70 mb-2">
             {seller.description || 'No description provided.'}
           </p>
 
-          <p className="text-sm text-gray-500 mb-1">
+          <p className="text-sm text-base-content/60 mb-1">
             <span className="font-medium">Category:</span> {seller.category || 'N/A'}
           </p>
 
-          <p className="text-sm text-gray-500 mb-1">
+          <p className="text-sm text-base-content/60 mb-1">
             <span className="font-medium">Address:</span> {seller.address || 'N/A'}
           </p>
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-base-content/40">
             Joined on {new Date(seller.created_at).toLocaleDateString()}
           </p>
         </Link>

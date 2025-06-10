@@ -13,6 +13,13 @@ import SellerProfileSetupPage from './pages/seller/profile-creation/SellerProfil
 import SellerPage from './pages/seller/SellerPage.tsx'
 import Settings from './pages/Settings.tsx'
 
+// --- THEME INIT LOGIC ---
+const THEME_KEY = 'theme-preference';
+const storedTheme = localStorage.getItem(THEME_KEY);
+const theme = storedTheme === 'system' ? 'light' : (storedTheme || 'light');
+document.documentElement.setAttribute('data-theme', theme);
+// --- END THEME INIT LOGIC ---
+
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/sign-up", element: <SignUpPage /> },
@@ -26,6 +33,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <div className="min-h-screen bg-base-100 text-base-content">
+      <RouterProvider router={router} />
+    </div>
   </StrictMode>,
 )
