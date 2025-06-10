@@ -45,7 +45,7 @@ export default function Settings() {
         {/* Theme selection dropdown */}
         <select
           id="theme-select"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-base-100 text-base-content"
           value={theme}
           onChange={e => setTheme(e.target.value)}
         >
