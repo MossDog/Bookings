@@ -11,7 +11,7 @@ import ConfirmEmailPage from './pages/ConfirmEmailPage.tsx'
 import SellerProfilePage from './pages/SellerProfilePage.tsx'
 import SellerProfileSetupPage from './pages/seller/profile-creation/SellerProfileSetupPage.tsx'
 import SellerPage from './pages/seller/SellerPage.tsx'
-import Settings from './pages/Settings.tsx'
+import Settings from './pages/SettingsPage.tsx'
 
 // --- THEME INIT LOGIC ---
 const THEME_KEY = 'theme-preference';
