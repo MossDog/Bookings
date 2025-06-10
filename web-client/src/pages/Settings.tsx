@@ -36,7 +36,7 @@ export default function Settings() {
   }, [theme]);
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow space-y-6">
+    <div className="max-w-md mx-auto mt-10 p-6 rounded shadow space-y-6">
       {/* Page title */}
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
       <div>
