@@ -45,10 +45,10 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full border-2 font-bold text-lg transition-all duration-300 ${
                   isCompleted
-                    ? "bg-blue-500 border-blue-600 text-white dark:bg-base-300 dark:border-blue-950 dark:text-blue-950"
+                    ? "bg-primary border-primary text-primary-content"
                     : isActive
-                    ? "bg-blue-100 border-blue-600 text-blue-600 dark:bg-base-100 dark:border-blue-600 dark:text-blue-600"
-                    : "bg-gray-100 border-gray-300 text-gray-500 dark:bg-base-100 dark:border-blue-900 dark:text-blue-900"
+                    ? "bg-primary/20 border-primary text-primary"
+                    : "bg-base-200 border-base-300 text-base-content/60"
                 }`}
               >
                 {index + 1}
@@ -57,10 +57,10 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
               <span
                 className={`mt-2 text-md font-bold ${
                   isCompleted
-                  ? "text-gray-500 dark:text-blue-950"
-                  : isActive
-                  ? "text-blue-600 dark:text-blue-600"
-                  : "text-gray-500 dark:text-blue-900"
+                    ? "text-base-content/60"
+                    : isActive
+                    ? "text-primary"
+                    : "text-base-content/60"
                 }`}
               >
                 {step}
@@ -85,7 +85,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
           className={`px-4 py-2 rounded ${
             currentStep === 1
               ? "bg-base-200 text-base-content/40 cursor-not-allowed"
-              : "bg-primary text-primary-foreground hover:bg-primary/80"
+              : "btn btn-primary"
           }`}
         >
           Back
@@ -96,7 +96,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
           className={`px-4 py-2 rounded ${
             currentStep === totalSteps
               ? "bg-base-200 text-base-content/40 cursor-not-allowed"
-              : "bg-primary text-primary-foreground hover:bg-primary/80"
+              : "btn btn-primary"
           }`}
         >
           Next

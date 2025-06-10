@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const THEME_KEY = 'theme-preference';
 // Available theme options for the user
 const themes = [
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' }
+  { value: 'emerald', label: 'Light' },
+  { value: 'sunset', label: 'Dark' }
 ];
 
 // Settings page component
@@ -17,7 +17,7 @@ export default function Settings() {
   const [theme, setTheme] = useState<string>(() => {
     // If system was previously selected, default to light
     const stored = localStorage.getItem(THEME_KEY);
-    return stored === 'system' ? 'light' : (stored || 'light');
+    return stored || 'light';
   });
 
   // Whenever the theme changes, apply it and save to localStorage

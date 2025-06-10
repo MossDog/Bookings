@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import supabase from '../utils/supabase';
 import { Seller } from '../types/types';
+import GalleryWidget from '@/components/widgets/Gallery/GalleryWidget';
 
 export default function ExploreBusinesses() {
   const [sellers, setSellers] = useState<Seller[]>([]);
@@ -69,7 +70,6 @@ export default function ExploreBusinesses() {
         </Link>
       ))}
     </div>
-
   </main>
 </div>
   );

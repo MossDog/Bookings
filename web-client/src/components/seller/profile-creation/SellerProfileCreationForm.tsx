@@ -63,7 +63,7 @@ const SellerProfileCreationForm = React.forwardRef<SellerProfileCreationFormRef,
         <h1 className='text-2xl font-bold'>Basic Info</h1>
         {/* Error message for validation failure */}
         {error && (
-          <div className="alert alert-error text-red-600 bg-red-100 border border-red-400 rounded p-2 mb-2">
+          <div className="alert alert-error font-bold text-error bg-base-100 border border-error rounded p-2 mb-2">
             {error}
           </div>
         )}
