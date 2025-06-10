@@ -32,21 +32,21 @@ export default function NavbarDialogMenu() {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="bg-white rounded-full p-3 cursor-pointer">
-          <Menu className="text-[#484848]"/>
+        <div className="rounded-full p-3 cursor-pointer">
+          <Menu/>
         </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="mb-5">
           <DialogTitle>My Account</DialogTitle>
         </DialogHeader>
-        <div className="min-h-[200px] flex flex-col text-[#484848] justify-between">
+        <div className="min-h-[200px] flex flex-col justify-between">
           <div className="flex flex-col gap-2">
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={() => navigate(`${user?.id}/profile`)}>Profile</button>
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={() => navigate(`/settings`)}>Settings</button>
-            <button className="w-fit cursor-pointer font-semibold text-[#5d5aff]" onClick={handleSignout}>Sign out</button>
+            <button className="w-fit cursor-pointer font-semibold" onClick={() => navigate(`${user?.id}/profile`)}>Profile</button>
+            <button className="w-fit cursor-pointer font-semibold" onClick={() => navigate(`/settings`)}>Settings</button>
+            <button className="w-fit cursor-pointer font-semibold" onClick={handleSignout}>Sign out</button>
           </div>
-          <Button className="w-full bg-[#5d5aff]">Add your business</Button>
+          <Button className="w-full">Add your business</Button>
         </div>
       </DialogContent>
     </Dialog>

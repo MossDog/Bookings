@@ -38,32 +38,32 @@ export default function ExploreBusinesses() {
     <h1 className="text-3xl font-bold mb-6">Explore Businesses</h1>
 
     {loading && <p>Loading...</p>}
-    {error && <p className="text-red-500">{error}</p>}
+    {error && <p>{error}</p>}
 
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {sellers.map((seller) => (
         <Link
           key={seller.user_id}
           to={`/${seller.user_id}/profile`}
-          className="block border rounded-lg p-4 shadow hover:shadow-md transition hover:bg-gray-50"
+          className="block border rounded-lg p-4 shadow hover:shadow-md transition"
         >
           <h2 className="text-xl font-semibold mb-1">
             {seller.name || 'Unnamed Business'}
           </h2>
 
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm mb-2">
             {seller.description || 'No description provided.'}
           </p>
 
-          <p className="text-sm text-gray-500 mb-1">
+          <p className="text-sm mb-1">
             <span className="font-medium">Category:</span> {seller.category || 'N/A'}
           </p>
 
-          <p className="text-sm text-gray-500 mb-1">
+          <p className="text-sm mb-1">
             <span className="font-medium">Address:</span> {seller.address || 'N/A'}
           </p>
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs">
             Joined on {new Date(seller.created_at).toLocaleDateString()}
           </p>
         </Link>

@@ -90,8 +90,8 @@ export default function EditSellerProfile() {
   return (
     <div style={{ padding: '2rem' }}>
       <h2>Edit Seller Profile Fields</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+      {error && <p>{error}</p>}
+      {success && <p>{success}</p>}
 
       {seller ? (
         <div
@@ -125,7 +125,7 @@ export default function EditSellerProfile() {
                 ) : (
                   <button onClick={() => handleEditClick(field)} style={{ marginRight: '0.5rem' }}>Edit</button>
                 )}
-                <button onClick={() => handleDeleteField(field)} style={{ backgroundColor: '#dc3545', color: '#fff' }}>
+                <button onClick={() => handleDeleteField(field)} style={{ backgroundColor: '#dc3545'}}>
                   Delete
                 </button>
               </div>

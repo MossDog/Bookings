@@ -26,44 +26,34 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
   };
 
   return (
-    <div className="flex flex-col justify-between items-center p-6 space-y-6 bg-white w-screen grow">
+    <div className="flex flex-col justify-between items-center p-6 space-y-6 w-screen grow">
     <div className="relative w-full max-w-4xl mx-auto px-6 py-8">
       {/* Steps */}
       <ul className="flex justify-between items-center">
         {steps.map((step, index) => {
-          const isCompleted = index + 1 < currentStep;
+          //const isCompleted = index + 1 < currentStep;
           const isActive = index + 1 === currentStep;
 
           return (
             <li
               key={index}
-              className={`flex flex-col items-center text-center ${
-                isActive ? "text-blue-600" : "text-gray-500"
-              }`}
+              className={`flex flex-col items-center text-center`}
             >
               {/* Step Circle */}
               <div
-                className={`w-12 h-12 flex items-center justify-center rounded-full border-2 font-bold text-lg transition-all duration-300 ${
-                  isCompleted
-                    ? "bg-blue-500 border-blue-500 text-white"
-                    : isActive
-                    ? "bg-blue-100 border-blue-600 text-blue-600"
-                    : "bg-gray-100 border-gray-300 text-gray-500"
-                }`}
+                className={`w-12 h-12 flex items-center justify-center rounded-full border-2 font-bold text-lg transition-all duration-300`}
               >
                 {index + 1}
               </div>
               {/* Step Label */}
               <span
-                className={`mt-2 text-sm font-medium ${
-                  isActive ? "font-bold text-blue-600" : "text-gray-500"
-                }`}
+                className={`mt-2 text-sm font-medium`}
               >
                 {step}
               </span>
               {/* Current Step Indicator */}
               {isActive && (
-                <span className="mt-1 text-xs text-blue-500 font-semibold">
+                <span className="mt-1 text-xs font-semibold">
                 </span>
               )}
             </li>
@@ -78,22 +68,14 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
         <button
           onClick={handleBack}
           disabled={currentStep === 1}
-          className={`px-4 py-2 rounded ${
-            currentStep === 1
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
-          }`}
+          className={`px-4 py-2 rounded`}
         >
           Back
         </button>
         <button
           onClick={handleNext}
           disabled={currentStep === totalSteps}
-          className={`px-4 py-2 rounded ${
-            currentStep === totalSteps
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
-          }`}
+          className={`px-4 py-2 rounded`}
         >
           Next
         </button>
