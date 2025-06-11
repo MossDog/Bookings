@@ -18,7 +18,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [, setSelectedService] = useState<Service | null>(null);
 
   useEffect(() => {
     if (!userId) return;
