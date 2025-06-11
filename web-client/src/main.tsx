@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { SessionContextProvider } from '@supabase/auth-helpers-react'
+import supabase from './utils/supabase'
 
 import './index.css'
 
@@ -33,8 +35,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div className="min-h-screen bg-base-100 text-base-content">
-      <RouterProvider router={router} />
-    </div>
+    <SessionContextProvider supabaseClient={supabase}>
+      <div className="min-h-screen bg-base-100 text-base-content">
+        <RouterProvider router={router} />
+      </div>
+    </SessionContextProvider>
   </StrictMode>,
 )

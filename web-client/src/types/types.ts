@@ -1,9 +1,10 @@
 export interface Service {
-    id: number;
+    id?: number;
     name: string;
     description: string;
     price: number;
-  }
+    duration: number;
+}
 
 export interface Seller {
     id: number;
