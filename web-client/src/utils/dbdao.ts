@@ -1,11 +1,14 @@
 import supabase from './supabase';
-import { Service } from '../types/types'; 
+import { Service } from '../types/types';
 
-export const fetchServices = async (): Promise<{ data: Service[]; error: string | null }> => {
+export const fetchServices = async (
+  userId: string
+): Promise<{ data: Service[]; error: string | null }> => {
   try {
     const { data, error } = await supabase
       .from("Service")
-      .select("id, name, description, price") as { data: Service[]; error: Error | null };
+      .select("id, name, description, price, category, duration, user_id")
+      .eq("user_id", userId);
 
     if (error) {
       throw new Error("Failed to fetch services. Please try again later.");

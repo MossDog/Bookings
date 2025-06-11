@@ -3,6 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Seller } from '../../types/types';
 import supabase from '../../utils/supabase';
 import Navbar from '../../components/Navbar';
+// import Banner from '@/components/seller/Banner';
+// import ProfilePicture from '@/components/seller/ProfilePicture';
+import ServicesWidget from '@/components/widgets/ServicesWidget';
+import SellerTitle from '@/components/SellerTitle';
+import HighlightWidget from '@/components/widgets/HighlightWidget';
 
 export default function SellerPage() {
   const { userId } = useParams();
@@ -37,12 +42,13 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-    <div>
-      <p>Name: {seller?.name}</p>
-      <p>Address: {seller?.address}</p>
-      <p>Category: {seller?.category}</p>
-      <p>Address: {seller?.address}</p>
+      <div className="relative">
+        {/* <Banner bannerUrl={seller?.banner_url} />
+        <ProfilePicture profileUrl={seller?.profile_url} /> */}
+        <SellerTitle seller={seller} />
+        <HighlightWidget userId={userId} />
+        <ServicesWidget userId={userId} />
+      </div>
     </div>
-    </div>
-  )
+  );
 }

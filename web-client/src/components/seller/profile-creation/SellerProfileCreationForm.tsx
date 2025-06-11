@@ -66,6 +66,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
           <p className='mt-2 text-base-content/70'>Tell us about your business to get started</p>
         </div>
 
+
         <div className='card-body p-8 space-y-6'>
           <div className='form-control w-full'>
             <label className='label'>

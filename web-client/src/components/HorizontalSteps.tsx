@@ -99,6 +99,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
         </div>
       </div>
 
+
       {/* Main content area */}
       <div className="flex-1 flex items-start flex-col">
         {React.Children.toArray(children)[currentStep - 1]}

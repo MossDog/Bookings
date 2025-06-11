@@ -22,7 +22,7 @@ export default function Navbar() {
       className="navbar px-10 bg-base-200 drop-shadow-sm min-h-[90px]"
     >
       <div className='navbar-start flex gap-2'>
-        <Calendar size={35} className='text-blue-600' strokeWidth={2} />
+        <Calendar size={35} className='text-primary' strokeWidth={2} />
         <h2 className='text-2xl font-mono text-base-content tracking-wide font-semibold'>bookeo</h2>
       </div>
 
