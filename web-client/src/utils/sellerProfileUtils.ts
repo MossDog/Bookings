@@ -1,7 +1,6 @@
 import { Service } from "@/types/types";
 import { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
-import { success } from "zod/v4";
 
 export interface ProfileCreationData {
     user: User;
