@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import HorizontalSteps from "../../../components/HorizontalSteps";
 import SellerProfileCreationForm from "../../../components/seller/profile-creation/SellerProfileCreationForm";
 import Navbar from "@/components/Navbar";
