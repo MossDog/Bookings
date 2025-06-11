@@ -26,81 +26,83 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
   };
 
   return (
-    <div className="flex flex-col justify-between items-center p-6 space-y-6 bg-base-100 w-screen grow">
-    <div className="relative w-full max-w-4xl mx-auto px-6 py-8">
-      {/* Steps */}
-      <ul className="flex justify-between items-center">
-        {steps.map((step, index) => {
-          const isCompleted = index + 1 < currentStep;
-          const isActive = index + 1 === currentStep;
+    <div className="flex h-full w-full grow bg-base-100">
+      {/* Left sidebar with steps */}
+      <div className="w-64 min-h-full flex flex-col justify-between p-8 border-r border-base-200">
+        <ul className="flex flex-col space-y-8">
+          {steps.map((step, index) => {
+            const isCompleted = index + 1 < currentStep;
+            const isActive = index + 1 === currentStep;
 
-          return (
-            <li
-              key={index}
-              className={`flex flex-col items-center text-center ${
-                isActive ? "text-primary" : "text-base-content/60"
-              }`}
-            >
-              {/* Step Circle */}
-              <div
-                className={`w-12 h-12 flex items-center justify-center rounded-full border-2 font-bold text-lg transition-all duration-300 ${
-                  isCompleted
-                    ? "bg-primary border-primary text-primary-content"
-                    : isActive
-                    ? "bg-primary/20 border-primary text-primary"
-                    : "bg-base-200 border-base-300 text-base-content/60"
+            return (
+              <li
+                key={index}
+                className={`flex items-center space-x-4 ${
+                  isActive ? "text-primary" : "text-base-content/60"
                 }`}
               >
-                {index + 1}
-              </div>
-              {/* Step Label */}
-              <span
-                className={`mt-2 text-md font-bold ${
-                  isCompleted
+                {/* Step Circle */}
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-bold text-lg transition-all duration-300 ${
+                    isCompleted
+                      ? "bg-primary border-primary-focus text-primary-content"
+                      : isActive
+                      ? "bg-primary/20 border-primary text-primary"
+                      : "bg-base-200 border-base-300 text-base-content/60"
+                  }`}
+                >
+                  {index + 1}
+                </div>
+                {/* Step Label */}
+                <span
+                  className={`text-sm font-medium ${
+                    isCompleted
                     ? "text-base-content/60"
                     : isActive
                     ? "text-primary"
                     : "text-base-content/60"
-                }`}
-              >
-                {step}
-              </span>
-              {/* Current Step Indicator */}
-              {isActive && (
-                <span className="mt-1 text-xs text-primary font-semibold">
+                  }`}
+                >
+                  {step}
                 </span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-    <div className="w-full flex items-center justify-center">
-        {React.Children.toArray(children)[currentStep - 1]}
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Navigation buttons */}
+        <div className="border-t border-base-300 py-3">
+          <div className="max-w-3xl mx-auto flex justify-center gap-4">
+            <button
+              onClick={handleBack}
+              disabled={currentStep === 1}
+              className={`btn btn-primary ${
+                currentStep === 1
+                  ? "btn-disabled"
+                  : ""
+              }`}
+            >
+              Back
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentStep === totalSteps}
+              className={`btn btn-primary ${
+                currentStep === totalSteps
+                  ? "btn-disabled"
+                  : ""
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="flex space-x-4">
-        <button
-          onClick={handleBack}
-          disabled={currentStep === 1}
-          className={`px-4 py-2 rounded ${
-            currentStep === 1
-              ? "bg-base-200 text-base-content/40 cursor-not-allowed"
-              : "btn btn-primary"
-          }`}
-        >
-          Back
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentStep === totalSteps}
-          className={`px-4 py-2 rounded ${
-            currentStep === totalSteps
-              ? "bg-base-200 text-base-content/40 cursor-not-allowed"
-              : "btn btn-primary"
-          }`}
-        >
-          Next
-        </button>
+
+
+      {/* Main content area */}
+      <div className="flex-1 flex items-start flex-col">
+        {React.Children.toArray(children)[currentStep - 1]}
       </div>
     </div>
   );
