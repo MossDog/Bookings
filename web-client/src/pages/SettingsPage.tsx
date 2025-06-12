@@ -6,8 +6,20 @@ import { useNavigate } from 'react-router-dom';
 const THEME_KEY = 'theme-preference';
 // Available theme options for the user
 const themes = [
-  { value: 'emerald', label: 'Light' },
-  { value: 'sunset', label: 'Dark' }
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'cupcake', label: 'Cupcake' },
+  { value: 'bumblebee', label: 'Bumblebee' },
+  { value: 'emerald', label: 'Emerald' },
+  { value: 'aqua', label: 'Aqua' },
+  { value: 'lofi', label: 'Lofi' },
+  { value: 'pastel', label: 'Pastel' },
+  { value: 'black', label: 'Black' },
+  { value: 'luxury', label: 'Luxury' },
+  { value: 'business', label: 'Business' },
+  { value: 'coffee', label: 'Coffee' },
+  { value: 'caramellatte', label: 'Caramellatte' },
+  { value: 'winter', label: 'Winter' },
 ];
 
 // Settings page component
