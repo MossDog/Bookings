@@ -4,7 +4,10 @@ import supabase from '../utils/supabase';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  testvar7?: number;
 }
+
+
 
 const ProtectedRoute = ({
   children
