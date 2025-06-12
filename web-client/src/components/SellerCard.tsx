@@ -12,27 +12,62 @@ export default function SellerCard({
     <Link
       key={seller.user_id}
       to={`/${seller.user_id}/profile`}
-      className="block border rounded-lg p-4 shadow hover:shadow-md transition hover:bg-base-200 bg-base-100 text-base-content"
+      className="card bg-base-100 hover:shadow-lg transition-all duration-200 group"
     >
-      <h2 className="text-xl font-semibold mb-1">
-        {seller.name || 'Unnamed Business'}
-      </h2>
+      {/* Card Image */}
+      <figure className="relative h-48 bg-base-300">
+        <div className="absolute inset-0 bg-gradient-to-t from-base-300 to-transparent opacity-50"></div>
+        <img
+          src="/test_Restaurant.jpeg"
+          alt={seller.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-4 right-4">
+          <div className="badge badge-primary">{seller.category || 'Uncategorized'}</div>
+        </div>
+      </figure>
 
-      <p className="text-sm text-base-content/70 mb-2">
-        {seller.description || 'No description provided.'}
-      </p>
+      <div className="card-body p-6">
+        {/* Title and Rating */}
+        <div className="flex justify-between items-start mb-2">
+          <h2 className="card-title text-lg group-hover:text-primary transition-colors">
+            {seller.name || 'Unnamed Business'}
+          </h2>
+          <div className="flex items-center gap-1">
+            <div className="rating rating-sm">
+              <input type="radio" name={`rating-${seller.user_id}`} className="mask mask-star-2 bg-orange-400" checked readOnly/>
+              <input type="radio" name={`rating-${seller.user_id}`} className="mask mask-star-2 bg-orange-400" checked readOnly/>
+              <input type="radio" name={`rating-${seller.user_id}`} className="mask mask-star-2 bg-orange-400" checked readOnly/>
+              <input type="radio" name={`rating-${seller.user_id}`} className="mask mask-star-2 bg-orange-400" checked readOnly/>
+              <input type="radio" name={`rating-${seller.user_id}`} className="mask mask-star-2 bg-orange-400" />
+            </div>
+            <span className="text-sm text-base-content/70">(4.0)</span>
+          </div>
+        </div>
 
-      <p className="text-sm text-base-content/60 mb-1">
-        <span className="font-medium">Category:</span> {seller.category || 'N/A'}
-      </p>
+        {/* Description */}
+        <p className="text-sm text-base-content/70 line-clamp-2 mb-4">
+          {seller.description || 'No description provided.'}
+        </p>
 
-      <p className="text-sm text-base-content/60 mb-1">
-        <span className="font-medium">Address:</span> {seller.address || 'N/A'}
-      </p>
+        {/* Footer Info */}
+        <div className="card-actions flex-col gap-2">
+          <div className="flex items-center gap-2 text-sm text-base-content/60">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {seller.address || 'Location not specified'}
+          </div>
 
-      <p className="text-xs text-base-content/40">
-        Joined on {new Date(seller.created_at).toLocaleDateString()}
-      </p>
+          <div className="flex items-center gap-2 text-xs text-base-content/50">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Joined {new Date(seller.created_at).toLocaleDateString()}
+          </div>
+        </div>
+      </div>
     </Link>
   )
 }
