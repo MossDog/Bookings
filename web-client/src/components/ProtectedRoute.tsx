@@ -4,6 +4,7 @@ import supabase from '../utils/supabase';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  testVar?: string;
 }
 
 const ProtectedRoute = ({
