@@ -1,1 +1,0 @@
-const message = "what the hell what the hellwad"
