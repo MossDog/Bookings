@@ -52,7 +52,8 @@ export async function bookSlot(
     }
 
     return { success: true, message: "Booking successful!" };
-  } catch (err: any) {
-    return { success: false, message: err.message || "Unexpected error occurred" };
-  }
+} catch (err: unknown) {
+  const errorMessage = err instanceof Error ? err.message : "Unexpected error occurred";
+  return { success: false, message: errorMessage };
+}
 }
