@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import supabase from "@/utils/supabase";
 import { DateTime } from "luxon";
 import { toast } from "sonner";
