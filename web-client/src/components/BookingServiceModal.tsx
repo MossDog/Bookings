@@ -1,93 +1,109 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Service } from "../types/types";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import { DateTime } from "luxon";
 import { getAvailableSlots } from "@/utils/availabilityUtils";
 import { bookSlot } from "@/utils/bookingsUtils";
-import { format } from "date-fns";
-import { toast } from "sonner"; // ✅ Make sure this is installed
+import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
+import { toast } from "sonner";
+import { Service } from "@/types/types";
 
 interface BookServiceModalProps {
   service: Service | null;
   onClose: () => void;
-  userId: string;
 }
 
-const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose, userId }) => {
-  const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
+const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [availableDates, setAvailableDates] = useState<Date[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
-  const [loadingSlots, setLoadingSlots] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     if (!service) return;
-    const fetchSlots = async () => {
-      setLoadingSlots(true);
-      try {
-        const available = await getAvailableSlots(service.user_id, new Date(date));
-        setSlots(available);
-      } catch (err) {
-        console.error(err);
-        setSlots([]);
-      } finally {
-        setLoadingSlots(false);
-      }
-    };
-    fetchSlots();
-  }, [service, date]);
+  
+    getAvailableDates(service.user_id)
+      .then((dates) => {
+        const dateObjects = dates.map((d) => new Date(d));
+        setAvailableDates(dateObjects); // ✅ now it's Date[]
+      })
+      .catch(console.error);
+  }, [service]);
+
+  useEffect(() => {
+    if (!service || !selectedDate) return;
+
+    setLoadingSlots(true);
+    getAvailableSlots(service.user_id, selectedDate, service.timezone)
+      .then(setSlots)
+      .catch(() => setSlots([]))
+      .finally(() => setLoadingSlots(false));
+  }, [selectedDate, service]);
 
   const handleConfirmBooking = async () => {
-    if (!service || !selectedSlot || typeof service.id !== 'number') return;
-  
+    if (!selectedDate || !selectedSlot || !service || !service.id) return;
+
     const result = await bookSlot(
-      service.user_id,      // sellerId
-      userId,               // userId
-      service.id,           // serviceId (now guaranteed to be number)
-      new Date(date),       // Date object
-      selectedSlot
+      service.user_id,
+      service.id,
+      selectedDate,
+      selectedSlot,
+      service.timezone
     );
-  
+
     if (result.success) {
       toast.success("Booking successful!");
-      setStatus("Booking confirmed!");
       onClose();
     } else {
       toast.error(result.message);
-      setStatus(result.message);
     }
   };
 
   if (!service) return null;
 
-  return (
-    <Dialog open={!!service} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Book: {service.name}</DialogTitle>
-        </DialogHeader>
+  const showTimezoneWarning = userTimezone !== service.timezone;
 
-        <div className="space-y-4">
-          <label className="form-control w-full">
-            <span className="label-text">Select Date</span>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="input input-bordered w-full"
-            />
-          </label>
+  return (
+    <>
+      <input type="checkbox" className="modal-toggle" checked readOnly />
+      <div className="modal modal-open">
+        <div className="modal-box rounded-2xl space-y-5">
+          <h3 className="text-xl font-semibold text-center">Book: {service.name}</h3>
+
+          {showTimezoneWarning && (
+            <p className="text-sm text-warning text-center">
+              Note: Times are shown in the seller’s local time ({service.timezone})
+            </p>
+          )}
+
+          <DayPicker
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            disabled={(date) =>
+              !availableDates.some((available) =>
+                DateTime.fromJSDate(available).toISODate() ===
+                DateTime.fromJSDate(date).toISODate()
+              )
+            }
+            className="mx-auto"
+          />
 
           {loadingSlots ? (
-            <p className="text-base-content/60">Loading slots...</p>
+            <p className="text-center text-sm text-base-content/60">Loading slots...</p>
           ) : slots.length === 0 ? (
-            <p className="text-base-content/60">No slots available for this date.</p>
+            <p className="text-center text-sm text-base-content/60">
+              No slots available for this date.
+            </p>
           ) : (
             <div className="grid grid-cols-3 gap-2">
               {slots.map((slot) => (
                 <button
                   key={slot}
                   onClick={() => setSelectedSlot(slot)}
-                  className={`btn btn-sm ${
+                  className={`btn btn-sm rounded-xl transition ${
                     selectedSlot === slot ? "btn-primary" : "btn-outline"
                   }`}
                 >
@@ -100,15 +116,22 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose, u
           <button
             onClick={handleConfirmBooking}
             disabled={!selectedSlot}
-            className="btn btn-success w-full"
+            className="btn btn-success w-full rounded-xl"
           >
             Confirm Booking
           </button>
 
-          {status && <p className="text-sm text-center mt-2">{status}</p>}
+          <div className="modal-action">
+            <button
+              onClick={onClose}
+              className="btn btn-ghost rounded-xl text-base-content/80"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </>
   );
 };
 
