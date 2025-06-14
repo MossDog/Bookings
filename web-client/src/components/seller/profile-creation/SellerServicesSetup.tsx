@@ -40,9 +40,9 @@ export default function SellerServicesSetup({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full h-full">
       {/* Service Creation Form */}
-      <div className="card bg-base-100 shadow-md h-fit">
+      <div className="card bg-base-100 shadow-md h-full">
         <div className="bg-base-200/50 p-6 border-b border-base-200">
           <h3 className="text-xl font-semibold text-base-content">Add a Service</h3>
           <p className="text-base-content/70 text-sm mt-1">
@@ -131,7 +131,7 @@ export default function SellerServicesSetup({
       </div>
 
       {/* Services List */}
-      <div className="card bg-base-100 shadow-md h-fit">
+      <div className="card bg-base-100 shadow-md h-full">
         <div className="bg-base-200/50 p-6 border-b border-base-200">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold text-base-content">Your Services</h3>
@@ -142,9 +142,9 @@ export default function SellerServicesSetup({
           </p>
         </div>
 
-        <div className="card-body p-6">
+        <div className="card-body p-6 h-full">
           {services.length === 0 ? (
-            <div className="text-center py-12 bg-base-200/30 rounded-lg">
+            <div className="text-center h-full py-12 bg-base-200/30 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>

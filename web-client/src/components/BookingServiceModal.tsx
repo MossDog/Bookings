@@ -4,7 +4,7 @@ import { Service } from "../types/types";
 import { getAvailableSlots } from "@/utils/availabilityUtils";
 import { bookSlot } from "@/utils/bookingsUtils";
 import { format } from "date-fns";
-import { toast } from "sonner"; // ✅ Make sure this is installed
+import { toast } from "sonner";
 
 interface BookServiceModalProps {
   service: Service | null;
