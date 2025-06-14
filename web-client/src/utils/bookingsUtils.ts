@@ -3,21 +3,31 @@ import supabase from "./supabase";
 import { fetchServices } from "./dbdao"; // Adjust path if needed
 
 /**
- * Book a slot for a user with a specific service
+ * Book a slot for a logged-in user with a specific service
  * @param sellerId - Seller's UUID
- * @param userId - Buyer's UUID
  * @param serviceId - ID of the selected service
  * @param date - The date being booked
  * @param slot - Time in 'HH:mm' format
  */
 export async function bookSlot(
   sellerId: string,
-  userId: string,
   serviceId: number,
   date: Date,
   slot: string
 ): Promise<{ success: boolean; message: string }> {
   try {
+    // Get the current user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return { success: false, message: "User not authenticated" };
+    }
+
+    const userId = user.id;
+
     // 1. Fetch services to get duration
     const { data: services, error: serviceError } = await fetchServices(sellerId);
     if (serviceError) {
@@ -52,8 +62,7 @@ export async function bookSlot(
     }
 
     return { success: true, message: "Booking successful!" };
-} catch (err: unknown) {
-  const errorMessage = err instanceof Error ? err.message : "Unexpected error occurred";
-  return { success: false, message: errorMessage };
-}
+  } catch (err: any) {
+    return { success: false, message: err.message || "Unexpected error occurred" };
+  }
 }

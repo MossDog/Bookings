@@ -17,6 +17,7 @@ export interface Seller {
     address: string;
     user_id: string;
     created_at: string;
+    timezone: string;
 }
 
 export interface WorkingHours {

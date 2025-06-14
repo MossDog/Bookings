@@ -150,7 +150,6 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
         <BookServiceModal
           service={selectedService}
           onClose={() => setSelectedService(null)}
-          userId={userId}
         />
       )}
     </div>
