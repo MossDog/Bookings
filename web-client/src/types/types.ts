@@ -6,7 +6,6 @@ export interface Service {
     category?: string;
     duration: number;
     user_id: string;
-    timezone: string;
   }
 
 export interface Seller {
@@ -18,6 +17,7 @@ export interface Seller {
     address: string;
     user_id: string;
     created_at: string;
+    timezone: string;
 }
 
 export interface WorkingHours {
