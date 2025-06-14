@@ -6,14 +6,14 @@ import { createSellerProfile, ProfileCreationData } from "@/utils/sellerProfileU
 import { useUser } from '@supabase/auth-helpers-react'
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service } from "@/types/types";
-import SellerOpeningHours, { WeekSchedule } from "@/components/seller/profile-creation/SellerOpeningHours";
+import SellerOpeningHours from "@/components/seller/profile-creation/SellerOpeningHours";
 
 function SellerProfileSetupPage() {
   const user = useUser();
   const [profileData, setProfileData] = useState<ProfileCreationData>();
   const [services, setServices] = useState<Service[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [weekSchedule, setWeekSchedule] = useState<WeekSchedule>();
+  //const [weekSchedule, setWeekSchedule] = useState<WeekSchedule>();
 
   const handleValidFormData = (data: ProfileCreationData) => {
     setProfileData(data);
