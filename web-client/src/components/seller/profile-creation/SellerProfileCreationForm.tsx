@@ -59,10 +59,10 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
   };
   
   return (    
-    <div className="w-full grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div className="w-full h-full grid grid-cols-1 lg:grid-cols-5 gap-8">
       {/* Basic Info Card - Takes up 3 columns on large screens */}
-      <div className="lg:col-span-3 space-y-8">
-        <div className="card bg-base-100 shadow-md">
+      <div className="lg:col-span-3 h-full space-y-8">
+        <div className="card bg-base-100 shadow-md h-full">
           <div className="bg-base-200/50 p-6 border-b border-base-200">
             <h3 className="text-xl font-semibold text-base-content">Basic Information</h3>
             <p className="text-base-content/70 text-sm mt-1">

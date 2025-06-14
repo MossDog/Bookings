@@ -20,6 +20,11 @@ const themes = [
   { value: 'coffee', label: 'Coffee' },
   { value: 'caramellatte', label: 'Caramellatte' },
   { value: 'winter', label: 'Winter' },
+  { value: 'dracula', label: 'Dracula' },
+  { value: 'night', label: 'Night' },
+  { value: 'corporate', label: 'Corporate' },
+  { value: 'acid', label: 'Acid' },
+  { value: 'autumn', label: 'Autumn' }
 ];
 
 // Settings page component

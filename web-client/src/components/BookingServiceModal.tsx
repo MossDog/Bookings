@@ -8,6 +8,7 @@ import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
 
+
 interface BookServiceModalProps {
   service: Service | null;
   onClose: () => void;

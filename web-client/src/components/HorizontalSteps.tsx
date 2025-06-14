@@ -25,7 +25,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
     }
   };
   return (
-    <div className="flex flex-col lg:flex-row min-h-full w-full">
+    <div className="flex flex-col lg:flex-row h-full w-full grow ">
       {/* Steps sidebar */}
       <div className="w-full lg:w-72 bg-base-100/50 border-b lg:border-b-0 lg:border-r border-base-200">
         <div className="sticky top-0 flex flex-col justify-between h-full">
@@ -87,8 +87,8 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
       </div>
 
       {/* Content area */}
-      <div className="flex-1 bg-base-100/50">
-        <div className="w-full h-full">
+      <div className="flex-1 flex grow bg-base-100/50 ">
+        <div className="w-full h-full grow ">
           {React.Children.toArray(children)[currentStep - 1]}
         </div>
       </div>
