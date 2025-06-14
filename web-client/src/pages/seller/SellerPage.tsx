@@ -23,7 +23,7 @@ export default function SellerPage() {
       }
 
       const { data, error } = await supabase
-        .from('Seller')
+        .from('seller')
         .select('*')
         .eq('user_id', userId)
         .single();

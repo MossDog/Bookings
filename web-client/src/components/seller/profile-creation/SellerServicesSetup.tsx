@@ -1,5 +1,6 @@
 import ServiceCard from "@/components/ServiceCard";
 import { Service } from "@/types/types"
+import { useUser } from "@supabase/auth-helpers-react";
 import { useState } from "react"
 
 interface SellerServicesSetupProps {
@@ -14,10 +15,21 @@ export default function SellerServicesSetup({
   const [price, setPrice] = useState(10);
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState(30);
+  const user = useUser();
 
   const addService = () => {
-    const newService = { name, price, duration, description }
-    setServices([...services, newService]);
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+    const newService = { name, price, duration, description, user_id: user.id }
+
+    setServices([
+      ...services,
+      newService
+    ]);
+
+
     onNewService(newService);
 
     // Reset form
