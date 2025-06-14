@@ -15,7 +15,7 @@ export default function ProfilePicture() {
       if (!userId) return;
 
       const { data, error } = await supabase
-        .from('Seller')
+        .from('seller')
         .select('profile_url')
         .eq('user_id', userId)
         .single();

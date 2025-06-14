@@ -6,7 +6,7 @@ export const fetchServices = async (
 ): Promise<{ data: Service[]; error: string | null }> => {
   try {
     const { data, error } = await supabase
-      .from("Service")
+      .from("service")
       .select("id, name, description, price, category, duration, user_id")
       .eq("user_id", userId);
 

@@ -22,7 +22,7 @@ export default function EditSellerProfile() {
       }
 
       const { data, error } = await supabase
-        .from('Seller')
+        .from('seller')
         .select('*')
         .eq('user_id', session.user.id)
         .single();
@@ -52,7 +52,7 @@ export default function EditSellerProfile() {
     const updateData = { [editingField]: fieldValue };
 
     const { error } = await supabase
-      .from('Seller')
+      .from('seller')
       .update(updateData)
       .eq('user_id', seller.id);
 
@@ -72,7 +72,7 @@ export default function EditSellerProfile() {
     const updateData = { [field]: null };
 
     const { error } = await supabase
-      .from('Seller')
+      .from('seller')
       .update(updateData)
       .eq('user_id', seller.id);
 

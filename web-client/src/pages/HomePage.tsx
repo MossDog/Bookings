@@ -13,7 +13,7 @@ export default function ExploreBusinesses() {
     const fetchSellers = async () => {
       try {
         const { data, error } = await supabase
-          .from('Seller')
+          .from('seller')
           .select('*');
 
         if (error) throw error;

@@ -14,7 +14,7 @@ export interface ProfileCreationData {
 export const createSellerProfile = async (details: ProfileCreationData) => {
     try {
         const { error: sellerError } = await supabase
-            .from('Seller')
+            .from('seller')
             .insert({
                 user_id: details.user.id,
                 name: details.name,
@@ -66,7 +66,7 @@ export const deleteSellerProfile = async (userId: string) => {
 
         // Then delete seller profile
         const { error: sellerError } = await supabase
-            .from('Seller')
+            .from('seller')
             .delete()
             .eq('user_id', userId);
 

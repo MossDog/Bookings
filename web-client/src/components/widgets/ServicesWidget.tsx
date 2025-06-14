@@ -3,9 +3,10 @@ import { Service } from "../../types/types";
 import supabase from "@/utils/supabase";
 import { Link } from "react-router-dom";
 import { formatDuration } from "@/utils/formatDuration";
+import BookServiceModal from "../BookingServiceModal";
 
 interface ServicesWidgetProps {
-  userId?: string;
+  userId?: string; // Optional: allows passing userId from parent
 }
 
 const DISPLAY_LIMIT = 5;
@@ -13,12 +14,23 @@ const DISPLAY_LIMIT = 5;
 const normalizeCategory = (value?: string) =>
   value?.trim().toLowerCase() || "";
 
-const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId }) => {
+const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId }) => {
   const [services, setServices] = useState<Service[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [, setSelectedService] = useState<Service | null>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [userId, setUserId] = useState<string | null>(externalUserId || null);
+
+  useEffect(() => {
+    if (!externalUserId) {
+      const fetchUserId = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) setUserId(user.id);
+      };
+      fetchUserId();
+    }
+  }, [externalUserId]);
 
   useEffect(() => {
     if (!userId) return;
@@ -28,7 +40,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId }) => {
       setError(null);
 
       const { data, error } = await supabase
-        .from("Service")
+        .from("service")
         .select("*")
         .eq("user_id", userId);
 
@@ -68,24 +80,23 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId }) => {
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold text-center">Prestation</h2>
-  
+
       {/* Tabs */}
-      <div className="flex flex-wrap gap-2 overflow-x-auto text-sm font-medium">
+      <div role="tablist" className="tabs tabs-border flex flex-wrap justify-center gap-2">
         {categories.map((cat) => (
           <button
             key={cat}
+            role="tab"
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-full whitespace-nowrap border transition ${
-              activeCategory === cat
-                ? "bg-black text-white border-black"
-                : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+            className={`tab transition ${
+              activeCategory === cat ? "tab-active text-primary" : "text-base-content"
             }`}
           >
             {cat}
           </button>
         ))}
       </div>
-  
+
       {/* Status */}
       {isLoading && (
         <p className="text-center text-base-content/60">Loading services...</p>
@@ -96,50 +107,54 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId }) => {
           No services in this category.
         </p>
       )}
-  
-      {/* Service cards */}
-      <div className="space-y-4">
+
+      {/* Services */}
+      <div className="min-h-[500px] md:min-h-[600px] lg:min-h-[650px] space-y-4">
         {limited.map((service) => (
           <div
             key={service.id}
             onClick={() => setSelectedService(service)}
-            className="flex justify-between items-center border rounded-lg p-4 shadow-sm bg-white hover:bg-gray-50 cursor-pointer transition"
+            className="card card-bordered shadow-sm bg-base-100 cursor-pointer hover:bg-base-200 transition"
           >
-            <div>
-              <h3 className="font-semibold text-base text-gray-900">
-                {service.name}
-              </h3>
-              {service.duration && (
-                <p className="text-sm text-gray-500">
+            <div className="card-body flex-row justify-between items-center">
+              <div>
+                <h3 className="card-title">{service.name}</h3>
+                <p className="text-sm text-base-content/60">
                   {formatDuration(service.duration)}
                 </p>
-              )}
-              <p className="text-sm text-gray-600 mt-1">
-                Costs €{service.price.toFixed(2)}
-              </p>
+                <p className="text-sm mt-1">Costs €{service.price.toFixed(2)}</p>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedService(service);
+                }}
+                className="btn btn-outline btn-sm text-primary"
+              >
+                Book
+              </button>
             </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedService(service);
-              }}
-              className="border border-gray-300 px-4 py-1 rounded-full text-sm hover:bg-gray-100"
-            >
-              Book
-            </button>
           </div>
         ))}
       </div>
-  
-      {/* See More button */}
-      {filtered.length > DISPLAY_LIMIT && (
-  <div className="flex justify-center">
-    <Link to="/" className="px-6 py-2 rounded-full border border-black text-black hover:bg-black hover:text-white transition">
-      See more
-    </Link>
-  </div>
-)}
-    </div> // ✅ This closes the root <div>
-  )};
+
+      {/* See More */}
+      <div className="flex justify-center mt-4">
+        <Link to="/" className="btn btn-outline btn-sm md:btn-md lg:btn-md">
+          See more
+        </Link>
+      </div>
+
+      {/* Modal */}
+      {selectedService && userId && (
+        <BookServiceModal
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+          userId={userId}
+        />
+      )}
+    </div>
+  );
+};
 
 export default ServicesWidget;
