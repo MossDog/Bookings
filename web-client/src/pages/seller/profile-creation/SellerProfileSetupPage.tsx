@@ -66,25 +66,75 @@ function SellerProfileSetupPage() {
     }
   }
 
-
-  return (
-    <div className="min-h-screen overflow flex flex-col">
+  return (    <div className="min-h-screen bg-base-100/50">
       <Navbar />
-      <HorizontalSteps 
-        steps={["Basic Info", "Services", "Bookings", "Add Images", "Confirm"]}
-        validateStep={validateStep}  
-      >
-        <SellerProfileCreationForm
-          onInvalidData={handleInvalidFormData}
-          onValidData={handleValidFormData}
-        />
-        <SellerServicesSetup 
-          onNewService={handleNewService}
-        />
-        <div>TODO: Availability</div>
-        <div>TODO: Gallery maybe? </div>
-        <button className="btn" onClick={onSubmit}>Confirm Account Creation</button>
-      </HorizontalSteps>
+      <main className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="mb-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-3">Create Your Business Profile</h1>
+            <p className="text-base-content/70 text-lg">
+              Set up your business presence and start accepting bookings
+            </p>
+          </div>
+        </div>
+
+        {/* Steps Content */}
+        <div className="bg-base-100 rounded-xl shadow-sm border border-base-200">
+          <HorizontalSteps 
+            steps={["Basic Info", "Services", "Bookings", "Add Images", "Confirm"]}
+            validateStep={validateStep}  
+          >
+            <div className="w-full max-w-[1200px] mx-auto p-6">
+              <SellerProfileCreationForm
+                onInvalidData={handleInvalidFormData}
+                onValidData={handleValidFormData}
+              />
+            </div>
+            <div className="w-full max-w-[1200px] mx-auto p-6">
+              <SellerServicesSetup 
+                onNewService={handleNewService}
+              />
+            </div>
+            <div className="w-full max-w-[1200px] mx-auto p-6">
+              <div className="card bg-base-100 shadow-sm border border-base-200">
+                <div className="p-8 text-center">
+                  <h3 className="text-xl font-semibold mb-3">Set Your Availability</h3>
+                  <p className="text-base-content/70 max-w-xl mx-auto">
+                    Coming soon - you'll be able to set your working hours and manage bookings.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full max-w-[1200px] mx-auto p-6">
+              <div className="card bg-base-100 shadow-sm border border-base-200">
+                <div className="p-8 text-center">
+                  <h3 className="text-xl font-semibold mb-3">Add Business Photos</h3>
+                  <p className="text-base-content/70 max-w-xl mx-auto">
+                    Coming soon - you'll be able to showcase your business with a photo gallery.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full max-w-[1200px] mx-auto p-6">
+              <div className="card bg-base-100 shadow-sm border border-base-200">
+                <div className="p-8 text-center">
+                  <h3 className="text-xl font-semibold mb-4">Ready to Launch Your Business?</h3>
+                  <p className="text-base-content/70 mb-6 max-w-xl mx-auto">
+                    Review your information and click below to create your business profile.
+                  </p>
+                  <button 
+                    onClick={onSubmit} 
+                    className="btn btn-primary btn-lg"
+                  >
+                    Create Business Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </HorizontalSteps>
+        </div>
+      </main>
     </div>
   );
 };
