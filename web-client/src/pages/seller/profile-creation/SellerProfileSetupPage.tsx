@@ -13,7 +13,7 @@ function SellerProfileSetupPage() {
   const [profileData, setProfileData] = useState<ProfileCreationData>();
   const [services, setServices] = useState<Service[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
-  //const [weekSchedule, setWeekSchedule] = useState<WeekSchedule>();
+  const [weekSchedule, setWeekSchedule] = useState<WeekSchedule>();
 
   const handleValidFormData = (data: ProfileCreationData) => {
     setProfileData(data);
