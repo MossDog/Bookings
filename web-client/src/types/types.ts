@@ -6,7 +6,6 @@ export interface Service {
     category?: string;
     duration: number;
     user_id: string;
-
   }
 
 export interface Seller {
