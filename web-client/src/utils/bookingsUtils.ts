@@ -1,23 +1,22 @@
+import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
-import { fetchServices } from "./dbdao";
-import { DateTime } from "luxon";
+import { fetchServices } from "./dbdao"; // Adjust path if needed
 
 /**
  * Book a slot for a logged-in user with a specific service
  * @param sellerId - Seller's UUID
  * @param serviceId - ID of the selected service
  * @param date - The date being booked
- * @param slot - Time in 'HH:mm' format (e.g. '08:15')
- * @param sellerTimezone - IANA timezone string like 'Europe/Dublin'
+ * @param slot - Time in 'HH:mm' format
  */
 export async function bookSlot(
   sellerId: string,
   serviceId: number,
   date: Date,
-  slot: string,
-  sellerTimezone: string = "Europe/Dublin"
+  slot: string
 ): Promise<{ success: boolean; message: string }> {
   try {
+    // Get the current user
     const {
       data: { user },
       error: authError,
@@ -42,27 +41,19 @@ export async function bookSlot(
 
     const duration = selectedService.duration;
 
-    // 2. Calculate start and end time in seller's timezone
-    const start = DateTime.fromFormat(
-      `${date.toISOString().split("T")[0]} ${slot}`,
-      "yyyy-MM-dd HH:mm",
-      { zone: sellerTimezone }
-    );
+    // 2. Calculate start and end time
+    const dateString = format(date, "yyyy-MM-dd");
+    const startDateTime = new Date(`${dateString}T${slot}`);
+    const endDateTime = addMinutes(startDateTime, duration);
 
-    if (!start.isValid) {
-      return { success: false, message: "Invalid date or time format" };
-    }
-
-    const end = start.plus({ minutes: duration });
-
-    // 3. Insert booking in UTC
+    // 3. Insert booking
     const { error: insertError } = await supabase.from("bookings").insert([
       {
         seller_id: sellerId,
         user_id: userId,
         service_id: serviceId,
-        start_time: start.toUTC().toISO(),
-        end_time: end.toUTC().toISO(),
+        start_time: startDateTime.toISOString(),
+        end_time: endDateTime.toISOString(),
       },
     ]);
 

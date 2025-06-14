@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { DateTime } from "luxon";
+import { format } from "date-fns";
 import { getAvailableSlots } from "@/utils/availabilityUtils";
 import { bookSlot } from "@/utils/bookingsUtils";
 import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
 import { toast } from "sonner";
-import { Service } from "@/types/types";
+import type { Service } from "@/types/types";
 
 interface BookServiceModalProps {
   service: Service | null;
@@ -19,15 +19,14 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
   const [slots, setSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     if (!service) return;
   
     getAvailableDates(service.user_id)
-      .then((dates) => {
-        const dateObjects = dates.map((d) => new Date(d));
-        setAvailableDates(dateObjects); // ✅ now it's Date[]
+      .then((dateStrings: string[]) => {
+        const dates: Date[] = dateStrings.map((str) => new Date(str));
+        setAvailableDates(dates);
       })
       .catch(console.error);
   }, [service]);
@@ -36,7 +35,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
     if (!service || !selectedDate) return;
 
     setLoadingSlots(true);
-    getAvailableSlots(service.user_id, selectedDate, service.timezone)
+    getAvailableSlots(service.user_id, selectedDate)
       .then(setSlots)
       .catch(() => setSlots([]))
       .finally(() => setLoadingSlots(false));
@@ -49,8 +48,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
       service.user_id,
       service.id,
       selectedDate,
-      selectedSlot,
-      service.timezone
+      selectedSlot
     );
 
     if (result.success) {
@@ -63,8 +61,6 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
   if (!service) return null;
 
-  const showTimezoneWarning = userTimezone !== service.timezone;
-
   return (
     <>
       <input type="checkbox" className="modal-toggle" checked readOnly />
@@ -72,22 +68,19 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
         <div className="modal-box rounded-2xl space-y-5">
           <h3 className="text-xl font-semibold text-center">Book: {service.name}</h3>
 
-          {showTimezoneWarning && (
-            <p className="text-sm text-warning text-center">
-              Note: Times are shown in the seller’s local time ({service.timezone})
-            </p>
-          )}
-
           <DayPicker
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
             disabled={(date) =>
-              !availableDates.some((available) =>
-                DateTime.fromJSDate(available).toISODate() ===
-                DateTime.fromJSDate(date).toISODate()
+              !availableDates.some(
+                (available) =>
+                  format(available, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
               )
             }
+            modifiersClassNames={{
+              disabled: "opacity-30 pointer-events-none", // greyed out
+            }}
             className="mx-auto"
           />
 
