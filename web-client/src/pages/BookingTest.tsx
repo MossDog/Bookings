@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { getAvailableSlots } from "../utils/availabilityUtils";
 import { bookSlot } from "../utils/bookingsUtils";
+type Slot = string; // Assuming slots are strings, adjust if needed
+type BookingResult = { message: string }; // Adjust based on the actual structure of the result
 
 const TestAvailability: React.FC = () => {
   const [slots, setSlots] = useState<string[]>([]);
@@ -21,10 +23,14 @@ const TestAvailability: React.FC = () => {
     setSlots([]);
 
     try {
-      const availableSlots = await getAvailableSlots(sellerId, date);
+      const availableSlots: Slot[] = await getAvailableSlots(sellerId, date);
       setSlots(availableSlots);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message || "Something went wrong");
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -32,8 +38,16 @@ const TestAvailability: React.FC = () => {
 
   const handleBookSlot = async (slot: string) => {
     setBookingMessage("Booking...");
-    const result = await bookSlot(sellerId, userId, serviceId, date, slot);
-    setBookingMessage(result.message);
+    try {
+      const result: BookingResult = await bookSlot(sellerId, userId, serviceId, date, slot);
+      setBookingMessage(result.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setBookingMessage(err.message || "Failed to book slot");
+      } else {
+        setBookingMessage("Failed to book slot");
+      }
+    }
   };
 
   return (
