@@ -76,6 +76,7 @@ export default function Settings() {
         <button className="btn btn-primary" onClick={() => navigate('/profile-creation')}>Profile Creation</button>
         <button className="btn btn-primary" onClick={() => navigate('/edit-seller-profile')}>Edit Seller Profile</button>
         <button className="btn btn-primary" onClick={() => navigate('/confirm')}>Confirm Email</button>
+        <button className="btn btn-primary" onClick={() => navigate('/my-bookings')}>View Bookings</button>
         {/* Example seller page navigation (replace USER_ID with a real id for real test) */}
         <button className="btn btn-primary" onClick={() => navigate('/test-user-id/profile')}>Seller Page (example)</button>
       </div>

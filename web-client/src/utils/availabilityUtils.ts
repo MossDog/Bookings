@@ -68,6 +68,7 @@ export async function getAvailableSlots(sellerId: string, date: Date): Promise<s
     .from('bookings')
     .select('*')
     .eq('seller_id', sellerId)
+    .eq('status', 'confirmed')
     .gte('start_time', `${isoDate}T00:00:00`)
     .lt('start_time', `${isoDate}T23:59:59`);
 
