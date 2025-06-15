@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar';
 import ServicesWidget from '@/components/widgets/ServicesWidget';
 import SellerTitle from '@/components/SellerTitle';
 import HighlightWidget from '@/components/widgets/HighlightWidget';
-import SellerTitleCard from '../../components/SellerTitleCard'; // Example widget for the right column
+import SellerTitleCard from '../../components/SellerTitleCard';
 
 export default function SellerPage() {
   const { userId } = useParams();
