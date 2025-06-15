@@ -63,7 +63,41 @@ export const createSellerProfile = async (details: ProfileCreationData, schedule
                     throw new Error(`Failed to create services: ${servicesError.message}`);
                 }
         }        
-   
+        
+        const {error: openingHoursError } = await supabase
+            .from('seller_working_hours')
+            .insert(
+                Object.entries(schedule)
+                    .filter(([_, daySchedule]) => !daySchedule.isClosed)
+                    .map(([day, daySchedule]) => ({
+                        user_id: details.user.id,
+                        day_of_week: getDayNumber(day),
+                        start_time: daySchedule.openTime,
+                        end_time: daySchedule.closeTime
+                    }))
+            );
+
+        if(openingHoursError) {
+            throw new Error(`Failed to create working hours: ${openingHoursError.message}`);
+        }
+
+        const { error: breakHoursError } = await supabase
+            .from('seller_breaks')
+            .insert(
+            Object.entries(schedule)
+                .flatMap(([day, daySchedule]) =>
+                (daySchedule.breaks || []).map(breakTime => ({
+                    user_id: details.user.id,
+                    day_of_week: getDayNumber(day),
+                    start_time: breakTime.startTime,
+                    end_time: breakTime.endTime
+                }))
+                )
+            );
+
+        if(breakHoursError) {
+            throw new Error(`Failed to create break hours: ${breakHoursError.message}`);
+        }
 
         const {error: openingHoursError } = await supabase
             .from('seller_working_hours')
