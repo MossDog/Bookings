@@ -1,0 +1,69 @@
+"filename", "language", "JSON", "JavaScript", "Batch", "TypeScript", "Markdown", "JSON with Comments", "TypeScript JSX", "PostCSS", "HTML", "comment", "blank", "total"
+"c:\Users\35386\Desktop\bookings\Bookings\README.md", "Markdown", 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 17, 114
+"c:\Users\35386\Desktop\bookings\Bookings\server\app.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\35386\Desktop\bookings\Bookings\server\package-lock.json", "JSON", 816, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 817
+"c:\Users\35386\Desktop\bookings\Bookings\server\package.json", "JSON", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 15
+"c:\Users\35386\Desktop\bookings\Bookings\start-app.bat", "Batch", 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 2, 7
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\README.md", "Markdown", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 10, 55
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\components.json", "JSON", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\eslint.config.js", "JavaScript", 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 2, 29
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 1, 14
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\package-lock.json", "JSON", 4674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4675
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\package.json", "JSON", 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 50
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\BookingServiceModal.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 115, 0, 0, 0, 17, 132
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\Button.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 3, 21
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\HorizontalSteps.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 87, 0, 0, 4, 8, 99
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ImageUpload.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 7, 42
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\Navbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 8, 52
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\NavbarDialogMenu.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 6, 55
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ProtectedRoute.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 6, 27
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerBrowser.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 83, 0, 0, 4, 7, 94
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerCard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 63, 0, 0, 4, 7, 74
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerTitle.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 42, 0, 0, 7, 13, 62
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ServiceCard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 4, 36
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\UserAvatar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 10, 57
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\VerticalSteps.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 96, 0, 0, 5, 10, 111
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\auth\LoginForm.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 58, 0, 0, 0, 11, 69
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\auth\SignUpForm.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 58, 0, 0, 0, 12, 70
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\image\ImageSlot.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 117, 0, 0, 6, 17, 140
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\Banner.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 8, 44
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\ProfilePicture.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 8, 55
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\SellerAvatarDropdown.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 8, 48
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerOpeningHours.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 211, 0, 0, 1, 22, 234
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerProfileCreationForm.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 175, 0, 0, 3, 17, 195
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerServicesSetup.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 147, 0, 0, 3, 16, 166
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ui\button.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 6, 60
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ui\dialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 129, 0, 0, 0, 13, 142
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\Gallery\GalleryWidget.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 1, 11
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\HighlightWidget.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 13, 86
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\ServicesWidget.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 133, 0, 0, 5, 21, 159
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\index.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 1, 6
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\lib\utils.ts", "TypeScript", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 2, 7
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\main.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 37, 0, 0, 2, 7, 46
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\ConfirmEmailPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 2, 9
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\HomePage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 7, 42
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\SellerProfilePage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 114, 0, 0, 0, 19, 133
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\SettingsPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 64, 0, 0, 15, 5, 84
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\AuthLayout.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 3, 18
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\LoginPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 1, 11
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\SignUpPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 12
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\seller\SellerPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 43, 0, 0, 4, 7, 54
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\seller\profile-creation\SellerProfileSetupPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 125, 0, 0, 4, 15, 144
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\types\types.ts", "TypeScript", 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 6, 51
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\authUtils.ts", "TypeScript", 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 8, 28
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\availabilityUtils.ts", "TypeScript", 0, 0, 0, 61, 0, 0, 0, 0, 0, 14, 16, 91
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\bookingsUtils.ts", "TypeScript", 0, 0, 0, 47, 0, 0, 0, 0, 0, 11, 10, 68
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\bucketUtils.ts", "TypeScript", 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 9, 36
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\cn.ts", "TypeScript", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\dbdao.ts", "TypeScript", 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 3, 24
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\formatDuration.ts", "TypeScript", 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\getAvailableDatesUtils.ts", "TypeScript", 0, 0, 0, 12, 0, 0, 0, 0, 0, 6, 3, 21
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\sellerProfileUtils.ts", "TypeScript", 0, 0, 0, 117, 0, 0, 0, 0, 0, 3, 16, 136
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\supabase.ts", "TypeScript", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 3, 8
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\tsconfig.app.json", "JSON", 29, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 35
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 1, 14
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\tsconfig.node.json", "JSON", 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 25
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\vercel.json", "JSON", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"c:\Users\35386\Desktop\bookings\Bookings\web-client\vite.config.ts", "TypeScript", 0, 0, 0, 15, 0, 0, 0, 0, 0, 1, 1, 17
+"Total", "-", 5628, 27, 2, 388, 142, 13, 2478, 5, 13, 113, 471, 9280

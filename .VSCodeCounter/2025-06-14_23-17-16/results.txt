@@ -1,0 +1,98 @@
+Date : 2025-06-14 23:17:16
+Directory : c:\Users\35386\Desktop\bookings\Bookings\web-client\src
+Total : 51 files,  2856 codes, 104 comments, 426 blanks, all 3386 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |         37 |      2,478 |         69 |        347 |      2,894 |
+| TypeScript     |         13 |        373 |         35 |         78 |        486 |
+| PostCSS        |          1 |          5 |          0 |          1 |          6 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                     | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                        |         51 |      2,856 |        104 |        426 |      3,386 |
+| . (Files)                                                                                                                |          3 |         42 |          3 |          9 |         54 |
+| components                                                                                                               |         27 |      2,018 |         44 |        279 |      2,341 |
+| components (Files)                                                                                                       |         13 |        732 |         24 |        106 |        862 |
+| components\auth                                                                                                          |          2 |        116 |          0 |         23 |        139 |
+| components\image                                                                                                         |          1 |        117 |          6 |         17 |        140 |
+| components\seller                                                                                                        |          6 |        656 |          7 |         79 |        742 |
+| components\seller (Files)                                                                                                |          3 |        123 |          0 |         24 |        147 |
+| components\seller\profile-creation                                                                                       |          3 |        533 |          7 |         55 |        595 |
+| components\ui                                                                                                            |          2 |        183 |          0 |         19 |        202 |
+| components\widgets                                                                                                       |          3 |        214 |          7 |         35 |        256 |
+| components\widgets (Files)                                                                                               |          2 |        206 |          5 |         34 |        245 |
+| components\widgets\Gallery                                                                                               |          1 |          8 |          2 |          1 |         11 |
+| lib                                                                                                                      |          1 |          5 |          0 |          2 |          7 |
+| pages                                                                                                                    |          9 |        423 |         23 |         61 |        507 |
+| pages (Files)                                                                                                            |          4 |        220 |         15 |         33 |        268 |
+| pages\auth                                                                                                               |          3 |         35 |          0 |          6 |         41 |
+| pages\seller                                                                                                             |          2 |        168 |          8 |         22 |        198 |
+| pages\seller (Files)                                                                                                     |          1 |         43 |          4 |          7 |         54 |
+| pages\seller\profile-creation                                                                                            |          1 |        125 |          4 |         15 |        144 |
+| types                                                                                                                    |          1 |         45 |          0 |          6 |         51 |
+| utils                                                                                                                    |         10 |        323 |         34 |         69 |        426 |
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                                 | language       | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\BookingServiceModal.tsx                               | TypeScript JSX |        115 |          0 |         17 |        132 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\Button.tsx                                            | TypeScript JSX |         18 |          0 |          3 |         21 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\HorizontalSteps.tsx                                   | TypeScript JSX |         87 |          4 |          8 |         99 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ImageUpload.tsx                                       | TypeScript JSX |         35 |          0 |          7 |         42 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\Navbar.tsx                                            | TypeScript JSX |         44 |          0 |          8 |         52 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\NavbarDialogMenu.tsx                                  | TypeScript JSX |         49 |          0 |          6 |         55 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ProtectedRoute.tsx                                    | TypeScript JSX |         21 |          0 |          6 |         27 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerBrowser.tsx                                     | TypeScript JSX |         83 |          4 |          7 |         94 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerCard.tsx                                        | TypeScript JSX |         63 |          4 |          7 |         74 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\SellerTitle.tsx                                       | TypeScript JSX |         42 |          7 |         13 |         62 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ServiceCard.tsx                                       | TypeScript JSX |         32 |          0 |          4 |         36 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\UserAvatar.tsx                                        | TypeScript JSX |         47 |          0 |         10 |         57 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\VerticalSteps.tsx                                     | TypeScript JSX |         96 |          5 |         10 |        111 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\auth\LoginForm.tsx                                    | TypeScript JSX |         58 |          0 |         11 |         69 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\auth\SignUpForm.tsx                                   | TypeScript JSX |         58 |          0 |         12 |         70 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\image\ImageSlot.tsx                                   | TypeScript JSX |        117 |          6 |         17 |        140 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\Banner.tsx                                     | TypeScript JSX |         36 |          0 |          8 |         44 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\ProfilePicture.tsx                             | TypeScript JSX |         47 |          0 |          8 |         55 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\SellerAvatarDropdown.tsx                       | TypeScript JSX |         40 |          0 |          8 |         48 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerOpeningHours.tsx        | TypeScript JSX |        211 |          1 |         22 |        234 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerProfileCreationForm.tsx | TypeScript JSX |        175 |          3 |         17 |        195 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\seller\profile-creation\SellerServicesSetup.tsx       | TypeScript JSX |        147 |          3 |         16 |        166 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ui\button.tsx                                         | TypeScript JSX |         54 |          0 |          6 |         60 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\ui\dialog.tsx                                         | TypeScript JSX |        129 |          0 |         13 |        142 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\Gallery\GalleryWidget.tsx                     | TypeScript JSX |          8 |          2 |          1 |         11 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\HighlightWidget.tsx                           | TypeScript JSX |         73 |          0 |         13 |         86 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\components\widgets\ServicesWidget.tsx                            | TypeScript JSX |        133 |          5 |         21 |        159 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\index.css                                                        | PostCSS        |          5 |          0 |          1 |          6 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\lib\utils.ts                                                     | TypeScript     |          5 |          0 |          2 |          7 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\main.tsx                                                         | TypeScript JSX |         37 |          2 |          7 |         46 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\ConfirmEmailPage.tsx                                       | TypeScript JSX |          7 |          0 |          2 |          9 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\HomePage.tsx                                               | TypeScript JSX |         35 |          0 |          7 |         42 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\SellerProfilePage.tsx                                      | TypeScript JSX |        114 |          0 |         19 |        133 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\SettingsPage.tsx                                           | TypeScript JSX |         64 |         15 |          5 |         84 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\AuthLayout.tsx                                        | TypeScript JSX |         15 |          0 |          3 |         18 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\LoginPage.tsx                                         | TypeScript JSX |         10 |          0 |          1 |         11 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\auth\SignUpPage.tsx                                        | TypeScript JSX |         10 |          0 |          2 |         12 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\seller\SellerPage.tsx                                      | TypeScript JSX |         43 |          4 |          7 |         54 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\pages\seller\profile-creation\SellerProfileSetupPage.tsx         | TypeScript JSX |        125 |          4 |         15 |        144 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\types\types.ts                                                   | TypeScript     |         45 |          0 |          6 |         51 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\authUtils.ts                                               | TypeScript     |         20 |          0 |          8 |         28 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\availabilityUtils.ts                                       | TypeScript     |         61 |         14 |         16 |         91 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\bookingsUtils.ts                                           | TypeScript     |         47 |         11 |         10 |         68 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\bucketUtils.ts                                             | TypeScript     |         27 |          0 |          9 |         36 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\cn.ts                                                      | TypeScript     |          5 |          0 |          1 |          6 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\dbdao.ts                                                   | TypeScript     |         21 |          0 |          3 |         24 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\formatDuration.ts                                          | TypeScript     |          8 |          0 |          0 |          8 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\getAvailableDatesUtils.ts                                  | TypeScript     |         12 |          6 |          3 |         21 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\sellerProfileUtils.ts                                      | TypeScript     |        117 |          3 |         16 |        136 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\utils\supabase.ts                                                | TypeScript     |          5 |          0 |          3 |          8 |
+| c:\Users\35386\Desktop\bookings\Bookings\web-client\src\vite-env.d.ts                                                    | TypeScript     |          0 |          1 |          1 |          2 |
+| Total                                                                                                                    |                |      2,856 |        104 |        426 |      3,386 |
++--------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
