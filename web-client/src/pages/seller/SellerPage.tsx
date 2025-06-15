@@ -7,7 +7,7 @@ import ServicesWidget from '@/components/widgets/ServicesWidget';
 import SellerTitle from '@/components/SellerTitle';
 import HighlightWidget from '@/components/widgets/HighlightWidget';
 import SellerTitleCard from '../../components/SellerTitleCard';
-import { fileExistsInBucket, getPublicUrl } from '@/utils/bucketUtils';
+import { getPublicUrl } from '@/utils/bucketUtils';
 
 export default function SellerPage() {
   const { userId } = useParams();

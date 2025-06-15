@@ -1,6 +1,6 @@
 import React from 'react';
 import { Seller } from '../types/types';
-import { MapPin, Star, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Clock, ExternalLink } from 'lucide-react';
 
 interface SellerTitleProps {
   seller?: Seller;
