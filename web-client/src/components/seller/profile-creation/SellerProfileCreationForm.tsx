@@ -32,7 +32,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData, profileData, s
     }
 
     try {
-      const validData = SellerFormSchema.parse(profileData);
+      SellerFormSchema.parse(profileData);
       onValidData();
       setError(null); // Clear any previous errors
     } catch(error) {
