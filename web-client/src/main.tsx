@@ -10,11 +10,11 @@ import HomePage from './pages/HomePage.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
 import SignUpPage from './pages/auth/SignUpPage.tsx'
 import ConfirmEmailPage from './pages/ConfirmEmailPage.tsx'
-import SellerProfilePage from './pages/SellerProfilePage.tsx'
 import SellerProfileSetupPage from './pages/seller/profile-creation/SellerProfileSetupPage.tsx'
 import SellerPage from './pages/seller/SellerPage.tsx'
 import Settings from './pages/SettingsPage.tsx'
 import MyBookingsPage from './pages/MyBookings.tsx'
+import AccountPage from './pages/AccountPage.tsx'
 
 // --- THEME INIT LOGIC ---
 const THEME_KEY = 'theme-preference';
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
   { path : "/profile-creation", element: <SellerProfileSetupPage /> },
   { path: "/:userId/profile", element: <SellerPage />},
   { path: "/confirm", element: <ConfirmEmailPage />},
-  { path: "/edit-seller-profile", element: <SellerProfilePage />},
+  { path: "/edit-seller-profile", element: <AccountPage />},
   { path: "/settings", element: <Settings />},
   { path: "/my-bookings", element: <MyBookingsPage />}
 

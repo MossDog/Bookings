@@ -79,7 +79,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-center">Prestation</h2>
+      <h2 className="text-2xl font-bold text-center">Services</h2>
 
       {/* Tabs */}
       <div role="tablist" className="tabs tabs-border flex flex-wrap justify-center gap-2">

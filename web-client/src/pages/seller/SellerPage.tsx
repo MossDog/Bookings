@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Seller } from '../../types/types';
 import supabase from '../../utils/supabase';
 import Navbar from '../../components/Navbar';
-// import Banner from '@/components/seller/Banner';
-// import ProfilePicture from '@/components/seller/ProfilePicture';
 import ServicesWidget from '@/components/widgets/ServicesWidget';
 import SellerTitle from '@/components/SellerTitle';
 import HighlightWidget from '@/components/widgets/HighlightWidget';
+import SellerTitleCard from '../../components/SellerTitleCard'; // Example widget for the right column
 
 export default function SellerPage() {
   const { userId } = useParams();
@@ -30,7 +29,7 @@ export default function SellerPage() {
 
       if (error) {
         console.error(error);
-        navigate("/");
+        navigate('/');
       } else {
         setSeller(data);
       }
@@ -42,12 +41,21 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-      <div className="relative">
-        {/* <Banner bannerUrl={seller?.banner_url} />
-        <ProfilePicture profileUrl={seller?.profile_url} /> */}
-        <SellerTitle seller={seller} />
-        <HighlightWidget userId={userId} />
-        <ServicesWidget userId={userId} />
+      <SellerTitle seller={seller} />
+  
+      <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
+        {/* Left Side: Main Content */}
+        <div className="flex-1 max-w-4xl">
+          <HighlightWidget userId={userId} />
+          <ServicesWidget userId={userId} />
+        </div>
+  
+        {/* Right Side: Sidebar (hidden on small screens) */}
+        <div className="hidden lg:block w-full max-w-[460px]">
+          <div className="sticky top-28">
+            <SellerTitleCard />
+          </div>
+        </div>
       </div>
     </div>
   );
