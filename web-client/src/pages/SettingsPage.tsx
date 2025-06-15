@@ -24,7 +24,8 @@ const themes = [
   { value: 'night', label: 'Night' },
   { value: 'corporate', label: 'Corporate' },
   { value: 'acid', label: 'Acid' },
-  { value: 'autumn', label: 'Autumn' }
+  { value: 'autumn', label: 'Autumn' },
+  { value: 'cyberpunk', label: 'Cyberpunk' }
 ];
 
 // Settings page component
