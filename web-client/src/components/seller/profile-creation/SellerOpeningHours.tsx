@@ -43,6 +43,7 @@ export default function SellerOpeningHours({
   schedule, setSchedule
 }: SellerOpeningHoursProps) {
   
+
   const handleTimeChange= (dayId: string, field: 'openTime' | 'closeTime', value: string) => {
     setSchedule(prev => ({
       ...prev,

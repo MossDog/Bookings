@@ -1,6 +1,5 @@
 import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
-import { fetchServices } from "./dbdao"; // Adjust path if needed
 
 /**
  * Book a slot for a logged-in user with a specific service
@@ -28,30 +27,32 @@ export async function bookSlot(
 
     const userId = user.id;
 
-    // 1. Fetch services to get duration
-    const { data: services, error: serviceError } = await fetchServices(sellerId);
-    if (serviceError) {
-      return { success: false, message: "Could not fetch service duration" };
+    // Fetch the selected service (name + duration)
+    const { data: service, error: serviceError } = await supabase
+      .from("service")
+      .select("name, duration")
+      .eq("id", serviceId)
+      .single();
+
+    if (serviceError || !service) {
+      return { success: false, message: "Service not found" };
     }
 
-    const selectedService = services.find((s) => s.id === serviceId);
-    if (!selectedService || !selectedService.duration) {
-      return { success: false, message: "Invalid service or missing duration" };
-    }
+    const serviceName = service.name;
+    const duration = service.duration;
 
-    const duration = selectedService.duration;
-
-    // 2. Calculate start and end time
+    // Calculate start and end time
     const dateString = format(date, "yyyy-MM-dd");
     const startDateTime = new Date(`${dateString}T${slot}`);
     const endDateTime = addMinutes(startDateTime, duration);
 
-    // 3. Insert booking
+    // Insert booking
     const { error: insertError } = await supabase.from("bookings").insert([
       {
         seller_id: sellerId,
         user_id: userId,
         service_id: serviceId,
+        service_name: serviceName,
         start_time: startDateTime.toISOString(),
         end_time: endDateTime.toISOString(),
       },

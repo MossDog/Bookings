@@ -23,7 +23,7 @@ export default function SellerServicesSetup({
       console.error("User not authenticated");
       return;
     }
-    const newService = { name, price, duration, description, user_id: user.id,  }
+    const newService = { name, price, duration, description, user_id: user.id  }
 
     setServices([
       ...services,

@@ -6,7 +6,9 @@ import { createSellerProfile, ProfileCreationData } from "@/utils/sellerProfileU
 import { useUser } from '@supabase/auth-helpers-react'
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service } from "@/types/types";
+
 import SellerOpeningHours, { days, WeekSchedule } from "@/components/seller/profile-creation/SellerOpeningHours";
+
 
 function SellerProfileSetupPage() {
   const user = useUser();
@@ -42,8 +44,13 @@ function SellerProfileSetupPage() {
     }), {});
   });
 
+
   const handleValidFormData = () => {
     setIsFormValid(true);
+  }
+
+  const onScheduleChange = (schedule: WeekSchedule) => {
+    setWeekSchedule(schedule);
   }
 
   const handleInvalidFormData = () => {
@@ -66,7 +73,7 @@ function SellerProfileSetupPage() {
   };
 
   const onSubmit = async () => {
-    if (!user || !profileData) {
+    if (!user || !profileData || !weekSchedule) {
       return;
     }
 
@@ -83,6 +90,7 @@ function SellerProfileSetupPage() {
         ...profileData,
         services
       }, schedule);
+
 
       if(success){
         console.log("Business profile successfully created!");
@@ -133,6 +141,7 @@ function SellerProfileSetupPage() {
               <SellerOpeningHours 
                 schedule={schedule}
                 setSchedule={setSchedule}
+
               />
             </div>
             <div className="w-full max-w-[1200px] mx-auto p-6">
