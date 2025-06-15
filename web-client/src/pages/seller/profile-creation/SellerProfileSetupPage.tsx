@@ -49,10 +49,6 @@ function SellerProfileSetupPage() {
     setIsFormValid(true);
   }
 
-  const onScheduleChange = (schedule: WeekSchedule) => {
-    setWeekSchedule(schedule);
-  }
-
   const handleInvalidFormData = () => {
     setIsFormValid(false);
   }
@@ -73,7 +69,7 @@ function SellerProfileSetupPage() {
   };
 
   const onSubmit = async () => {
-    if (!user || !profileData || !weekSchedule) {
+    if (!user || !profileData || !schedule) {
       return;
     }
 
