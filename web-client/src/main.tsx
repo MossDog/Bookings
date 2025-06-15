@@ -13,8 +13,8 @@ import ConfirmEmailPage from './pages/ConfirmEmailPage.tsx'
 import SellerProfileSetupPage from './pages/seller/profile-creation/SellerProfileSetupPage.tsx'
 import SellerPage from './pages/seller/SellerPage.tsx'
 import Settings from './pages/SettingsPage.tsx'
-import MyBookingsPage from './pages/MyBookings.tsx'
 import AccountPage from './pages/AccountPage.tsx'
+import MyBookings from './pages/MyBookings.tsx'
 
 // --- THEME INIT LOGIC ---
 const THEME_KEY = 'theme-preference';
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   { path: "/confirm", element: <ConfirmEmailPage />},
   { path: "/edit-seller-profile", element: <AccountPage />},
   { path: "/settings", element: <Settings />},
-  { path: "/my-bookings", element: <MyBookingsPage />}
+  { path: "/my-bookings", element: <MyBookings />}
 
 ]);
 
