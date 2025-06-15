@@ -1,6 +1,6 @@
 import supabase from './supabase';
 
-export async function cancelBooking(bookingId: number) {
+export async function cancelBooking(bookingId: string) {
   const { error } = await supabase
     .from("bookings")
     .update({ status: "cancelled" })

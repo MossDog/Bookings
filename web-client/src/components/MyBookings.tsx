@@ -2,19 +2,13 @@ import { useEffect, useState } from "react";
 import supabase from "@/utils/supabase";
 import { DateTime } from "luxon";
 import { toast } from "sonner";
-import { cancelBooking } from "../utils/cancelBookingUtil";
-
-interface Booking {
-  id: number;
-  start_time: string;
-  end_time: string;
-  status: string;
-  service_name: string;
-}
+import { Booking } from "@/types/types";
+import MyBookingsModal from "./MyBookingsModal";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -46,16 +40,10 @@ export default function MyBookings() {
     fetchBookings();
   }, []);
 
-  const handleCancel = async (id: number) => {
-    const res = await cancelBooking(id);
-    if (res.success) {
-      toast.success(res.message);
-      setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b))
-      );
-    } else {
-      toast.error(res.message);
-    }
+  const handleCancelSuccess = (id: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b))
+    );
   };
 
   return (
@@ -70,7 +58,8 @@ export default function MyBookings() {
         bookings.map((b) => (
           <div
             key={b.id}
-            className="p-4 border border-base-300 rounded-xl shadow flex justify-between items-start"
+            onClick={() => setSelectedBooking(b)}
+            className="p-4 border border-base-300 rounded-xl shadow cursor-pointer hover:bg-base-100 transition"
           >
             <div>
               <p className="font-semibold">{b.service_name || "Unnamed Service"}</p>
@@ -80,23 +69,23 @@ export default function MyBookings() {
               </p>
               <p
                 className={`text-sm mt-1 ${
-                  b.status === "cancelled" ? "text-error" : "text-success"
+                  b.status === "cancelled" ? "text-error" : "text-primary"
                 }`}
               >
                 {b.status.toUpperCase()}
               </p>
             </div>
-
-            {b.status !== "cancelled" && (
-              <button
-                onClick={() => handleCancel(b.id)}
-                className="btn btn-warning btn-sm rounded-xl"
-              >
-                Cancel
-              </button>
-            )}
           </div>
         ))
+      )}
+
+      {/* Booking detail modal */}
+      {selectedBooking && (
+        <MyBookingsModal
+          booking={selectedBooking}
+          onClose={() => setSelectedBooking(null)}
+          onCancelSuccess={handleCancelSuccess}
+        />
       )}
     </div>
   );
