@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { z } from 'zod';
 import { ProfileCreationData } from '@/utils/sellerProfileUtils';
 import ImageSlot from '@/components/image/ImageSlot';
@@ -14,18 +14,14 @@ const SellerFormSchema = z.object({
 });
 
 interface SellerProfileCreationFormProps {
-  onValidData: (data: ProfileCreationData) => void;
+  onValidData: () => void;
   onInvalidData: () => void;
+  setProfileData: Dispatch<SetStateAction<ProfileCreationData>>;
+  profileData: ProfileCreationData;
 }
 
-function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfileCreationFormProps) {
+function SellerProfileCreationForm ({ onValidData, onInvalidData, profileData, setProfileData }: SellerProfileCreationFormProps) {
   const user = useUser();
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    address: '',
-    category: '',
-  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,11 +32,8 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
     }
 
     try {
-      const validData = SellerFormSchema.parse(formData);
-      onValidData({
-        ...validData,
-        user
-      });
+      const validData = SellerFormSchema.parse(profileData);
+      onValidData();
       setError(null); // Clear any previous errors
     } catch(error) {
       if(error instanceof z.ZodError) {
@@ -48,14 +41,14 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
       }
       onInvalidData();
     }
-  }, [formData, user]); // Add all dependencies
+  }, [profileData, user]); // Add all dependencies
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    setProfileData({
+      ...profileData,
       [name]: value
-    }));
+    });
   };
   
   return (    
@@ -79,7 +72,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
                 name="name"
                 className="input input-bordered w-full focus:ring-2 focus:ring-primary/20 transition-all" 
                 placeholder="Enter your business name"
-                value={formData.name}
+                value={profileData.name}
                 onChange={handleInputChange}
               />
             </div>
@@ -90,7 +83,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
               </label>
               <textarea 
                 name="description"
-                value={formData.description}
+                value={profileData.description}
                 onChange={handleInputChange}
                 className="textarea textarea-bordered w-full h-32 focus:ring-2 focus:ring-primary/20 transition-all" 
                 placeholder="Describe your services, experience, and what makes your business unique..."
@@ -109,7 +102,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
                 </label>
                 <select 
                   name="category"
-                  value={formData.category}
+                  value={profileData.category}
                   onChange={handleInputChange}
                   className="select select-bordered w-full focus:ring-2 focus:ring-primary/20 transition-all"
                 >
@@ -127,7 +120,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData }: SellerProfil
                 </label>
                 <input 
                   name="address"
-                  value={formData.address}
+                  value={profileData.address}
                   onChange={handleInputChange}
                   className="input input-bordered w-full focus:ring-2 focus:ring-primary/20 transition-all" 
                   placeholder="Enter your business address"

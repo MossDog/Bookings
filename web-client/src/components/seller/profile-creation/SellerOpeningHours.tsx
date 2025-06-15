@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface BreakTime {
   startTime: string;
@@ -16,7 +16,7 @@ export type WeekSchedule = {
   [key: string]: DaySchedule;
 };
 
-const days = [
+export const days = [
   { id: "monday", label: "Monday" },
   { id: "tuesday", label: "Tuesday" },
   { id: "wednesday", label: "Wednesday" },
@@ -34,19 +34,15 @@ const timeOptions = Array.from({ length: 48 }, (_, i) => {
   return `${displayHour}:${minute} ${ampm}`;
 });
 
-export default function SellerOpeningHours() {
-  const [schedule, setSchedule] = useState<WeekSchedule>(() => {
-    // Initialize with default values
-    return days.reduce((acc, day) => ({
-      ...acc,
-      [day.id]: {
-        isClosed: false,
-        openTime: '9:00 AM',
-        closeTime: '5:00 PM',
-        breaks: []
-      }
-    }), {});
-  });
+interface SellerOpeningHoursProps {
+  schedule: WeekSchedule;
+  setSchedule: Dispatch<SetStateAction<WeekSchedule>>;
+}
+
+export default function SellerOpeningHours({
+  schedule, setSchedule
+}: SellerOpeningHoursProps) {
+  
   const handleTimeChange= (dayId: string, field: 'openTime' | 'closeTime', value: string) => {
     setSchedule(prev => ({
       ...prev,

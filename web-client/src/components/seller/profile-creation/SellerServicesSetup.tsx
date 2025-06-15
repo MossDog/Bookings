@@ -1,16 +1,17 @@
 import ServiceCard from "@/components/ServiceCard";
 import { Service } from "@/types/types"
 import { useUser } from "@supabase/auth-helpers-react";
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 interface SellerServicesSetupProps {
   onNewService: (service: Service) => void;
+  services: Service[];
+  setServices: Dispatch<SetStateAction<Service[]>>;
 }
 
 export default function SellerServicesSetup({
-  onNewService
+  onNewService, services, setServices
 }: SellerServicesSetupProps) {
-  const [services, setServices] = useState<Service[]>([]);
   const [name, setName] = useState('');
   const [price, setPrice] = useState(10);
   const [description, setDescription] = useState('');
