@@ -7,6 +7,7 @@ import { bookSlot } from "@/utils/bookingsUtils";
 import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
+import supabase from "@/utils/supabase";
 
 
 interface BookServiceModalProps {
@@ -34,12 +35,34 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
   useEffect(() => {
     if (!service || !selectedDate) return;
-
+  
     setLoadingSlots(true);
-    getAvailableSlots(service.user_id, selectedDate)
-      .then(setSlots)
-      .catch(() => setSlots([]))
-      .finally(() => setLoadingSlots(false));
+  
+    const fetchTimezoneAndSlots = async () => {
+      try {
+        const { data: seller, error } = await supabase
+          .from('seller')
+          .select('timezone')
+          .eq('user_id', service.user_id)
+          .single();
+  
+        if (error || !seller?.timezone) {
+          console.error('Failed to load timezone');
+          setSlots([]);
+          return;
+        }
+  
+        const slots = await getAvailableSlots(service.user_id, selectedDate, seller.timezone);
+        setSlots(slots);
+      } catch (err) {
+        console.error(err);
+        setSlots([]);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+  
+    fetchTimezoneAndSlots();
   }, [selectedDate, service]);
 
   const handleConfirmBooking = async () => {
