@@ -4,9 +4,10 @@ import supabase from "@/utils/supabase";
 import { Link } from "react-router-dom";
 import { formatDuration } from "@/utils/formatDuration";
 import BookServiceModal from "../BookingServiceModal";
+import { Clock, Euro, ChevronRight } from 'lucide-react';
 
 interface ServicesWidgetProps {
-  userId?: string; // Optional: allows passing userId from parent
+  userId?: string;
 }
 
 const DISPLAY_LIMIT = 5;
@@ -77,73 +78,147 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
 
   const limited = filtered.slice(0, DISPLAY_LIMIT);
 
-  return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-center">Services</h2>
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex flex-col items-center space-y-6">
+          <h2 className="text-2xl font-bold text-base-content">Services</h2>
+          <div className="tabs tabs-bordered w-full justify-center animate-pulse">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-10 w-24 bg-base-200 rounded-lg mx-1"></div>
+            ))}
+          </div>
+        </div>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="card bg-base-200 shadow animate-pulse">
+              <div className="card-body">
+                <div className="h-6 bg-base-300 rounded w-1/4"></div>
+                <div className="h-4 bg-base-300 rounded w-1/3"></div>
+                <div className="h-4 bg-base-300 rounded w-1/5"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-      {/* Tabs */}
-      <div role="tablist" className="tabs tabs-border flex flex-wrap justify-center gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            role="tab"
-            onClick={() => setActiveCategory(cat)}
-            className={`tab transition ${
-              activeCategory === cat ? "tab-active text-primary" : "text-base-content"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="alert alert-error shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 space-y-8">
+      {/* Header */}
+      <div className="flex flex-col items-center space-y-6">
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-2xl font-bold text-base-content">Services</h2>
+          {filtered.length > 0 && (
+            <div className="badge badge-primary badge-lg">{filtered.length} services</div>
+          )}
+        </div>
+
+        {/* Categories */}
+        <div className="tabs tabs-bordered w-full justify-center">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`
+                tab tab-lg transition-all duration-200 
+                ${activeCategory === cat 
+                  ? "tab-active text-primary border-primary" 
+                  : "text-base-content/70 hover:text-base-content"
+                }
+              `}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Status */}
-      {isLoading && (
-        <p className="text-center text-base-content/60">Loading services...</p>
-      )}
-      {error && <p className="text-error text-center">{error}</p>}
-      {!isLoading && !error && filtered.length === 0 && (
-        <p className="text-center text-base-content/60">
-          No services in this category.
-        </p>
+      {/* Empty State */}
+      {filtered.length === 0 && (
+        <div className="text-center py-12">
+          <div className="bg-base-200 rounded-lg p-8">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <p className="text-base-content/70 font-medium">No services available in this category</p>
+          </div>
+        </div>
       )}
 
-      {/* Services */}
-      <div className="min-h-[500px] md:min-h-[600px] lg:min-h-[650px] space-y-4">
+      {/* Services List */}
+      <div className="space-y-4">
         {limited.map((service) => (
           <div
             key={service.id}
             onClick={() => setSelectedService(service)}
-            className="card card-bordered shadow-sm bg-base-100 cursor-pointer hover:bg-base-200 transition"
+            className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
           >
-            <div className="card-body flex-row justify-between items-center">
-              <div>
-                <h3 className="card-title">{service.name}</h3>
-                <p className="text-sm text-base-content/60">
-                  {formatDuration(service.duration)}
-                </p>
-                <p className="text-sm mt-1">Costs €{service.price.toFixed(2)}</p>
+            <div className="card-body">
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1 min-w-0">                  <h3 className="card-title text-base-content group-hover:text-primary transition-colors mb-2">
+                    {service.name}
+                  </h3>
+                  
+                  <p className="text-base-content/70 text-sm line-clamp-2 mb-4">
+                    {service.description}
+                  </p>
+
+                  <div className="flex items-center gap-6 text-base-content/70">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm">{formatDuration(service.duration)}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Euro className="w-4 h-4" />
+                      <span className="text-lg font-bold text-primary">
+                        {service.price.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedService(service);
+                  }}
+                  className="btn btn-primary btn-sm"
+                >
+                  Book Now
+                </button>
               </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedService(service);
-                }}
-                className="btn btn-outline btn-sm text-primary"
-              >
-                Book
-              </button>
             </div>
           </div>
         ))}
       </div>
 
       {/* See More */}
-      <div className="flex justify-center mt-4">
-        <Link to="/" className="btn btn-outline btn-sm md:btn-md lg:btn-md">
-          See more
-        </Link>
-      </div>
+      {filtered.length > DISPLAY_LIMIT && (
+        <div className="flex justify-center pt-4">
+          <Link 
+            to="/" 
+            className="btn btn-outline btn-wide gap-2 group hover:btn-primary"
+          >
+            View All Services
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      )}
 
       {/* Modal */}
       {selectedService && userId && (

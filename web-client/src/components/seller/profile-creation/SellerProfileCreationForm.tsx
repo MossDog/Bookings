@@ -160,7 +160,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData, profileData, s
                 </span>
               </label>
               <div className="relative w-full h-[200px] rounded-lg bg-base-200 overflow-hidden">
-                <ImageSlot bucketName="TEST" filePath="TEST"/>
+                <ImageSlot bucketName="public.images" filePath={`${user?.id}/bannerimage`}/>
               </div>
             </div>
             
@@ -173,7 +173,7 @@ function SellerProfileCreationForm ({ onValidData, onInvalidData, profileData, s
               </label>
               <div className="flex justify-center">
                 <div className="w-32 h-32 relative rounded-full overflow-hidden bg-base-200">
-                  <ImageSlot bucketName="TEST" filePath="TEST" circle/>
+                  <ImageSlot bucketName="public.images" filePath={`${user?.id}/profileimage`} circle/>
                 </div>
               </div>
             </div>

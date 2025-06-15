@@ -7,10 +7,14 @@ import ServicesWidget from '@/components/widgets/ServicesWidget';
 import SellerTitle from '@/components/SellerTitle';
 import HighlightWidget from '@/components/widgets/HighlightWidget';
 import SellerTitleCard from '../../components/SellerTitleCard';
+import { fileExistsInBucket, getPublicUrl } from '@/utils/bucketUtils';
 
 export default function SellerPage() {
   const { userId } = useParams();
   const [seller, setSeller] = useState<Seller | undefined>();
+
+  const [bannerImageUrl, setBannerImageUrl] = useState<string | undefined>(undefined);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -33,6 +37,12 @@ export default function SellerPage() {
       } else {
         setSeller(data);
       }
+
+      const bannerUrl = await getPublicUrl('public.images', `${userId}/bannerimage`);
+      const profileUrl = await getPublicUrl('public.images', `${userId}/profileimage`);
+
+      setBannerImageUrl(bannerUrl || undefined);
+      setProfileImageUrl(profileUrl || undefined);
     };
 
     fetchSeller();
@@ -41,7 +51,7 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-      <SellerTitle seller={seller} />
+      <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl}/>
   
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {/* Left Side: Main Content */}
