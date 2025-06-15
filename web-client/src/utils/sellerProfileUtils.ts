@@ -18,7 +18,7 @@ const getDayNumber = (day: string): number => {
 };
 
 export interface ProfileCreationData {
-    user: User;
+    user?: User;
     name: string;
     description?: string;
     address?: string;
@@ -28,6 +28,10 @@ export interface ProfileCreationData {
 
 export const createSellerProfile = async (details: ProfileCreationData, schedule: WeekSchedule) => {
     try {
+        if(!details.user){
+            throw new Error(`Failed to create seller profile: user not found`)
+        }
+
         const { error: sellerError } = await supabase
             .from('seller')
             .insert({
@@ -42,14 +46,16 @@ export const createSellerProfile = async (details: ProfileCreationData, schedule
             throw new Error(`Failed to create seller profile: ${sellerError.message}`)
         }
 
+        
+
         if(details.services && details.services.length > 0) {
             const { error: servicesError } = await supabase
                 .from('service')
                 .insert(
                     details.services.map(service => ({
                         ...service,
-                        category: details.category,
-                        user_id: details.user.id
+                        user_id: details.user!.id
+
                     }))
                 );
             
@@ -57,14 +63,15 @@ export const createSellerProfile = async (details: ProfileCreationData, schedule
                     throw new Error(`Failed to create services: ${servicesError.message}`);
                 }
         }        
-        
+   
+
         const {error: openingHoursError } = await supabase
             .from('seller_working_hours')
             .insert(
                 Object.entries(schedule)
                     .filter(([_, daySchedule]) => !daySchedule.isClosed)
                     .map(([day, daySchedule]) => ({
-                        user_id: details.user.id,
+                        user_id: details.user!.id,
                         day_of_week: getDayNumber(day),
                         start_time: daySchedule.openTime,
                         end_time: daySchedule.closeTime
@@ -81,7 +88,7 @@ export const createSellerProfile = async (details: ProfileCreationData, schedule
             Object.entries(schedule)
                 .flatMap(([day, daySchedule]) =>
                 (daySchedule.breaks || []).map(breakTime => ({
-                    user_id: details.user.id,
+                    user_id: details.user!.id,
                     day_of_week: getDayNumber(day),
                     start_time: breakTime.startTime,
                     end_time: breakTime.endTime
@@ -107,7 +114,7 @@ export const deleteSellerProfile = async (userId: string) => {
     try {
         // delete all services associated with the seller
         const { error: servicesError } = await supabase
-            .from('Service')
+            .from('service')
             .delete()
             .eq('user_id', userId);
 

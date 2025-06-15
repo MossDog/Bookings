@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { isAuthenticated } from '../utils/authUtils';
 import { Calendar } from 'lucide-react';
 import NavbarDialogMenu from './NavbarDialogMenu';
@@ -21,10 +21,14 @@ export default function Navbar() {
     <div
       className="navbar px-10 bg-base-200 drop-shadow-sm min-h-[90px]"
     >
-      <div className='navbar-start flex gap-2'>
-        <Calendar size={35} className='text-primary' strokeWidth={2} />
-        <h2 className='text-2xl font-mono text-base-content tracking-wide font-semibold'>bookeo</h2>
-      </div>
+      
+        <div className='navbar-start'>
+          <Link to="/" className='flex gap-2'>
+            <Calendar size={35} className='text-primary' strokeWidth={2} />
+            <h2 className='text-2xl font-mono text-base-content tracking-wide font-semibold'>bookeo</h2>
+          </Link>
+        </div>
+      
 
       <div className='navbar-end'>
         { authenticated ? (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HorizontalSteps from "../../../components/HorizontalSteps";
 import SellerProfileCreationForm from "../../../components/seller/profile-creation/SellerProfileCreationForm";
 import Navbar from "@/components/Navbar";
@@ -6,22 +6,47 @@ import { createSellerProfile, ProfileCreationData } from "@/utils/sellerProfileU
 import { useUser } from '@supabase/auth-helpers-react'
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service } from "@/types/types";
-import SellerOpeningHours, { WeekSchedule } from "@/components/seller/profile-creation/SellerOpeningHours";
+
+import SellerOpeningHours, { days, WeekSchedule } from "@/components/seller/profile-creation/SellerOpeningHours";
+
 
 function SellerProfileSetupPage() {
   const user = useUser();
-  const [profileData, setProfileData] = useState<ProfileCreationData>();
+
+  const [profileData, setProfileData] = useState<ProfileCreationData>({
+    name: '',
+    description: '',
+    address: '',
+    category: '',
+  });
+
+  // On load init profile data
+  useEffect(() => {
+    setProfileData({
+      user: user || undefined,
+      ...profileData
+    });
+  }, []);
+
   const [services, setServices] = useState<Service[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [weekSchedule, setWeekSchedule] = useState<WeekSchedule>();
+  
+  const [schedule, setSchedule] = useState<WeekSchedule>(() => {
+    // Initialize with default values
+    return days.reduce((acc, day) => ({
+      ...acc,
+      [day.id]: {
+        isClosed: false,
+        openTime: '9:00 AM',
+        closeTime: '5:00 PM',
+        breaks: []
+      }
+    }), {});
+  });
 
-  const handleValidFormData = (data: ProfileCreationData) => {
-    setProfileData(data);
+
+  const handleValidFormData = () => {
     setIsFormValid(true);
-  }
-
-  const onScheduleChange = (schedule: WeekSchedule) => {
-    setWeekSchedule(schedule);
   }
 
   const handleInvalidFormData = () => {
@@ -44,7 +69,7 @@ function SellerProfileSetupPage() {
   };
 
   const onSubmit = async () => {
-    if (!user || !profileData || !weekSchedule) {
+    if (!user || !profileData || !schedule) {
       return;
     }
 
@@ -60,7 +85,8 @@ function SellerProfileSetupPage() {
       const { success } = await createSellerProfile({
         ...profileData,
         services
-      }, weekSchedule);
+      }, schedule);
+
 
       if(success){
         console.log("Business profile successfully created!");
@@ -94,6 +120,8 @@ function SellerProfileSetupPage() {
           >
             <div className="w-full h-full max-w-[1200px] mx-auto p-6">
               <SellerProfileCreationForm
+                profileData={profileData}
+                setProfileData={setProfileData}
                 onInvalidData={handleInvalidFormData}
                 onValidData={handleValidFormData}
               />
@@ -101,11 +129,15 @@ function SellerProfileSetupPage() {
             <div className="w-full h-full max-w-[1200px] mx-auto p-6">
               <SellerServicesSetup 
                 onNewService={handleNewService}
+                services={services}
+                setServices={setServices}
               />
             </div>
             <div className="w-full h-full max-w-[1200px] mx-auto p-6 ">
               <SellerOpeningHours 
-                onChange={onScheduleChange}
+                schedule={schedule}
+                setSchedule={setSchedule}
+
               />
             </div>
             <div className="w-full max-w-[1200px] mx-auto p-6">
