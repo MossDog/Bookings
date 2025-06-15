@@ -40,9 +40,14 @@ export interface Holiday {
 }
 
 export interface Booking {
+  id: string;
   seller_id: string;
+  seller_name: string;
+  user_id: string;
   start_time: string; // ISO string: "2025-06-14T14:30:00Z"
   end_time: string;
+  service_name: string;
+  status: "pending" | "confirmed" | "cancelled";
 }
 
 export interface Slot {
