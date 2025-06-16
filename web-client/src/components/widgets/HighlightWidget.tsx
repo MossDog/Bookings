@@ -25,7 +25,7 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({ userId }) => {
       const { data, error } = await supabase
         .from('service')
         .select('*')
-        .eq('user_id', userId);
+        .eq('seller_id', userId);
 
       if (error) {
         setError(error.message);

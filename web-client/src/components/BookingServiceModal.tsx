@@ -25,7 +25,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
   useEffect(() => {
     if (!service) return;
 
-    getAvailableDates(service.user_id)
+    getAvailableDates(service.seller_id)
       .then((dateStrings: string[]) => {
         const dates: Date[] = dateStrings.map((str) => new Date(str));
         setAvailableDates(dates);
@@ -41,10 +41,10 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
       try {
         const { data: seller, error } = await supabase
-          .from("seller")
-          .select("id, timezone")
-          .eq("user_id", service.user_id)
-          .single();
+  .from("seller")
+  .select("id, timezone")
+  .eq("id", service.seller_id)  // ✅ correct
+  .single();
 
         if (error || !seller?.timezone || !seller?.id) {
           console.error("Failed to load seller info");

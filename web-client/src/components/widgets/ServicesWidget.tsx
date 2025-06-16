@@ -43,7 +43,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
       const { data, error } = await supabase
         .from("service")
         .select("*")
-        .eq("user_id", userId);
+        .eq("seller_id", userId);
 
       if (error) {
         setError(error.message);

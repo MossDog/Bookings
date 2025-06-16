@@ -6,6 +6,7 @@ export interface Service {
     category?: string;
     duration: number;
     user_id: string;
+    seller_id: string; // UUID of the seller
   }
 
 export interface Seller {
@@ -16,6 +17,7 @@ export interface Seller {
     email: string;
     address: string;
     user_id: string;
+    seller_id: string; // UUID of the seller
     created_at: string;
     timezone: string;
 }
