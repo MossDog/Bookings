@@ -1,5 +1,8 @@
 import { Seller } from "@/types/types";
+import { getPublicUrl } from "@/utils/bucketUtils";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Store } from "lucide-react";
 
 interface SellerCardProps {
   seller: Seller;
@@ -7,21 +10,58 @@ interface SellerCardProps {
 
 export default function SellerCard({
   seller
-}: SellerCardProps) {
+}: SellerCardProps) {  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    async function getBanner() {
+      setIsLoading(true);
+      setImageError(false);
+      try {
+        const url = await getPublicUrl('public.images', `${seller.user_id}/bannerimage`);
+
+        if(url) {
+          setBannerUrl(url);
+        } else {
+          setImageError(true);
+        }
+      } catch (error) {
+        console.error('Error loading banner:', error);
+        setImageError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getBanner();
+  }, [seller])
+
   return (
     <Link
       key={seller.user_id}
       to={`/${seller.user_id}/profile`}
       className="card bg-base-100 hover:shadow-lg transition-all duration-200 group"
-    >
-      {/* Card Image */}
+    >      {/* Card Image */}
       <figure className="relative h-48 bg-base-300">
         <div className="absolute inset-0 bg-gradient-to-t from-base-300 to-transparent opacity-50"></div>
-        <img
-          src="/test_Restaurant.jpeg"
-          alt={seller.name}
-          className="w-full h-full object-cover"
-        />
+        {isLoading ? (
+          <div className="w-full h-full animate-pulse bg-base-300"></div>
+        ) : imageError ? (
+          <div className="w-full h-full flex items-center justify-center bg-base-200">
+            <Store className="w-12 h-12 text-base-content" />
+          </div>
+        ) : (
+          <img
+            src={bannerUrl || '/test_Restaurant.jpeg'}
+            alt={seller.name}
+            className="w-full h-full object-cover"
+            onError={() => {
+              setImageError(true);
+              setBannerUrl('/test_Restaurant.jpeg');
+            }}
+          />
+        )}
         <div className="absolute top-4 right-4">
           <div className="badge badge-primary">{seller.category || 'Uncategorized'}</div>
         </div>
