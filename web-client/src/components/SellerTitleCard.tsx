@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import { Seller } from '@/types/types';
 import OpeningHoursWidget from './OpeningHours';
 import { MapPin, ExternalLink } from 'lucide-react';

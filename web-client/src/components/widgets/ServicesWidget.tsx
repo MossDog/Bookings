@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Service } from "../../types/types";
-import supabase from "@/utils/supabase";
 import { Link } from "react-router-dom";
 import { formatDuration } from "@/utils/formatDuration";
 import BookServiceModal from "../BookingServiceModal";

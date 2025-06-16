@@ -13,7 +13,7 @@ export async function generateUniqueSlug(baseSlug: string, tableName: string) {
   let slug = baseSlug;
   let counter = 1;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from(tableName)
     .select('slug')
     .ilike('slug', `${baseSlug}%`);
