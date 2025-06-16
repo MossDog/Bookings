@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Service } from "../../types/types";
-import { Link } from "react-router-dom";
 import { formatDuration } from "@/utils/formatDuration";
 import BookServiceModal from "../BookingServiceModal";
-import { Clock, Euro, ChevronRight } from 'lucide-react';
+import { Clock, Euro, ChevronRight, PackageOpen } from 'lucide-react';
 
 interface ServicesWidgetProps {
   services?: Service[];
@@ -15,7 +14,7 @@ const DISPLAY_LIMIT = 5;
 const normalizeCategory = (value?: string) =>
   value?.trim().toLowerCase() || "";
 
-const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, userId }: ServicesWidgetProps) => {
+const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services }: ServicesWidgetProps) => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
@@ -100,12 +99,9 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, userId }: Ser
       </div>
 
       {/* Empty State */}
-      {filtered.length === 0 && (
-        <div className="text-center py-12">
+      {filtered.length === 0 && (      <div className="text-center py-12">
           <div className="bg-base-200 rounded-lg p-8">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+            <PackageOpen className="h-12 w-12 mx-auto text-base-content/30 mb-4" />
             <p className="text-base-content/70 font-medium">No services available in this category</p>
           </div>
         </div>
@@ -158,19 +154,17 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, userId }: Ser
 
       {/* See More */}
       {filtered.length > DISPLAY_LIMIT && (
-        <div className="flex justify-center pt-4">
-          <Link 
-            to="/" 
+        <div className="flex justify-center pt-4">          <button 
+            onClick={() => setActiveCategory("All")}
             className="btn btn-outline btn-wide gap-2 group hover:btn-primary"
           >
             View All Services
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          </button>
         </div>
       )}
 
-      {/* Modal */}
-      {selectedService && userId && (
+      {/* Modal */}      {selectedService && (
         <BookServiceModal
           service={selectedService}
           onClose={() => setSelectedService(null)}
