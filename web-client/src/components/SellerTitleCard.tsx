@@ -1,43 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Seller } from '@/types/types';
 import OpeningHoursWidget from './OpeningHours';
-import supabase from '@/utils/supabase';
 import { MapPin, ExternalLink } from 'lucide-react';
 
-const SellerTitleCard: React.FC = () => {
-  const [seller, setSeller] = useState<Seller | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { userId } = useParams();
-  const navigate = useNavigate();
+interface SellerTitleCardProps {
+  seller?: Seller;
+}
 
-  useEffect(() => {
-    const fetchSeller = async () => {
-      if (!userId) {
-        navigate('/login');
-        return;
-      }
+function SellerTitleCard({
+  seller
+}: SellerTitleCardProps) {
 
-      const { data, error } = await supabase
-        .from('seller')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
 
-      if (error || !data) {
-        console.error(error);
-        navigate('/');
-      } else {
-        setSeller(data);
-      }
-
-      setLoading(false);
-    };
-
-    fetchSeller();
-  }, [userId]);
-
-  if (loading) {
+  if (!seller) {
     return (
       <div className="card bg-base-100 shadow-xl animate-pulse">
         <div className="card-body items-center text-center space-y-6">
@@ -53,8 +28,6 @@ const SellerTitleCard: React.FC = () => {
       </div>
     );
   }
-  
-  if (!seller) return null;
 
   const { name, address, timezone, user_id } = seller;
   const rating = 5.0;

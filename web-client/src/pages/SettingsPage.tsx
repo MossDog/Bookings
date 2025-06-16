@@ -1,4 +1,5 @@
 // Import React hooks for state and effect management
+import Navbar from '@/components/Navbar';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +49,8 @@ export default function Settings() {
   }, [theme]);
 
   return (
+    <div>
+      <Navbar />
     <div className="max-w-md mx-auto mt-10 p-6 rounded shadow space-y-6 bg-base-100 text-base-content" data-theme={theme}>
       {/* Page title */}
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
@@ -71,9 +74,6 @@ export default function Settings() {
 
       {/* Navigation buttons for testing */}
       <div className="flex flex-col gap-2 mt-6">
-        <button className="btn btn-primary" onClick={() => navigate('/')}>Home</button>
-        <button className="btn btn-primary" onClick={() => navigate('/login')}>Login</button>
-        <button className="btn btn-primary" onClick={() => navigate('/sign-up')}>Sign Up</button>
         <button className="btn btn-primary" onClick={() => navigate('/profile-creation')}>Profile Creation</button>
         <button className="btn btn-primary" onClick={() => navigate('/edit-seller-profile')}>Edit Seller Profile</button>
         <button className="btn btn-primary" onClick={() => navigate('/confirm')}>Confirm Email</button>
@@ -81,6 +81,7 @@ export default function Settings() {
         {/* Example seller page navigation (replace USER_ID with a real id for real test) */}
         <button className="btn btn-primary" onClick={() => navigate('/test-user-id/profile')}>Seller Page (example)</button>
       </div>
+    </div>
     </div>
   );
 }

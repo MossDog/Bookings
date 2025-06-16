@@ -7,7 +7,8 @@ import BookServiceModal from "../BookingServiceModal";
 import { Clock, Euro, ChevronRight } from 'lucide-react';
 
 interface ServicesWidgetProps {
-  userId?: string;
+  services?: Service[];
+  userId?: string;  // Add userId prop
 }
 
 const DISPLAY_LIMIT = 5;
@@ -15,70 +16,11 @@ const DISPLAY_LIMIT = 5;
 const normalizeCategory = (value?: string) =>
   value?.trim().toLowerCase() || "";
 
-const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId }) => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, userId }: ServicesWidgetProps) => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [userId, setUserId] = useState<string | null>(externalUserId || null);
 
-  useEffect(() => {
-    if (!externalUserId) {
-      const fetchUserId = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) setUserId(user.id);
-      };
-      fetchUserId();
-    }
-  }, [externalUserId]);
-
-  useEffect(() => {
-    if (!userId) return;
-
-    const getServices = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      const { data, error } = await supabase
-        .from("service")
-        .select("*")
-        .eq("user_id", userId);
-
-      if (error) {
-        setError(error.message);
-        console.error("Error fetching services:", error);
-      } else {
-        setServices(data || []);
-      }
-
-      setIsLoading(false);
-    };
-
-    getServices();
-  }, [userId]);
-
-  const categoryMap = new Map<string, string>();
-  services.forEach((s) => {
-    if (s.category) {
-      const norm = normalizeCategory(s.category);
-      if (!categoryMap.has(norm)) {
-        categoryMap.set(norm, s.category.trim());
-      }
-    }
-  });
-
-  const categories = ["All", ...Array.from(categoryMap.values()).sort()];
-  const normalizedActive = normalizeCategory(activeCategory);
-  const filtered = normalizedActive === "all"
-    ? services
-    : services.filter(
-        (s) => normalizeCategory(s.category) === normalizedActive
-      );
-
-  const limited = filtered.slice(0, DISPLAY_LIMIT);
-
-  if (isLoading) {
+  if (!services) {
     return (
       <div className="p-6 space-y-6">
         <div className="flex flex-col items-center space-y-6">
@@ -104,18 +46,28 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
     );
   }
 
-  if (error) {
-    return (
-      <div className="p-6">
-        <div className="alert alert-error shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>{error}</span>
-        </div>
-      </div>
-    );
-  }
+  const categoryMap = new Map<string, string>();
+  services.forEach((s) => {
+    if (s.category) {
+      const norm = normalizeCategory(s.category);
+      if (!categoryMap.has(norm)) {
+        categoryMap.set(norm, s.category.trim());
+      }
+    }
+  });
+
+  const categories = ["All", ...Array.from(categoryMap.values()).sort()];
+  const normalizedActive = normalizeCategory(activeCategory);
+  const filtered = normalizedActive === "all"
+    ? services
+    : services.filter(
+        (s) => normalizeCategory(s.category) === normalizedActive
+      );
+
+  const limited = filtered.slice(0, DISPLAY_LIMIT);
+
+  
+
 
   return (
     <div className="p-6 space-y-8">
@@ -162,10 +114,8 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ userId: externalUserId 
 
       {/* Services List */}
       <div className="space-y-4">
-        {limited.map((service) => (
-          <div
+        {limited.map((service) => (          <div
             key={service.id}
-            onClick={() => setSelectedService(service)}
             className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
           >
             <div className="card-body">

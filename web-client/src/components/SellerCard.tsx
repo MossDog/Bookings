@@ -10,8 +10,8 @@ export default function SellerCard({
 }: SellerCardProps) {
   return (
     <Link
-      key={seller.user_id}
-      to={`/${seller.user_id}/profile`}
+      key={seller.slug}
+      to={`${seller.slug}`}
       className="card bg-base-100 hover:shadow-lg transition-all duration-200 group"
     >
       {/* Card Image */}
