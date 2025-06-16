@@ -2,6 +2,7 @@ import { Service } from "@/types/types";
 import { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
 import { WeekSchedule } from "@/components/seller/profile-creation/SellerOpeningHours";
+import { createSlug, generateUniqueSlug } from "./slugUtils";
 
 // Convert day string to number (0 = Sunday, 1 = Monday, etc.)
 const getDayNumber = (day: string): number => {
@@ -26,11 +27,42 @@ export interface ProfileCreationData {
     services?: Service[];
 }
 
+export const getProfileFromSlug = async (slug: string) => {
+    const { data, error } = await supabase
+      .from('seller')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return null;
+    } else {
+      return data;
+    }
+}
+
+export const getServicesFromId = async (userId: string) => {
+    const { data, error } = await supabase
+        .from("service")
+        .select("*")
+        .eq("user_id", userId);
+
+    if (error) {
+        console.error("Error fetching services:", error);
+        return null;
+    }
+    
+    return data;
+}
+
 export const createSellerProfile = async (details: ProfileCreationData, schedule: WeekSchedule) => {
     try {
         if(!details.user){
             throw new Error(`Failed to create seller profile: user not found`)
         }
+
+        const slug = await generateUniqueSlug(createSlug(details.name), 'seller');
 
         const { error: sellerError } = await supabase
             .from('seller')
@@ -39,7 +71,8 @@ export const createSellerProfile = async (details: ProfileCreationData, schedule
                 name: details.name,
                 description: details.description || '',
                 address: details.address || '',
-                category: details.category
+                category: details.category,
+                slug
             });
 
         if(sellerError) {

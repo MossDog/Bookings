@@ -16,6 +16,7 @@ export interface Seller {
     email: string;
     address: string;
     user_id: string;
+    slug: string;
     created_at: string;
     timezone: string;
 }

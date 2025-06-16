@@ -28,7 +28,7 @@ const router = createBrowserRouter([
   { path: "/sign-up", element: <SignUpPage /> },
   { path: "/login", element: <LoginPage /> },
   { path : "/profile-creation", element: <SellerProfileSetupPage /> },
-  { path: "/:userId/profile", element: <SellerPage />},
+  { path: "/:slug", element: <SellerPage />},
   { path: "/confirm", element: <ConfirmEmailPage />},
   { path: "/edit-seller-profile", element: <AccountPage />},
   { path: "/settings", element: <Settings />},
