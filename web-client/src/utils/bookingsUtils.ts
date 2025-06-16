@@ -38,7 +38,6 @@ export async function bookSlot(
       return { success: false, message: "Service not found" };
     }
 
-    const serviceName = service.name;
     const duration = service.duration;
 
     // Calculate start and end time
@@ -52,7 +51,6 @@ export async function bookSlot(
         seller_id: sellerId,
         user_id: userId,
         service_id: serviceId,
-        service_name: serviceName,
         start_time: startDateTime.toISOString(),
         end_time: endDateTime.toISOString(),
       },
