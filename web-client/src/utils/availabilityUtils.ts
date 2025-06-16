@@ -7,18 +7,16 @@ import type { WorkingHours, Break, Holiday } from '../types/types';
  */
 function generateTimeSlots(start: DateTime, end: DateTime): string[] {
   const slots: string[] = [];
-
   let current = start;
   while (current < end) {
     slots.push(current.toFormat('HH:mm'));
     current = current.plus({ minutes: 15 });
   }
-
   return slots;
 }
 
 /**
- * Fetch rows from Supabase with a match filter
+ * Generic fetch wrapper for filtering by seller_id
  */
 async function fetchTable<T = unknown>(table: string, match: Record<string, unknown>): Promise<T[]> {
   const { data, error } = await supabase.from(table).select('*').match(match);
@@ -30,7 +28,7 @@ async function fetchTable<T = unknown>(table: string, match: Record<string, unkn
  * Main function: get available slots for a given seller and date
  */
 export async function getAvailableSlots(
-  sellerId: string,
+  sellerId: string,         // This is now seller.id
   date: Date,
   sellerTimezone: string
 ): Promise<string[]> {
@@ -40,7 +38,7 @@ export async function getAvailableSlots(
 
   // 1. Get working hours
   const workingHours = await fetchTable<WorkingHours>('seller_working_hours', {
-    user_id: sellerId,
+    seller_id: sellerId,
     day_of_week: weekday,
   });
 
@@ -51,7 +49,7 @@ export async function getAvailableSlots(
   const allSlots = generateTimeSlots(workStart, workEnd);
 
   // 2. Check holidays
-  const holidays = await fetchTable<Holiday>('seller_holidays', { user_id: sellerId });
+  const holidays = await fetchTable<Holiday>('seller_holidays', { seller_id: sellerId });
   const isHoliday = holidays.some(h =>
     DateTime.fromISO(h.date, { zone: sellerTimezone }).toISODate() === isoDate
   );
@@ -59,7 +57,7 @@ export async function getAvailableSlots(
 
   // 3. Remove break slots
   const breaks = await fetchTable<Break>('seller_breaks', {
-    user_id: sellerId,
+    seller_id: sellerId,
     day_of_week: weekday,
   });
 
@@ -69,13 +67,13 @@ export async function getAvailableSlots(
     return generateTimeSlots(breakStart, breakEnd);
   });
 
-  // 4. Remove booked slots (convert from UTC to seller local time)
+  // 4. Remove booked slots (from confirmed bookings only)
   const { data: bookings, error } = await supabase
     .from('bookings')
-    .select('*')
+    .select('start_time, end_time')
     .eq('seller_id', sellerId)
     .eq('status', 'confirmed')
-    .gte('start_time', `${isoDate}T00:00:00Z`) // query in UTC
+    .gte('start_time', `${isoDate}T00:00:00Z`)
     .lt('start_time', `${isoDate}T23:59:59Z`);
 
   if (error) throw new Error(error.message);
@@ -91,7 +89,7 @@ export async function getAvailableSlots(
     }
   });
 
-  // 5. Final slots
+  // 5. Final available slots
   return allSlots.filter(
     (slot) => !breakSlots.includes(slot) && !bookedSlots.includes(slot)
   );

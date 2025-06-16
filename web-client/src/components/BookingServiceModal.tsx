@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import type { Service } from "@/types/types";
 import supabase from "@/utils/supabase";
 
-
 interface BookServiceModalProps {
   service: Service | null;
   onClose: () => void;
@@ -21,10 +20,11 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
   const [slots, setSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [sellerId, setSellerId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!service) return;
-  
+
     getAvailableDates(service.user_id)
       .then((dateStrings: string[]) => {
         const dates: Date[] = dateStrings.map((str) => new Date(str));
@@ -35,24 +35,25 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
   useEffect(() => {
     if (!service || !selectedDate) return;
-  
-    setLoadingSlots(true);
-  
+
     const fetchTimezoneAndSlots = async () => {
+      setLoadingSlots(true);
+
       try {
         const { data: seller, error } = await supabase
-          .from('seller')
-          .select('timezone')
-          .eq('user_id', service.user_id)
+          .from("seller")
+          .select("id, timezone")
+          .eq("user_id", service.user_id)
           .single();
-  
-        if (error || !seller?.timezone) {
-          console.error('Failed to load timezone');
+
+        if (error || !seller?.timezone || !seller?.id) {
+          console.error("Failed to load seller info");
           setSlots([]);
           return;
         }
-  
-        const slots = await getAvailableSlots(service.user_id, selectedDate, seller.timezone);
+
+        setSellerId(seller.id); // Save for use in booking
+        const slots = await getAvailableSlots(seller.id, selectedDate, seller.timezone);
         setSlots(slots);
       } catch (err) {
         console.error(err);
@@ -61,15 +62,15 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
         setLoadingSlots(false);
       }
     };
-  
+
     fetchTimezoneAndSlots();
   }, [selectedDate, service]);
 
   const handleConfirmBooking = async () => {
-    if (!selectedDate || !selectedSlot || !service || !service.id) return;
+    if (!selectedDate || !selectedSlot || !service || !service.id || !sellerId) return;
 
     const result = await bookSlot(
-      service.user_id,
+      sellerId,
       service.id,
       selectedDate,
       selectedSlot
@@ -103,7 +104,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
               )
             }
             modifiersClassNames={{
-              disabled: "opacity-30 pointer-events-none", // greyed out
+              disabled: "opacity-30 pointer-events-none",
             }}
             className="mx-auto"
           />

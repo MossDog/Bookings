@@ -2,90 +2,106 @@ import { useEffect, useState } from "react";
 import supabase from "@/utils/supabase";
 import { DateTime } from "luxon";
 import { toast } from "sonner";
-import { Booking } from "@/types/types";
-import MyBookingsModal from "./MyBookingsModal";
 
 export default function MyBookings() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
+      setLoading(true);
+  
       const {
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
-
+  
       if (authError || !user) {
         toast.error("Authentication error");
+        setLoading(false);
         return;
       }
-
+  
+      console.log("Authenticated user ID:", user.id); // ✅ Add this
+  
       const { data, error } = await supabase
         .from("bookings")
-        .select("id, start_time, end_time, status, service_name")
-        .eq("user_id", user.id)
+        .select(`
+          id,
+          start_time,
+          end_time,
+          status,
+          seller (
+            id,
+            name,
+            business_name
+          ),
+          service (
+            id,
+            name,
+            price
+          )
+        `)
+        .eq("user_id", user.id) // Compare this to what's stored in your table
         .order("start_time", { ascending: true });
-
+  
+      console.log("Fetched bookings:", data); // ✅ Add this
+  
       if (error) {
         toast.error("Failed to fetch bookings");
-      } else {
-        setBookings(data as Booking[]);
+        setLoading(false);
+        return;
       }
-
+  
+      setBookings(data);
       setLoading(false);
     };
-
+  
     fetchBookings();
   }, []);
 
-  const handleCancelSuccess = (id: string) => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b))
-    );
-  };
+  if (loading) return <p>Loading your bookings...</p>;
 
   return (
-    <div className="max-w-2xl mx-auto py-10 space-y-6">
-      <h1 className="text-2xl font-bold text-center">My Bookings</h1>
-
-      {loading ? (
-        <p className="text-center text-base-content/60">Loading...</p>
-      ) : bookings.length === 0 ? (
-        <p className="text-center text-base-content/60">No bookings found.</p>
+    <div className="space-y-4">
+      {bookings.length === 0 ? (
+        <p>No bookings yet.</p>
       ) : (
-        bookings.map((b) => (
+        bookings.map((booking) => (
           <div
-            key={b.id}
-            onClick={() => setSelectedBooking(b)}
-            className="p-4 border border-base-300 rounded-xl shadow cursor-pointer hover:bg-base-100 transition"
+            key={booking.id}
+            className="p-4 border rounded-lg shadow-sm flex flex-col gap-1"
           >
-            <div>
-              <p className="font-semibold">{b.service_name || "Unnamed Service"}</p>
-              <p className="text-sm text-base-content/60">
-                {DateTime.fromISO(b.start_time).toLocaleString(DateTime.DATETIME_MED)} →{" "}
-                {DateTime.fromISO(b.end_time).toLocaleString(DateTime.TIME_SIMPLE)}
-              </p>
-              <p
-                className={`text-sm mt-1 ${
-                  b.status === "cancelled" ? "text-error" : "text-primary"
-                }`}
-              >
-                {b.status.toUpperCase()}
-              </p>
-            </div>
+            <h2 className="text-lg font-semibold">
+              {booking.service?.name || "Unnamed service"}
+            </h2>
+
+            <p className="text-sm text-gray-700">
+              {DateTime.fromISO(booking.start_time).toLocaleString(
+                DateTime.DATETIME_MED
+              )}{" "}
+              –{" "}
+              {DateTime.fromISO(booking.end_time).toLocaleString(
+                DateTime.TIME_SIMPLE
+              )}
+            </p>
+
+            <p className="text-sm">Status: {booking.status}</p>
+
+            <p className="text-sm text-gray-600">
+              With: {booking.seller?.business_name || booking.seller?.name}
+            </p>
+
+            <button
+              className="mt-2 w-fit text-blue-600 underline text-sm"
+              onClick={() => {
+                window.location.href = `/seller/${booking.seller?.id}`;
+              }}
+            >
+              Visit business page
+            </button>
           </div>
         ))
-      )}
-
-      {/* Booking detail modal */}
-      {selectedBooking && (
-        <MyBookingsModal
-          booking={selectedBooking}
-          onClose={() => setSelectedBooking(null)}
-          onCancelSuccess={handleCancelSuccess}
-        />
       )}
     </div>
   );
