@@ -42,13 +42,21 @@ export interface Holiday {
 
 export interface Booking {
   id: string;
-  seller_id: string;
-  seller_name: string;
   user_id: string;
-  start_time: string; // ISO string: "2025-06-14T14:30:00Z"
+  seller_id: string;
+  start_time: string;
   end_time: string;
-  service_name: string;
   status: "pending" | "confirmed" | "cancelled";
+  banner_url?: string; // URL to the seller's banner image
+  service?: {
+    id: number;
+    name: string;
+    price: number;
+  };
+  seller?: {
+    user_id: string;
+    name: string;
+  };
 }
 
 export interface Slot {
