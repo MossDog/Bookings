@@ -1,17 +1,12 @@
-
-import { Seller } from '@/types/types';
-import OpeningHoursWidget from './OpeningHours';
-import { MapPin, ExternalLink } from 'lucide-react';
+import { Seller } from "@/types/types";
+import OpeningHoursWidget from "./OpeningHours";
+import { MapPin, ExternalLink } from "lucide-react";
 
 interface SellerTitleCardProps {
   seller?: Seller;
 }
 
-function SellerTitleCard({
-  seller
-}: SellerTitleCardProps) {
-
-
+function SellerTitleCard({ seller }: SellerTitleCardProps) {
   if (!seller) {
     return (
       <div className="card bg-base-100 shadow-xl animate-pulse">
@@ -53,9 +48,13 @@ function SellerTitleCard({
                   />
                 ))}
               </div>
-              <span className="font-medium text-base-content">{rating.toFixed(1)}</span>
+              <span className="font-medium text-base-content">
+                {rating.toFixed(1)}
+              </span>
             </div>
-            <span className="text-primary font-medium">({reviews} reviews)</span>
+            <span className="text-primary font-medium">
+              ({reviews} reviews)
+            </span>
           </div>
         </div>
 
@@ -87,14 +86,12 @@ function SellerTitleCard({
 
         {/* Open Status */}
         <div className="flex items-center gap-2 text-base-content/70">
-          <div className="badge badge-error gap-2">
-            Closed
-          </div>
+          <div className="badge badge-error gap-2">Closed</div>
           <span className="text-sm">Opens Monday at 09:00</span>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default SellerTitleCard;

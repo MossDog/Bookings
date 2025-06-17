@@ -1,6 +1,6 @@
-import React from 'react';
-import { Seller } from '../types/types';
-import { MapPin, Clock, ExternalLink } from 'lucide-react';
+import React from "react";
+import { Seller } from "../types/types";
+import { MapPin, Clock, ExternalLink } from "lucide-react";
 
 interface SellerTitleProps {
   seller?: Seller;
@@ -8,7 +8,11 @@ interface SellerTitleProps {
   profileUrl?: string;
 }
 
-const SellerTitle: React.FC<SellerTitleProps> = ({ seller, bannerUrl, profileUrl }) => {
+const SellerTitle: React.FC<SellerTitleProps> = ({
+  seller,
+  bannerUrl,
+  profileUrl,
+}) => {
   if (!seller) return null;
 
   const {
@@ -26,9 +30,9 @@ const SellerTitle: React.FC<SellerTitleProps> = ({ seller, bannerUrl, profileUrl
       {/* Banner */}
       <div className="relative w-full h-[400px] bg-base-200 overflow-hidden">
         {bannerUrl ? (
-          <img 
-            src={bannerUrl} 
-            alt={`${name} banner`} 
+          <img
+            src={bannerUrl}
+            alt={`${name} banner`}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -45,7 +49,7 @@ const SellerTitle: React.FC<SellerTitleProps> = ({ seller, bannerUrl, profileUrl
           <div className="avatar mb-4">
             <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-xl">
               {profileUrl ? (
-                <img 
+                <img
                   src={profileUrl}
                   alt={`${name} profile`}
                   className="w-full h-full object-cover"
@@ -63,7 +67,7 @@ const SellerTitle: React.FC<SellerTitleProps> = ({ seller, bannerUrl, profileUrl
           {/* Business Info */}
           <div className="text-center space-y-4 max-w-2xl mx-auto">
             <h1 className="text-4xl font-bold text-base-content">{name}</h1>
-            
+
             <div className="badge badge-primary badge-lg font-medium">
               {category}
             </div>

@@ -6,7 +6,11 @@ interface HorizontalStepsProps {
   validateStep?: (stepIdx: number) => boolean;
 }
 
-const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, validateStep }) => {
+const HorizontalSteps: React.FC<HorizontalStepsProps> = ({
+  steps,
+  children,
+  validateStep,
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = steps.length;
 
@@ -31,7 +35,9 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
         <div className="sticky top-0 flex flex-col justify-between h-full">
           {/* Steps list */}
           <div className="p-6">
-            <h4 className="text-sm font-medium text-base-content/70 mb-6">Setup Progress</h4>
+            <h4 className="text-sm font-medium text-base-content/70 mb-6">
+              Setup Progress
+            </h4>
             <ul className="steps steps-vertical gap-2">
               {steps.map((step, index) => {
                 const isCompleted = index + 1 < currentStep;
@@ -41,21 +47,29 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
                   <li
                     key={index}
                     className={`w-full min-h-[3rem] flex items-center gap-3 rounded-lg transition-colors
-                      ${isActive ? 'bg-primary/10' : 'hover:bg-base-200/50'}
-                      ${isCompleted ? 'text-base-content' : 'text-base-content/70'}
+                      ${isActive ? "bg-primary/10" : "hover:bg-base-200/50"}
+                      ${isCompleted ? "text-base-content" : "text-base-content/70"}
                       p-2
                     `}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                      ${isCompleted ? 'bg-primary text-primary-content' : 
-                        isActive ? 'bg-primary text-primary-content' : 
-                        'bg-base-200 text-base-content/70'}
-                    `}>
-                      {isCompleted ? '✓' : index + 1}
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                      ${
+                        isCompleted
+                          ? "bg-primary text-primary-content"
+                          : isActive
+                            ? "bg-primary text-primary-content"
+                            : "bg-base-200 text-base-content/70"
+                      }
+                    `}
+                    >
+                      {isCompleted ? "✓" : index + 1}
                     </div>
-                    <span className={`text-sm font-medium flex-1
-                      ${isActive ? 'text-primary font-semibold' : ''}
-                    `}>
+                    <span
+                      className={`text-sm font-medium flex-1
+                      ${isActive ? "text-primary font-semibold" : ""}
+                    `}
+                    >
                       {step}
                     </span>
                   </li>
@@ -79,7 +93,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
                 disabled={currentStep === totalSteps}
                 className="btn flex-1 btn-primary"
               >
-                {currentStep === totalSteps ? 'Finish' : 'Next'}
+                Next
               </button>
             </div>
           </div>

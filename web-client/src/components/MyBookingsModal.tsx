@@ -29,7 +29,9 @@ export default function MyBookingsModal({
 
   const date = DateTime.fromISO(booking.start_time);
   const start = date.toLocaleString(DateTime.TIME_SIMPLE);
-  const end = DateTime.fromISO(booking.end_time).toLocaleString(DateTime.TIME_SIMPLE);
+  const end = DateTime.fromISO(booking.end_time).toLocaleString(
+    DateTime.TIME_SIMPLE,
+  );
   const day = date.toLocaleString(DateTime.DATE_MED);
 
   return (
@@ -37,7 +39,9 @@ export default function MyBookingsModal({
       <input type="checkbox" className="modal-toggle" checked readOnly />
       <div className="modal modal-open">
         <div className="modal-box space-y-4 rounded-2xl">
-          <h3 className="text-xl font-bold text-center">{booking.service_name}</h3>
+          <h3 className="text-xl font-bold text-center">
+            {booking.service_name}
+          </h3>
 
           <div className="text-sm text-gray-700 space-y-1">
             <p>

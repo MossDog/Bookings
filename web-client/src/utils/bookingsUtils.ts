@@ -12,7 +12,7 @@ export async function bookSlot(
   sellerId: string,
   serviceId: number,
   date: Date,
-  slot: string
+  slot: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
     // Get the current user
@@ -59,11 +59,17 @@ export async function bookSlot(
     ]);
 
     if (insertError) {
-      return { success: false, message: `Failed to book slot: ${insertError.message}` };
+      return {
+        success: false,
+        message: `Failed to book slot: ${insertError.message}`,
+      };
     }
 
     return { success: true, message: "Booking successful!" };
   } catch (err: any) {
-    return { success: false, message: err.message || "Unexpected error occurred" };
+    return {
+      success: false,
+      message: err.message || "Unexpected error occurred",
+    };
   }
 }

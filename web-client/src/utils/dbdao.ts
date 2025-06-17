@@ -1,8 +1,8 @@
-import supabase from './supabase';
-import { Service } from '../types/types';
+import supabase from "./supabase";
+import { Service } from "../types/types";
 
 export const fetchServices = async (
-  userId: string
+  userId: string,
 ): Promise<{ data: Service[]; error: string | null }> => {
   try {
     const { data, error } = await supabase
@@ -18,7 +18,8 @@ export const fetchServices = async (
   } catch (err) {
     return {
       data: [],
-      error: err instanceof Error ? err.message : "An unexpected error occurred.",
+      error:
+        err instanceof Error ? err.message : "An unexpected error occurred.",
     };
   }
 };

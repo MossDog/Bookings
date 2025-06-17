@@ -4,18 +4,20 @@ import "react-day-picker/dist/style.css";
 import { format } from "date-fns";
 import { getAvailableSlots } from "@/utils/availabilityUtils";
 import { bookSlot } from "@/utils/bookingsUtils";
-import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
+import { getAvailableDates } from "@/utils/seller";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
 import supabase from "@/utils/supabase";
-
 
 interface BookServiceModalProps {
   service: Service | null;
   onClose: () => void;
 }
 
-const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose }) => {
+const BookServiceModal: React.FC<BookServiceModalProps> = ({
+  service,
+  onClose,
+}) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
@@ -24,7 +26,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
   useEffect(() => {
     if (!service) return;
-  
+
     getAvailableDates(service.user_id)
       .then((dateStrings: string[]) => {
         const dates: Date[] = dateStrings.map((str) => new Date(str));
@@ -35,24 +37,28 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
 
   useEffect(() => {
     if (!service || !selectedDate) return;
-  
+
     setLoadingSlots(true);
-  
+
     const fetchTimezoneAndSlots = async () => {
       try {
         const { data: seller, error } = await supabase
-          .from('seller')
-          .select('timezone')
-          .eq('user_id', service.user_id)
+          .from("seller")
+          .select("timezone")
+          .eq("user_id", service.user_id)
           .single();
-  
+
         if (error || !seller?.timezone) {
-          console.error('Failed to load timezone');
+          console.error("Failed to load timezone");
           setSlots([]);
           return;
         }
-  
-        const slots = await getAvailableSlots(service.user_id, selectedDate, seller.timezone);
+
+        const slots = await getAvailableSlots(
+          service.user_id,
+          selectedDate,
+          seller.timezone,
+        );
         setSlots(slots);
       } catch (err) {
         console.error(err);
@@ -61,7 +67,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
         setLoadingSlots(false);
       }
     };
-  
+
     fetchTimezoneAndSlots();
   }, [selectedDate, service]);
 
@@ -72,7 +78,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
       service.user_id,
       service.id,
       selectedDate,
-      selectedSlot
+      selectedSlot,
     );
 
     if (result.success) {
@@ -90,7 +96,9 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
       <input type="checkbox" className="modal-toggle" checked readOnly />
       <div className="modal modal-open">
         <div className="modal-box rounded-2xl space-y-5">
-          <h3 className="text-xl font-semibold text-center">Book: {service.name}</h3>
+          <h3 className="text-xl font-semibold text-center">
+            Book: {service.name}
+          </h3>
 
           <DayPicker
             mode="single"
@@ -99,7 +107,8 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
             disabled={(date) =>
               !availableDates.some(
                 (available) =>
-                  format(available, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+                  format(available, "yyyy-MM-dd") ===
+                  format(date, "yyyy-MM-dd"),
               )
             }
             modifiersClassNames={{
@@ -109,7 +118,9 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
           />
 
           {loadingSlots ? (
-            <p className="text-center text-sm text-base-content/60">Loading slots...</p>
+            <p className="text-center text-sm text-base-content/60">
+              Loading slots...
+            </p>
           ) : slots.length === 0 ? (
             <p className="text-center text-sm text-base-content/60">
               No slots available for this date.
