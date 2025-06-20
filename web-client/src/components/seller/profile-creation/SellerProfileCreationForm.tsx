@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
-import { ProfileCreationData } from "@/utils/sellerProfileUtils";
+import { ProfileCreationData } from "@/utils/sellerProfile";
 import ImageSlot from "@/components/image/ImageSlot";
 import { useUser } from "@supabase/auth-helpers-react";
 

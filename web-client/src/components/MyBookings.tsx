@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 import { toast } from "sonner";
 import { Booking } from "@/types/types";
 import MyBookingsModal from "./MyBookingsModal";
-import { getPublicUrl } from "@/utils/bucketUtils";
+import { getPublicUrl } from "@/utils/bucket";
 import { useUser } from "@supabase/auth-helpers-react";
 
 export default function MyBookings() {

@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import {
   createSellerProfile,
   ProfileCreationData,
-} from "@/utils/sellerProfileUtils";
+} from "@/utils/sellerProfile";
 import { useUser } from "@supabase/auth-helpers-react";
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service, WeekSchedule } from "@/types/types";

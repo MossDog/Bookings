@@ -8,7 +8,7 @@ import {
   fileExistsInBucket,
   getPublicUrl,
   upload,
-} from "../../utils/bucketUtils";
+} from "../../utils/bucket";
 
 interface ImageSlotProps {
   gridOptions?: {

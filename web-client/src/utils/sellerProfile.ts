@@ -1,7 +1,7 @@
 import { Service, WeekSchedule } from "@/types/types";
 import { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
-import { createSlug, generateUniqueSlug } from "./slugUtils";
+import { createSlug, generateUniqueSlug } from "./slug";
 
 // Convert day string to number (0 = Sunday, 1 = Monday, etc.)
 const getDayNumber = (day: string): number => {

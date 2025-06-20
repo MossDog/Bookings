@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { cancelBooking } from "@/utils/cancelBookingUtil";
+import { cancelBooking } from "@/utils/bookings";
 import { toast } from "sonner";
 import { Booking } from "@/types/types";
 

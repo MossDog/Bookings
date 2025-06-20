@@ -1,5 +1,5 @@
 import { Seller } from "@/types/types";
-import { getPublicUrl } from "@/utils/bucketUtils";
+import { getPublicUrl } from "@/utils/bucket";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, Store } from "lucide-react";

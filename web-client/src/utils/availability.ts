@@ -80,6 +80,8 @@ export async function getAvailableSlots(
     .gte("start_time", `${isoDate}T00:00:00Z`) // query in UTC
     .lt("start_time", `${isoDate}T23:59:59Z`);
 
+    
+
   if (error) throw new Error(error.message);
 
   const bookedSlots: string[] = [];

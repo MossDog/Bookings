@@ -8,6 +8,7 @@ import { getAvailableDates } from "@/utils/seller";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
 import supabase from "@/utils/supabase";
+import { useUser } from "@supabase/auth-helpers-react";
 
 interface BookServiceModalProps {
   service: Service | null;
@@ -18,6 +19,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
   service,
   onClose,
 }) => {
+  const user = useUser();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
@@ -72,9 +74,10 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
   }, [selectedDate, service]);
 
   const handleConfirmBooking = async () => {
-    if (!selectedDate || !selectedSlot || !service || !service.id) return;
+    if (!selectedDate || !selectedSlot || !service || !service.id || !user) return;
 
     const result = await bookSlot(
+      user.id,
       service.user_id,
       service.id,
       selectedDate,

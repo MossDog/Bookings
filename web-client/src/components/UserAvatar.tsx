@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fileExistsInBucket, getPublicUrl } from "../utils/bucketUtils";
+import { fileExistsInBucket, getPublicUrl } from "../utils/bucket";
 import { getUser } from "../utils/auth";
 import SellerAvatarDropdown from "./seller/SellerAvatarDropdown";
 

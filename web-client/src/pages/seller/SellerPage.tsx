@@ -6,11 +6,11 @@ import ServicesWidget from "@/components/widgets/ServicesWidget";
 import SellerTitle from "@/components/SellerTitle";
 import HighlightWidget from "@/components/widgets/HighlightWidget";
 import SellerTitleCard from "../../components/SellerTitleCard";
-import { getPublicUrl } from "@/utils/bucketUtils";
+import { getPublicUrl } from "@/utils/bucket";
 import {
   getProfileFromSlug,
   getServicesFromId,
-} from "@/utils/sellerProfileUtils";
+} from "@/utils/sellerProfile";
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
