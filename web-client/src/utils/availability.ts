@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import supabase from "./supabase";
 import type { WorkingHours, Break, Holiday } from "../types/types";
+import { fetchTable } from "./dbdao";
 
 export const days = [
   { id: "monday", label: "Monday" },
@@ -12,41 +13,14 @@ export const days = [
   { id: "sunday", label: "Sunday" },
 ];
 
-/**
- * Generate 15-minute time slots between two Luxon DateTime objects
- */
-function generateTimeSlots(start: DateTime, end: DateTime): string[] {
-  const slots: string[] = [];
-
-  let current = start;
-  while (current < end) {
-    slots.push(current.toFormat("HH:mm"));
-    current = current.plus({ minutes: 15 });
-  }
-
-  return slots;
-}
-
-/**
- * Fetch rows from Supabase with a match filter
- */
-async function fetchTable<T = unknown>(
-  table: string,
-  match: Record<string, unknown>,
-): Promise<T[]> {
-  const { data, error } = await supabase.from(table).select("*").match(match);
-  if (error) throw new Error(error.message);
-  return data as T[];
-}
-
-/**
- * Main function: get available slots for a given seller and date
- */
 export async function getAvailableSlots(
   sellerId: string,
   date: Date,
   sellerTimezone: string,
 ): Promise<string[]> {
+
+  const INTERVAL = 15; //TODO: Pull this from seller in db
+
   const selectedDay = DateTime.fromJSDate(date, {
     zone: sellerTimezone,
   }).startOf("day");
@@ -68,7 +42,7 @@ export async function getAvailableSlots(
   const workEnd = DateTime.fromISO(`${isoDate}T${workingHours[0].end_time}`, {
     zone: sellerTimezone,
   });
-  const allSlots = generateTimeSlots(workStart, workEnd);
+  const allSlots = generateTimeSlots(workStart, workEnd, INTERVAL);
 
   // 2. Check holidays
   const holidays = await fetchTable<Holiday>("seller_holidays", {
@@ -94,7 +68,7 @@ export async function getAvailableSlots(
     const breakEnd = DateTime.fromISO(`${isoDate}T${b.end_time}`, {
       zone: sellerTimezone,
     });
-    return generateTimeSlots(breakStart, breakEnd);
+    return generateTimeSlots(breakStart, breakEnd, INTERVAL);
   });
 
   // 4. Remove booked slots (convert from UTC to seller local time)
@@ -119,7 +93,7 @@ export async function getAvailableSlots(
 
     while (start < end) {
       bookedSlots.push(start.toFormat("HH:mm"));
-      start = start.plus({ minutes: 15 });
+      start = start.plus({ minutes: INTERVAL });
     }
   });
 
@@ -127,4 +101,16 @@ export async function getAvailableSlots(
   return allSlots.filter(
     (slot) => !breakSlots.includes(slot) && !bookedSlots.includes(slot),
   );
+}
+
+function generateTimeSlots(start: DateTime, end: DateTime, interval: number): string[] {
+  const slots: string[] = [];
+
+  let current = start;
+  while (current < end) {
+    slots.push(current.toFormat("HH:mm"));
+    current = current.plus({ minutes: interval });
+  }
+
+  return slots;
 }

@@ -1,13 +1,8 @@
 import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
+import { getUser } from "./auth";
 
-/**
- * Book a slot for a logged-in user with a specific service
- * @param sellerId - Seller's UUID
- * @param serviceId - ID of the selected service
- * @param date - The date being booked
- * @param slot - Time in 'HH:mm' format
- */
+
 export async function bookSlot(
   sellerId: string,
   serviceId: number,
@@ -16,12 +11,9 @@ export async function bookSlot(
 ): Promise<{ success: boolean; message: string }> {
   try {
     // Get the current user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getUser();
 
-    if (authError || !user) {
+    if (!user) {
       return { success: false, message: "User not authenticated" };
     }
 

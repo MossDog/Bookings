@@ -1,5 +1,5 @@
 import { WeekSchedule } from "@/types/types";
-import { days } from "@/utils/availabilityUtils";
+import { days } from "@/utils/availability";
 import { Dispatch, SetStateAction } from "react";
 
 const timeOptions = Array.from({ length: 48 }, (_, i) => {

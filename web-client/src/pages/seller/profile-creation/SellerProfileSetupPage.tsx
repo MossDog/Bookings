@@ -12,7 +12,7 @@ import { Service, WeekSchedule } from "@/types/types";
 
 
 import { useNavigate } from "react-router-dom";
-import { days } from "@/utils/availabilityUtils";
+import { days } from "@/utils/availability";
 import SellerOpeningHours from "@/components/seller/profile-creation/SellerOpeningHours";
 
 function SellerProfileSetupPage() {
