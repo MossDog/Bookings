@@ -72,32 +72,26 @@ export async function getAvailableSlots(
   });
 
   // 4. Remove booked slots (convert from UTC to seller local time)
-  const { data: bookings, error } = await supabase
-    .from("bookings")
-    .select("*")
-    .eq("seller_id", sellerId)
-    .eq("status", "confirmed")
-    .gte("start_time", `${isoDate}T00:00:00Z`) // query in UTC
-    .lt("start_time", `${isoDate}T23:59:59Z`);
+const { data: bookings, error } = await supabase
+  .from("bookings")
+  .select("start_time, end_time")
+  .eq("seller_id", sellerId)
+  .eq("status", "confirmed")
+  .gte("start_time", `${isoDate}T00:00:00`)
+  .lt("start_time", `${isoDate}T23:59:59`);
 
-    
+if (error) throw new Error(error.message);
 
-  if (error) throw new Error(error.message);
+const bookedSlots: string[] = [];
+bookings.forEach((booking) => {
+  let start = DateTime.fromISO(booking.start_time);
+  const end = DateTime.fromISO(booking.end_time);
 
-  const bookedSlots: string[] = [];
-  bookings.forEach((booking) => {
-    let start = DateTime.fromISO(booking.start_time, { zone: "utc" }).setZone(
-      sellerTimezone,
-    );
-    const end = DateTime.fromISO(booking.end_time, { zone: "utc" }).setZone(
-      sellerTimezone,
-    );
-
-    while (start < end) {
-      bookedSlots.push(start.toFormat("HH:mm"));
-      start = start.plus({ minutes: INTERVAL });
-    }
-  });
+  while (start < end) {
+    bookedSlots.push(start.toFormat("HH:mm"));
+    start = start.plus({ minutes: INTERVAL });
+  }
+});
 
   // 5. Final slots
   return allSlots.filter(

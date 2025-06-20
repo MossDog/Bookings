@@ -40,7 +40,7 @@ export default function MyBookingsModal({
       <div className="modal modal-open">
         <div className="modal-box space-y-4 rounded-2xl">
           <h3 className="text-xl font-bold text-center">
-            {booking.service_name}
+           Book : {booking.service?.name}
           </h3>
 
           <div className="text-sm text-gray-700 space-y-1">

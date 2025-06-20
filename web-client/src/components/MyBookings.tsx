@@ -2,16 +2,22 @@ import { useEffect, useState } from "react";
 import supabase from "@/utils/supabase";
 import { DateTime } from "luxon";
 import { toast } from "sonner";
-import { Booking } from "@/types/types";
+import { Booking, Seller, Service } from "@/types/types";
 import MyBookingsModal from "./MyBookingsModal";
 import { getPublicUrl } from "@/utils/bucket";
 import { useUser } from "@supabase/auth-helpers-react";
+import { fetchServices, getSellers } from "@/utils/seller";
+
+export interface BookingWithDetails extends Booking {
+  service?: Service;
+  seller?: Seller;
+}
 
 export default function MyBookings() {
   const user = useUser();
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<BookingWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<BookingWithDetails | null>(null);
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -20,47 +26,52 @@ export default function MyBookings() {
         toast.error("Authentication error");
         return;
       }
-
-      const { data, error } = await supabase
+  
+      const { data: bookingsData, error } = await supabase
         .from("bookings")
-        .select(`
-          id,
-          start_time,
-          end_time,
-          status,
-          seller_id,
-          user_id,
-          service:service_id (
-            id,
-            name,
-            price
-          ),
-          seller:seller_id (
-            name
-          )
-        `)
+        .select("*")
         .eq("user_id", user.id)
         .order("start_time", { ascending: true });
-
+  
       if (error) {
         toast.error("Failed to fetch bookings");
-      } else {
-        setBookings(data as Booking[]);
-
-        const sellerId = data?.[0]?.seller_id;
-        if (sellerId) {
-          const url = await getPublicUrl("public.images", `${sellerId}/bannerimage`);
-          setBannerUrl(url || "/fallback.png");
-        }
+        setLoading(false);
+        return;
       }
-
+  
+      const sellers = await getSellers();
+  
+      // Get unique seller_ids from bookings
+      const sellerIds = [...new Set((bookingsData || []).map(b => b.seller_id))];
+  
+      // Fetch all services for each seller
+      const allServices: Service[] = [];
+      for (const sellerId of sellerIds) {
+        const { data: sellerServices } = await fetchServices(sellerId);
+        allServices.push(...(sellerServices || []));
+      }
+  
+      const enhanced: BookingWithDetails[] = (bookingsData || []).map((b) => ({
+        ...b,
+        seller: sellers.find((s) => s.user_id === b.seller_id),
+        service: allServices.find((s) => s.id === b.service_id),
+      }));
+  
+      setBookings(enhanced);
+  
+      const sellerId = enhanced?.[0]?.seller_id;
+      if (sellerId) {
+        const url = await getPublicUrl("public.images", `${sellerId}/bannerimage`);
+        setBannerUrl(url || "/fallback.png");
+      }
+  
       setLoading(false);
     };
-
+  
     fetchBookings();
   }, []);
 
-  const handleCancelSuccess = (id: string) => {
+   const handleCancelSuccess = (id: string) => {
     setBookings((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b))
     );

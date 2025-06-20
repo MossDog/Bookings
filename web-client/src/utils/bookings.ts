@@ -26,7 +26,6 @@ export async function bookSlot(
       return { success: false, message: "Service not found" };
     }
 
-    const serviceName = service.name;
     const duration = service.duration;
 
     
