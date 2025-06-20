@@ -6,7 +6,6 @@ import { Booking, Seller, Service } from "@/types/types";
 import MyBookingsModal from "./MyBookingsModal";
 import { getPublicUrl } from "@/utils/bucket";
 import { useUser } from "@supabase/auth-helpers-react";
-import { fetchServices, getSellers } from "@/utils/seller";
 
 export interface BookingWithDetails extends Booking {
   service?: Service;
@@ -26,52 +25,51 @@ export default function MyBookings() {
         toast.error("Authentication error");
         return;
       }
-  
+
       const { data: bookingsData, error } = await supabase
         .from("bookings")
         .select("*")
         .eq("user_id", user.id)
         .order("start_time", { ascending: true });
-  
-      if (error) {
+
+      if (error || !bookingsData) {
         toast.error("Failed to fetch bookings");
         setLoading(false);
         return;
       }
-  
-      const sellers = await getSellers();
-  
-      // Get unique seller_ids from bookings
-      const sellerIds = [...new Set((bookingsData || []).map(b => b.seller_id))];
-  
-      // Fetch all services for each seller
-      const allServices: Service[] = [];
-      for (const sellerId of sellerIds) {
-        const { data: sellerServices } = await fetchServices(sellerId);
-        allServices.push(...(sellerServices || []));
-      }
-  
-      const enhanced: BookingWithDetails[] = (bookingsData || []).map((b) => ({
+
+      const uniqueSellerIds = [...new Set(bookingsData.map((b) => b.seller_id))];
+      const uniqueServiceIds = [...new Set(bookingsData.map((b) => b.service_id))];
+
+      const [sellersRes, servicesRes] = await Promise.all([
+        supabase.from("seller").select("*").in("user_id", uniqueSellerIds),
+        supabase.from("service").select("*").in("id", uniqueServiceIds),
+      ]);
+
+      const sellers = sellersRes.data || [];
+      const services = servicesRes.data || [];
+
+      const enhancedBookings = bookingsData.map((b) => ({
         ...b,
         seller: sellers.find((s) => s.user_id === b.seller_id),
-        service: allServices.find((s) => s.id === b.service_id),
+        service: services.find((s) => s.id === b.service_id),
       }));
-  
-      setBookings(enhanced);
-  
-      const sellerId = enhanced?.[0]?.seller_id;
+
+      setBookings(enhancedBookings);
+
+      const sellerId = enhancedBookings?.[0]?.seller_id;
       if (sellerId) {
         const url = await getPublicUrl("public.images", `${sellerId}/bannerimage`);
         setBannerUrl(url || "/fallback.png");
       }
-  
+
       setLoading(false);
     };
-  
-    fetchBookings();
-  }, []);
 
-   const handleCancelSuccess = (id: string) => {
+    fetchBookings();
+  }, [user]);
+
+  const handleCancelSuccess = (id: string) => {
     setBookings((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b))
     );
@@ -96,11 +94,10 @@ export default function MyBookings() {
               onClick={() => setSelectedBooking(b)}
               className="card card-side bg-base-100 shadow-md hover:shadow-lg transition border border-base-300 cursor-pointer"
             >
-              {/* Content */}
               <div className="card-body">
                 <h2 className="card-title">{b.service?.name || "Unnamed Service"}</h2>
                 <p className="text-sm text-base-content/70">
-                  {DateTime.fromISO(b.start_time).toLocaleString(DateTime.DATETIME_MED)} →{" "}
+                  {DateTime.fromISO(b.start_time).toLocaleString(DateTime.DATETIME_MED)} → {" "}
                   {DateTime.fromISO(b.end_time).toLocaleString(DateTime.TIME_SIMPLE)}
                 </p>
                 {b.service?.price !== undefined && (
@@ -112,15 +109,11 @@ export default function MyBookings() {
                   Seller: {b.seller?.name || "Unknown Seller"}
                 </p>
                 <div
-                  className={`badge ${
-                    b.status === "cancelled" ? "badge-error" : "badge-primary"
-                  } badge-outline mt-2`}
+                  className={`badge ${b.status === "cancelled" ? "badge-error" : "badge-primary"} badge-outline mt-2`}
                 >
                   {b.status.toUpperCase()}
                 </div>
               </div>
-
-              {/* Image */}
               <figure className="w-1/3 min-w-[120px] max-w-[200px] overflow-hidden">
                 <img
                   src={bannerUrl || "/test_Restaurant.jpeg"}
