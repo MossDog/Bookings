@@ -1,3 +1,6 @@
+// TODO: Refactor and split into multiple components
+
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -141,7 +144,7 @@ export default function DashboardPage() {
           {/* Dashboard Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-base-content">Seller Dashboard</h1>
+              <h1 className="text-3xl font-bold text-base-content">Hi, {seller?.name}!</h1>
               <p className="text-base-content/70 mt-1">Manage your bookings and services</p>
             </div>
             
