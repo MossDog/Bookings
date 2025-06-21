@@ -1,17 +1,19 @@
 import { DateTime } from "luxon";
 import { cancelBooking } from "@/utils/bookings";
 import { toast } from "sonner";
-import { Booking, Service } from "@/types/types";
+import { Booking, Seller, Service } from "@/types/types";
 
 interface UserBookingModalProps {
   booking: Booking;
   service: Service;
+  seller: Seller;
   onClose: () => void;
 }
 
 export default function UserBookingModal({
   booking,
   service,
+  seller,
   onClose,
 }: UserBookingModalProps) {
   if (!booking) return null;
@@ -63,7 +65,7 @@ export default function UserBookingModal({
         </div>
 
         <a
-          href={`/seller/${booking.user_id}`}
+          href={`/${seller.slug}`}
           className="btn btn-outline btn-primary w-full"
         >
           Visit Business Page

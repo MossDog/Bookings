@@ -72,10 +72,11 @@ export default function UserBookingCard({ booking }: UserBookingCardProps) {
         <div className="text-sm text-gray-500">€{service.price}</div>
       </div>
 
-      {openModal && (
+      {openModal && seller && (
         <UserBookingModal
           booking={booking}
           service={service}
+          seller={seller}
           onClose={() => setOpenModal(false)}
         />
       )}
