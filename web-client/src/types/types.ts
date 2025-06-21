@@ -68,3 +68,13 @@ export interface Booking {
   status: "pending" | "confirmed" | "cancelled";
 }
 
+export interface Review {
+  id: string;
+  booking_id: string;
+  seller_id: string;
+  user_id: string;
+  rating: number;
+  comment: string | null;
+  verified: boolean;
+  created_at: string;
+}

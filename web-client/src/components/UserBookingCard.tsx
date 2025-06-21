@@ -1,5 +1,5 @@
-import { Booking, Service } from '@/types/types';
-import { getServiceById } from '@/utils/seller';
+import { Booking, Seller, Service } from '@/types/types';
+import { getServiceById, getSellers } from '@/utils/seller';
 import { useEffect, useState } from 'react';
 import UserBookingModal from './UserBookingModal';
 
@@ -7,22 +7,31 @@ interface UserBookingCardProps {
   booking: Booking;
 }
 
-export default function UserBookingCard({
-  booking
-}: UserBookingCardProps) {
-  const [service, setService] = useState<Service | null>();
+export default function UserBookingCard({ booking }: UserBookingCardProps) {
+  const [service, setService] = useState<Service | null>(null);
+  const [seller, setSeller] = useState<Seller | null>(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    async function getService(){
+    async function fetchData() {
       setLoading(true);
-      const s = await getServiceById(booking.service_id);
-      setService(s ?? null);
+
+      const fetchedService = await getServiceById(booking.service_id);
+      setService(fetchedService ?? null);
+
+      if (fetchedService?.user_id) {
+        const allSellers = await getSellers();
+        const matchedSeller = allSellers.find(
+          (s) => s.user_id === fetchedService.user_id
+        );
+        setSeller(matchedSeller ?? null);
+      }
+
       setLoading(false);
     }
 
-    getService();
+    fetchData();
   }, [booking]);
 
   if (loading) {
@@ -43,20 +52,33 @@ export default function UserBookingCard({
   }
 
   return (
-    <div 
-      className="card bg-base-100 shadow-md p-4 cursor-pointer"
-    
-    >
-      <div className="font-bold text-lg">{service.name}</div>
-      <div className="text-base-content/70">Booking status: {booking.status}</div>
-      
-      { openModal && (
-        <UserBookingModal 
+    <>
+      <div
+        className="card bg-base-100 shadow-md p-4 cursor-pointer"
+        onClick={() => setOpenModal(true)}
+      >
+        <div className="font-bold text-lg">{service.name}</div>
+        <div className="text-base-content/70">
+          Booking status: {booking.status}
+        </div>
+        <div className="text-sm text-gray-500">
+          {new Date(booking.start_time).toLocaleDateString()} —{' '}
+          {new Date(booking.start_time).toLocaleTimeString()} to{' '}
+          {new Date(booking.end_time).toLocaleTimeString()}
+        </div>
+        {seller?.name && (
+          <div className="text-base-content/70">With: {seller.name}</div>
+        )}
+        <div className="text-sm text-gray-500">€{service.price}</div>
+      </div>
+
+      {openModal && (
+        <UserBookingModal
           booking={booking}
           service={service}
           onClose={() => setOpenModal(false)}
         />
       )}
-    </div>
+    </>
   );
 }
