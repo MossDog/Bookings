@@ -11,6 +11,7 @@ import {
   getProfileFromSlug,
   getServicesFromId,
 } from "@/utils/sellerProfile";
+import MapWidget from "@/components/MapWidget";
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -76,6 +77,7 @@ export default function SellerPage() {
           <div className="flex-1 max-w-4xl">
             <HighlightWidget services={services} isLoading={loading} />
             <ServicesWidget services={services} isLoading={loading} />
+            <MapWidget sellerId={seller.user_id} />
           </div>
         )}
         {/* Right Side: Sidebar (hidden on small screens) */}
