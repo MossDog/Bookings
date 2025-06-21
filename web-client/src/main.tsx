@@ -13,7 +13,7 @@ import ConfirmEmailPage from "./pages/ConfirmEmailPage.tsx";
 import SellerProfileSetupPage from "./pages/seller/profile-creation/SellerProfileSetupPage.tsx";
 import SellerPage from "./pages/seller/SellerPage.tsx";
 import Settings from "./pages/SettingsPage.tsx";
-import MyBookings from "./pages/MyBookings.tsx";
+import ViewUserBookings from "./pages/ViewUserBookings.tsx";
 import { theme } from "./utils/theme.ts";
 
 // Sets the theme
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   { path: "/:slug", element: <SellerPage /> },
   { path: "/confirm", element: <ConfirmEmailPage /> },
   { path: "/settings", element: <Settings /> },
-  { path: "/my-bookings", element: <MyBookings /> },
+  { path: "/my-bookings", element: <ViewUserBookings /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

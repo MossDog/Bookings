@@ -54,3 +54,18 @@ export const fetchServices = async (
     };
   }
 };
+
+export const getServiceById = async (id: number) => {
+  const { data, error } = await supabase
+    .from('service')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if(error){
+    console.log(`Error fetching service with ID ${id}`);
+    return null;
+  }
+
+  return data as Service;
+}
