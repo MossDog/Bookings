@@ -45,7 +45,7 @@ function SellerProfileCreationForm({
       }
       onInvalidData();
     }
-  }, [profileData, user]); // Add all dependencies
+  }, [profileData, user, onInvalidData, onValidData]); // Add all dependencies
 
   const handleInputChange = (
     e: React.ChangeEvent<

@@ -1,5 +1,5 @@
 import { Seller } from "@/types/types";
-import SellerCard from "../SellerCard";
+import SellerCard from "../seller/SellerCard";
 
 interface SellerBrowserProps {
   sellers: Seller[];

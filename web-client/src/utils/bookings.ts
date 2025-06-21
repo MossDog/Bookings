@@ -55,10 +55,10 @@ export async function bookSlot(
     }
 
     return { success: true, message: "Booking successful!" };
-  } catch (err: any) {
+  } catch (err) {
     return {
       success: false,
-      message: err.message || "Unexpected error occurred",
+      message: err as string || "Unexpected error occurred",
     };
   }
 }

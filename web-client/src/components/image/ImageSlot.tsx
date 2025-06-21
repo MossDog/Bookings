@@ -61,7 +61,7 @@ export default function ImageSlot({
 
   useEffect(() => {
     fetchImage();
-  }, [bucketName, filePath]);
+  }, [bucketName, filePath, fetchImage]);
 
   const rounding = circle ? "rounded-full" : "rounded-md";
 
@@ -126,7 +126,7 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
 }
 
 interface UploadPartProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => any;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function UploadPart({ onChange }: UploadPartProps) {

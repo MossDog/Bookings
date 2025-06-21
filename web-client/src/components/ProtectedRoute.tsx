@@ -15,7 +15,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       if (!session) navigate("/login");
       else setLoading(false);
     });
-  }, []);
+  }, [navigate]);
 
   if (loading) return <div>Loading...</div>;
 

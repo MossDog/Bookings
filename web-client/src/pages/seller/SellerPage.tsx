@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Seller, Service } from "../../types/types";
 import Navbar from "../../components/Navbar";
 import ServicesWidget from "@/components/widgets/ServicesWidget";
-import SellerTitle from "@/components/SellerTitle";
+import SellerTitle from "@/components/seller/SellerTitle";
 import HighlightWidget from "@/components/widgets/HighlightWidget";
-import SellerTitleCard from "../../components/SellerTitleCard";
+import SellerTitleCard from "../../components/seller/SellerTitleCard";
 import { getPublicUrl } from "@/utils/bucket";
 import {
   getProfileFromSlug,
@@ -59,7 +59,7 @@ export default function SellerPage() {
     };
 
     fetchSeller().then(() => setLoading(false));
-  }, [slug]);
+  }, [slug, navigate]);
 
   return (
     <div>
