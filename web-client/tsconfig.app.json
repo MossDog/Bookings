@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "incremental": true,                     // Add this line
+    "incremental": true, // Add this line
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -26,9 +26,7 @@
     /* Added for shadcn ui */
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]

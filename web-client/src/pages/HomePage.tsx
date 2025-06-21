@@ -1,26 +1,21 @@
-import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import supabase from '../utils/supabase';
-import { Seller } from '../types/types';
-import SellerBrowser from '@/components/SellerBrowser';
+import { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import { Seller } from "../types/types";
+import SellerBrowser from "@/components/home_page/SellerBrowser";
+import { getSellers } from "@/utils/seller";
+import HeroSection from "@/components/home_page/HeroSection";
 
-export default function ExploreBusinesses() {
+export default function HomePage() {
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchSellers = async () => {
       try {
-        const { data, error } = await supabase
-          .from('seller')
-          .select('*');
-
-        if (error) throw error;
-
-        setSellers(data || []);
+        setSellers(await getSellers());
       } catch (err) {
-        setError('Failed to load businesses');
+        setError("Failed to load sellers");
         console.error(err);
       } finally {
         setLoading(false);
@@ -34,9 +29,11 @@ export default function ExploreBusinesses() {
     <div>
       <Navbar />
       {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <SellerBrowser sellers={sellers} />
+      {error && <p className="text-error">{error}</p>}
+      <main className="container mx-auto px-4 py-8 bg-base-100 text-base-content min-h-screen">
+        <HeroSection />
+        <SellerBrowser sellers={sellers} />
+      </main>
     </div>
   );
-
 }

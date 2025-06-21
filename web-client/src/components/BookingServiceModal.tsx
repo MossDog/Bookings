@@ -1,74 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { format } from "date-fns";
-import { getAvailableSlots } from "@/utils/availabilityUtils";
-import { bookSlot } from "@/utils/bookingsUtils";
-import { getAvailableDates } from "@/utils/getAvailableDatesUtils";
+import { getAvailableSlots } from "@/utils/availability";
+import { bookSlot } from "@/utils/bookings";
+import { getAvailableDates } from "@/utils/seller";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
-import supabase from "@/utils/supabase";
-
+import { useUser } from "@supabase/auth-helpers-react";
+import { format } from "date-fns";
 
 interface BookServiceModalProps {
   service: Service | null;
   onClose: () => void;
 }
 
-const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose }) => {
+const BookServiceModal: React.FC<BookServiceModalProps> = ({
+  service,
+  onClose,
+}) => {
+  const user = useUser();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
+  // Load bookable dates
   useEffect(() => {
     if (!service) return;
-  
+
     getAvailableDates(service.user_id)
       .then((dateStrings: string[]) => {
-        const dates: Date[] = dateStrings.map((str) => new Date(str));
+        const dates = dateStrings.map((str) => new Date(str));
         setAvailableDates(dates);
       })
       .catch(console.error);
   }, [service]);
 
+  // Load available slots for selected date
   useEffect(() => {
     if (!service || !selectedDate) return;
-  
+
     setLoadingSlots(true);
-  
-    const fetchTimezoneAndSlots = async () => {
-      try {
-        const { data: seller, error } = await supabase
-          .from('seller')
-          .select('timezone')
-          .eq('user_id', service.user_id)
-          .single();
-  
-        if (error || !seller?.timezone) {
-          console.error('Failed to load timezone');
-          setSlots([]);
-          return;
-        }
-  
-        const slots = await getAvailableSlots(service.user_id, selectedDate, seller.timezone);
-        setSlots(slots);
-      } catch (err) {
+
+    getAvailableSlots(service.user_id, selectedDate, "Europe/Dublin")
+      .then(setSlots)
+      .catch((err) => {
         console.error(err);
         setSlots([]);
-      } finally {
-        setLoadingSlots(false);
-      }
-    };
-  
-    fetchTimezoneAndSlots();
+      })
+      .finally(() => setLoadingSlots(false));
   }, [selectedDate, service]);
 
+  // Confirm booking
   const handleConfirmBooking = async () => {
-    if (!selectedDate || !selectedSlot || !service || !service.id) return;
+    if (!selectedDate || !selectedSlot || !service || !user) return;
 
+    if (!service.id) {
+      toast.error("Service ID is required.");
+      return;
+    }
     const result = await bookSlot(
+      user.id,
       service.user_id,
       service.id,
       selectedDate,
@@ -90,7 +83,9 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
       <input type="checkbox" className="modal-toggle" checked readOnly />
       <div className="modal modal-open">
         <div className="modal-box rounded-2xl space-y-5">
-          <h3 className="text-xl font-semibold text-center">Book: {service.name}</h3>
+          <h3 className="text-xl font-semibold text-center">
+            Book: {service.name}
+          </h3>
 
           <DayPicker
             mode="single"
@@ -99,17 +94,20 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({ service, onClose })
             disabled={(date) =>
               !availableDates.some(
                 (available) =>
-                  format(available, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+                  format(available, "yyyy-MM-dd") ===
+                  format(date, "yyyy-MM-dd"),
               )
             }
             modifiersClassNames={{
-              disabled: "opacity-30 pointer-events-none", // greyed out
+              disabled: "opacity-30 pointer-events-none",
             }}
             className="mx-auto"
           />
 
           {loadingSlots ? (
-            <p className="text-center text-sm text-base-content/60">Loading slots...</p>
+            <p className="text-center text-sm text-base-content/60">
+              Loading slots...
+            </p>
           ) : slots.length === 0 ? (
             <p className="text-center text-sm text-base-content/60">
               No slots available for this date.

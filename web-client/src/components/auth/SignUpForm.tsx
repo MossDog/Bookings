@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import supabase from '../../utils/supabase';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import supabase from "../../utils/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
-
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -15,18 +14,19 @@ export default function SignUpForm() {
 
     setError(null);
 
-    const {data, error} = await supabase.auth.signUp({
-      email, password
-    }); 
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-    if(error){
+    if (error) {
       setError("Invalid email or password. Please try again.");
       console.error("Error signing up: ", error);
     } else {
       console.log("Successful sign-up: ", data);
       navigate("/");
     }
-  }
+  };
 
   return (
     <form className="card-body w-full max-w-md gap-4 it">
@@ -35,7 +35,7 @@ export default function SignUpForm() {
           <span>{error}</span>
         </div>
       )}
-      
+
       <div className="form-control">
         <input
           type="email"
@@ -62,9 +62,14 @@ export default function SignUpForm() {
         </button>
       </div>
 
-      <div className='flex w-full items-center justify-center'>
-        <span>Already have an account? <a href='/login' className='underline'>Login</a></span>
+      <div className="flex w-full items-center justify-center">
+        <span>
+          Already have an account?{" "}
+          <a href="/login" className="underline">
+            Login
+          </a>
+        </span>
       </div>
     </form>
-  )
+  );
 }

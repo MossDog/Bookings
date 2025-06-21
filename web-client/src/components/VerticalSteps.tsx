@@ -6,7 +6,11 @@ interface HorizontalStepsProps {
   validateStep?: (stepIdx: number) => boolean;
 }
 
-const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, validateStep }) => {
+const HorizontalSteps: React.FC<HorizontalStepsProps> = ({
+  steps,
+  children,
+  validateStep,
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = steps.length;
 
@@ -47,8 +51,8 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
                     isCompleted
                       ? "bg-primary border-primary-focus text-primary-content"
                       : isActive
-                      ? "bg-primary/20 border-primary text-primary"
-                      : "bg-base-200 border-base-300 text-base-content/60"
+                        ? "bg-primary/20 border-primary text-primary"
+                        : "bg-base-200 border-base-300 text-base-content/60"
                   }`}
                 >
                   {index + 1}
@@ -57,10 +61,10 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
                 <span
                   className={`text-sm font-medium ${
                     isCompleted
-                    ? "text-base-content/60"
-                    : isActive
-                    ? "text-primary"
-                    : "text-base-content/60"
+                      ? "text-base-content/60"
+                      : isActive
+                        ? "text-primary"
+                        : "text-base-content/60"
                   }`}
                 >
                   {step}
@@ -77,9 +81,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
               onClick={handleBack}
               disabled={currentStep === 1}
               className={`btn btn-primary ${
-                currentStep === 1
-                  ? "btn-disabled"
-                  : ""
+                currentStep === 1 ? "btn-disabled" : ""
               }`}
             >
               Back
@@ -88,9 +90,7 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
               onClick={handleNext}
               disabled={currentStep === totalSteps}
               className={`btn btn-primary ${
-                currentStep === totalSteps
-                  ? "btn-disabled"
-                  : ""
+                currentStep === totalSteps ? "btn-disabled" : ""
               }`}
             >
               Next
@@ -98,7 +98,6 @@ const HorizontalSteps: React.FC<HorizontalStepsProps> = ({ steps, children, vali
           </div>
         </div>
       </div>
-
 
       {/* Main content area */}
       <div className="flex-1 flex items-start flex-col">
