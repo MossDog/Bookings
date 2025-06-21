@@ -5,7 +5,7 @@ import supabase from "@/utils/supabase";
 
 interface ReviewModalProps {
   bookingId: string;
-  sellerId: string;
+  sellerId: number;
   userId: string;
   onClose: () => void;
   onSubmitSuccess?: () => void;
@@ -46,52 +46,58 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-      <div className="bg-base-100 p-6 rounded-xl w-full max-w-md shadow-lg relative">
+<div className="fixed inset-0 bg-base-100/10 backdrop-blur-md z-50 flex justify-center items-center">
+          <div className="bg-base-100 rounded-xl w-full max-w-lg mx-4 shadow-lg p-6 space-y-6 relative">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-base-content/60 hover:text-error"
+          className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <h2 className="text-xl font-bold mb-4 text-base-content">Leave a Review</h2>
+        <h2 className="text-2xl font-bold text-center">Leave a Review</h2>
 
-        <div className="form-control mb-4">
-          <label className="label">Rating</label>
-          <select
-            className="select select-bordered"
-            value={rating}
-            onChange={(e) => setRating(Number(e.target.value))}
+        <div className="space-y-4">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Rating</span>
+            </label>
+            <select
+              className="select select-bordered w-full"
+              value={rating}
+              onChange={(e) => setRating(Number(e.target.value))}
+            >
+              {[5, 4, 3, 2, 1].map((val) => (
+                <option key={val} value={val}>
+                  {val} Star{val !== 1 && "s"}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Comment</span>
+            </label>
+            <textarea
+              className="textarea textarea-bordered w-full"
+              rows={4}
+              placeholder="Share your experience..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </div>
+
+          {error && <p className="text-error text-sm">{error}</p>}
+
+          <button
+            onClick={handleSubmit}
+            className="btn btn-primary w-full"
+            disabled={submitting}
           >
-            {[5, 4, 3, 2, 1].map((val) => (
-              <option key={val} value={val}>{val} Stars</option>
-            ))}
-          </select>
+            {submitting ? "Submitting..." : "Submit Review"}
+          </button>
         </div>
-
-        <div className="form-control mb-4">
-          <label className="label">Comment</label>
-          <textarea
-            className="textarea textarea-bordered"
-            rows={3}
-            placeholder="Write your thoughts..."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-        </div>
-
-        {error && (
-          <div className="text-error text-sm mb-2">{error}</div>
-        )}
-
-        <button
-          onClick={handleSubmit}
-          className="btn btn-primary w-full"
-          disabled={submitting}
-        >
-          {submitting ? "Submitting..." : "Submit Review"}
-        </button>
       </div>
     </div>
   );

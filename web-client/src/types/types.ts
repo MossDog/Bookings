@@ -65,7 +65,7 @@ export interface Booking {
   service_id: number;
   start_time: string;
   end_time: string;
-  status: "pending" | "confirmed" | "cancelled";
+  status: "pending" | "confirmed" | "completed" | "cancelled";
 }
 
 export interface Review {

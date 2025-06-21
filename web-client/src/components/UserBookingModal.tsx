@@ -1,7 +1,10 @@
+// components/UserBookingModal.tsx
 import { DateTime } from "luxon";
 import { cancelBooking } from "@/utils/bookings";
 import { toast } from "sonner";
 import { Booking, Seller, Service } from "@/types/types";
+import { useState } from "react";
+import ReviewModal from "./ReviewModal";
 
 interface UserBookingModalProps {
   booking: Booking;
@@ -16,6 +19,8 @@ export default function UserBookingModal({
   seller,
   onClose,
 }: UserBookingModalProps) {
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   if (!booking) return null;
 
   const handleCancel = async () => {
@@ -34,6 +39,21 @@ export default function UserBookingModal({
     DateTime.TIME_SIMPLE,
   );
   const day = date.toLocaleString(DateTime.DATE_MED);
+
+  if (showReviewModal) {
+    return (
+      <ReviewModal
+        bookingId={booking.id}
+        sellerId={seller.id} // Make sure this is the correct UUID
+        userId={booking.user_id}
+        onClose={() => setShowReviewModal(false)}
+        onSubmitSuccess={() => {
+          setShowReviewModal(false);
+          onClose();
+        }}
+      />
+    );
+  }
 
   return (
     <div className="modal modal-open">
@@ -70,6 +90,15 @@ export default function UserBookingModal({
         >
           Visit Business Page
         </a>
+
+        {booking.status === "completed" && (
+          <button
+            className="btn btn-primary w-full"
+            onClick={() => setShowReviewModal(true)}
+          >
+            Leave a Review
+          </button>
+        )}
 
         <div className="modal-action justify-between">
           <button className="btn btn-ghost" onClick={onClose}>

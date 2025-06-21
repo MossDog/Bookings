@@ -55,7 +55,7 @@ export default function ViewUserBookings() {
       ) : (
         <div className="space-y-6">
           {bookings.map((b) => (
-            <UserBookingCard booking={b}/>
+            <UserBookingCard key={b.id} booking={b}/>
           ))}
         </div>
       )}
