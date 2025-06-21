@@ -67,3 +67,4 @@ export interface Booking {
   end_time: string;
   status: "pending" | "confirmed" | "cancelled";
 }
+
