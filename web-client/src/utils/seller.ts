@@ -1,4 +1,4 @@
-import { Seller, Service } from "@/types/types";
+import { Seller, Service } from "../types/types";
 import supabase from "./supabase";
 
 export async function getSellers(): Promise<Seller[]> {
@@ -55,17 +55,17 @@ export const fetchServices = async (
   }
 };
 
-export const getServiceById = async (id: number) => {
+export async function fetchAddressBySellerId(sellerId: string): Promise<string | null> {
   const { data, error } = await supabase
-    .from('service')
-    .select('*')
-    .eq('id', id)
+    .from("seller")
+    .select("address")
+    .eq("user_id", sellerId)
     .single();
 
-  if(error){
-    console.log(`Error fetching service with ID ${id}`);
+  if (error || !data?.address) {
+    console.error("Error fetching address:", error);
     return null;
   }
 
-  return data as Service;
+  return data.address;
 }
