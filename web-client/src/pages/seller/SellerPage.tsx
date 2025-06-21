@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Seller, Service } from "../../types/types";
 import Navbar from "../../components/Navbar";
+import MapsWidget from "../../components/MapWidget";
 import ServicesWidget from "@/components/widgets/ServicesWidget";
 import SellerTitle from "@/components/seller/SellerTitle";
 import HighlightWidget from "@/components/widgets/HighlightWidget";
@@ -76,6 +77,7 @@ export default function SellerPage() {
           <div className="flex-1 max-w-4xl">
             <HighlightWidget services={services} isLoading={loading} />
             <ServicesWidget services={services} isLoading={loading} />
+            <MapsWidget seller={seller} />
           </div>
         )}
         {/* Right Side: Sidebar (hidden on small screens) */}

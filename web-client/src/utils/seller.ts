@@ -55,6 +55,21 @@ export const fetchServices = async (
   }
 };
 
+export async function fetchAddressBySellerId(sellerId: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("seller")
+    .select("address")
+    .eq("user_id", sellerId)
+    .single();
+
+  if (error || !data?.address) {
+    console.error("Error fetching address:", error);
+    return null;
+  }
+
+  return data.address;
+}
+
 export const getServiceById = async (id: number) => {
   const { data, error } = await supabase
     .from('service')
@@ -69,3 +84,4 @@ export const getServiceById = async (id: number) => {
 
   return data as Service;
 }
+
