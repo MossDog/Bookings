@@ -15,7 +15,7 @@ import SellerPage from "./pages/seller/SellerPage.tsx";
 import Settings from "./pages/SettingsPage.tsx";
 import ViewUserBookings from "./pages/ViewUserBookings.tsx";
 import { theme } from "./utils/theme.ts";
-import DashboardPage from "./pages/seller/dashboardPage.tsx";
+import DashboardPage from "./pages/seller/DashboardPage.tsx";
 
 // Sets the theme
 document.documentElement.setAttribute("data-theme", theme);
