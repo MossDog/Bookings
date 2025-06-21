@@ -27,7 +27,13 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="navbar-end">
+      <div className="navbar-end gap-3">
+        <Link 
+          to="/dashboard"
+          className="text-sm underline"
+        >
+          Dashboard
+        </Link>
         {authenticated ? <NavbarDialogMenu /> : <AuthPart />}
       </div>
     </div>
