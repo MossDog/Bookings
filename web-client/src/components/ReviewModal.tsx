@@ -1,7 +1,6 @@
-// components/ReviewModal.tsx
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import supabase from "@/utils/supabase";
+import { submitReview } from "@/utils/reviews";
 
 interface ReviewModalProps {
   bookingId: string;
@@ -27,15 +26,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     setSubmitting(true);
     setError(null);
 
-    const { error } = await supabase.from("reviews").insert({
-      booking_id: bookingId,
-      seller_id: sellerId,
-      user_id: userId,
+    const result = await submitReview({
+      bookingId,
+      sellerId,
+      userId,
       rating,
       comment,
     });
 
-    if (error) {
+    if (!result.success) {
       setError("Failed to submit review. Please try again.");
       setSubmitting(false);
       return;
@@ -46,8 +45,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   return (
-<div className="fixed inset-0 bg-base-100/10 backdrop-blur-md z-50 flex justify-center items-center">
-          <div className="bg-base-100 rounded-xl w-full max-w-lg mx-4 shadow-lg p-6 space-y-6 relative">
+    <div className="fixed inset-0 bg-base-100/10 backdrop-blur-md z-50 flex justify-center items-center">
+      <div className="bg-base-100 rounded-xl w-full max-w-lg mx-4 shadow-lg p-6 space-y-6 relative">
         <button
           onClick={onClose}
           className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"

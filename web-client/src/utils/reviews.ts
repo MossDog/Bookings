@@ -1,11 +1,32 @@
 import supabase from "@/utils/supabase";
 import { Review } from "@/types/types";
 
-export async function submitReview(review: Omit<Review, "id" | "created_at" | "verified">) {
-  const { data, error } = await supabase.from("reviews").insert([review]);
+export async function submitReview({
+  bookingId,
+  sellerId,
+  userId,
+  rating,
+  comment,
+}: {
+  bookingId: string;
+  sellerId: number;
+  userId: string;
+  rating: number;
+  comment: string;
+}) {
+  const { error } = await supabase.from("reviews").insert({
+    booking_id: bookingId,
+    seller_id: sellerId,
+    user_id: userId,
+    rating,
+    comment,
+  });
 
-  if (error) throw new Error(error.message);
-  return data;
+  if (error) {
+    return { success: false, message: error.message };
+  }
+
+  return { success: true, message: "Review submitted" };
 }
 
 export async function getUserReviewsForSeller(sellerId: string) {
@@ -18,3 +39,4 @@ export async function getUserReviewsForSeller(sellerId: string) {
   if (error) throw new Error(error.message);
   return data as Review[];
 }
+

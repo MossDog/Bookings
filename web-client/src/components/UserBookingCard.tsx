@@ -1,7 +1,7 @@
 import { Booking, Seller, Service } from '@/types/types';
-import { getServiceById, getSellers } from '@/utils/seller';
 import { useEffect, useState } from 'react';
 import UserBookingModal from './UserBookingModal';
+import { fetchBookingDetails } from '@/utils/bookings';
 
 interface UserBookingCardProps {
   booking: Booking;
@@ -14,24 +14,15 @@ export default function UserBookingCard({ booking }: UserBookingCardProps) {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
+    async function load() {
       setLoading(true);
-
-      const fetchedService = await getServiceById(booking.service_id);
-      setService(fetchedService ?? null);
-
-      if (fetchedService?.user_id) {
-        const allSellers = await getSellers();
-        const matchedSeller = allSellers.find(
-          (s) => s.user_id === fetchedService.user_id
-        );
-        setSeller(matchedSeller ?? null);
-      }
-
+      const { service, seller } = await fetchBookingDetails(booking);
+      setService(service);
+      setSeller(seller);
       setLoading(false);
     }
 
-    fetchData();
+    load();
   }, [booking]);
 
   if (loading) {
