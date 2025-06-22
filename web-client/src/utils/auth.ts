@@ -1,5 +1,13 @@
 import supabase from "./supabase";
 
+export const signInWithOAuth = async (provider: "google" | "apple") => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider,
+  });
+    
+  if (error) console.error('Error logging in:', error.message);
+};
+
 export const getUser = async () => {
   const {
     data: { user },

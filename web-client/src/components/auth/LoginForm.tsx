@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import supabase from "../../utils/supabase";
 import { useNavigate } from "react-router-dom";
+import { signInWithOAuth } from "@/utils/auth";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -58,6 +59,14 @@ export default function LoginForm() {
       <div className="form-control mt-4">
         <button className="btn btn-primary w-full" onClick={onSubmit}>
           Login
+        </button>
+      </div>
+
+      <span className="w-full text-center">Or</span>
+
+      <div className="form-control mt-4">
+        <button className="btn btn-primary w-full" onClick={() => signInWithOAuth('google')}>
+          Sign in with Google
         </button>
       </div>
 
