@@ -64,7 +64,7 @@ export async function bookSlot(
   }
 }
 
-export async function cancelBooking(bookingId: string) {
+export async function cancelBooking(bookingId: number) {
   const { error } = await supabase
     .from("bookings")
     .update({ status: "cancelled" })
