@@ -8,7 +8,7 @@ export async function submitReview({
   rating,
   comment,
 }: {
-  bookingId: string;
+  bookingId: number;
   sellerId: number;
   userId: string;
   rating: number;

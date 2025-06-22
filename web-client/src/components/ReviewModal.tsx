@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import { submitReview } from "@/utils/reviews";
 
 interface ReviewModalProps {
-  bookingId: string;
+  bookingId: number;
   sellerId: number;
   userId: string;
   onClose: () => void;
