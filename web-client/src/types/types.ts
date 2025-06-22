@@ -65,6 +65,16 @@ export interface Booking {
   service_id: number;
   start_time: string;
   end_time: string;
-  status: "pending" | "confirmed" | "cancelled";
+  status: "pending" | "confirmed" | "completed" | "cancelled";
 }
 
+export interface Review {
+  id: string;
+  booking_id: string;
+  seller_id: string;
+  user_id: string;
+  rating: number;
+  comment: string | null;
+  verified: boolean;
+  created_at: string;
+}
