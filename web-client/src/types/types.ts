@@ -19,6 +19,8 @@ export interface Seller {
   slug: string;
   created_at: string;
   timezone: string;
+  average_rating: number;
+  popularity_score: number;
 }
 
 export interface WorkingHours {
