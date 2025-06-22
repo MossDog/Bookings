@@ -1,4 +1,4 @@
-import { AllSellerData, Booking, Seller, Service } from "@/types/types";
+import { AllSellerData, Seller, Service } from "@/types/types";
 import supabase from "./supabase";
 
 export async function getSellers(): Promise<Seller[]> {
