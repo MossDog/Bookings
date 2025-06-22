@@ -14,6 +14,7 @@ import { Service, WeekSchedule } from "@/types/types";
 import { useNavigate } from "react-router-dom";
 import { days } from "@/utils/availability";
 import SellerOpeningHours from "@/components/seller/profile-creation/SellerOpeningHours";
+import { toast } from "sonner";
 
 function SellerProfileSetupPage() {
   const user = useUser();
@@ -101,8 +102,9 @@ function SellerProfileSetupPage() {
       );
 
       if (success) {
-        console.log("Business profile successfully created!");
+        toast.success("Business profile successfully created!");
       } else {
+        toast.error("Failed to create business profile. Please try again.");
         throw new Error("Error creating business");
       }
     } catch (error) {

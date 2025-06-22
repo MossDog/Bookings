@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { getUser, signOut } from "@/utils/auth";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 export default function NavbarDialogMenu() {
   const [user, setUser] = useState<User | null>();
@@ -26,6 +27,7 @@ export default function NavbarDialogMenu() {
 
   async function handleSignout() {
     await signOut();
+    toast.success("Signed out successfully");
     navigate(0);
   }
 
