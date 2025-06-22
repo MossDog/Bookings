@@ -16,6 +16,7 @@ import Settings from "./pages/SettingsPage.tsx";
 import ViewUserBookings from "./pages/ViewUserBookings.tsx";
 import { theme } from "./utils/theme.ts";
 import DashboardPage from "./pages/seller/DashboardPage.tsx";
+import { Toaster } from "./components/ui/sonner.tsx";
 
 // Sets the theme
 document.documentElement.setAttribute("data-theme", theme);
@@ -37,6 +38,13 @@ createRoot(document.getElementById("root")!).render(
     <SessionContextProvider supabaseClient={supabase}>
       <div className="min-h-screen bg-base-100 text-base-content">
         <RouterProvider router={router} />
+        <Toaster 
+          richColors={true}
+          toastOptions={{
+            className: "font-medium rounded-lg shadow-md border",
+            duration: 4000,
+          }}
+        />
       </div>
     </SessionContextProvider>
   </StrictMode>,
