@@ -1,4 +1,4 @@
-import { AllSellerData, Seller, Service } from "@/types/types";
+import { AllSellerData, Seller, Service, SellerPreview } from "@/types/types";
 import supabase from "./supabase";
 
 export async function getSellers(): Promise<Seller[]> {
@@ -123,3 +123,16 @@ export const getServiceById = async (id: number) => {
   return data as Service;
 }
 
+export async function searchSellersByName(name: string): Promise<SellerPreview[]> {
+  const { data, error } = await supabase
+    .from("seller")
+    .select("user_id, name, slug, category")
+    .ilike("name", `%${name}%`); // now using `name` to filter
+
+  if (error) {
+    console.error("Error searching sellers:", error.message);
+    return [];
+  }
+
+  return (data || []) as SellerPreview[];
+}

@@ -86,3 +86,11 @@ export interface Review {
   verified: boolean;
   created_at: string;
 }
+
+// types/SellerPreview.ts
+export interface SellerPreview {
+  user_id: string;
+  name: string;
+  slug: string;
+  category: string;
+}
