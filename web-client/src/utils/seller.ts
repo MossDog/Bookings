@@ -1,4 +1,4 @@
-import { Seller, Service } from "@/types/types";
+import { AllSellerData, Seller, Service } from "@/types/types";
 import supabase from "./supabase";
 
 export async function getSellers(): Promise<Seller[]> {
@@ -18,6 +18,44 @@ export async function getSellers(): Promise<Seller[]> {
     console.error("Error fetching all sellers:", error);
     throw error;
   }
+}
+
+export async function fetchAllSellerData(sellerId: string): Promise<AllSellerData> {
+  const { data: sellerData, error: sellerError } = await supabase
+    .from('seller')
+    .select('*')
+    .eq('user_id', sellerId)
+    .single();
+   
+  if(sellerError) {
+    console.error("Seller not found");
+  }
+
+  const { data: servicesData, error: servicesError } = await supabase
+    .from('service')
+    .select('*')
+    .eq('user_id', sellerId)
+
+  if (servicesError) {
+   console.error("Seller services error");
+  }
+
+  const { data: bookingsData, error: bookingsError } = await supabase
+    .from('bookings')
+    .select('*')
+    .eq('seller_id', sellerId);
+
+  if (bookingsError) {
+   console.error("Seller bookings error");
+  }
+
+  const data: AllSellerData = {
+    seller: sellerData,
+    services: servicesData || [],
+    bookings: bookingsData || []
+  };
+
+  return data;
 }
 
 export async function getAvailableDates(sellerId: string): Promise<string[]> {

@@ -59,7 +59,7 @@ export type WeekSchedule = {
 };
 
 export interface Booking {
-  id: string;
+  id: number;
   user_id: string;
   seller_id: number;
   service_id: number;
@@ -67,6 +67,14 @@ export interface Booking {
   end_time: string;
   status: "pending" | "confirmed" | "completed" | "cancelled";
 }
+
+export interface AllSellerData {
+  seller: Seller;
+  bookings: Booking[];
+  services: Service[];
+}
+
+export type BookingStatus = "confirmed" | "cancelled" | "pending" | "completed";
 
 export interface Review {
   id: string;

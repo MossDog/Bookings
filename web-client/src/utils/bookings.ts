@@ -1,5 +1,7 @@
 import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
+import { BookingStatus } from "@/types/types";
+
 import { getServiceById, getSellers } from '@/utils/seller';
 import { Booking, Seller, Service } from '@/types/types';
 
@@ -64,7 +66,7 @@ export async function bookSlot(
   }
 }
 
-export async function cancelBooking(bookingId: string) {
+export async function cancelBooking(bookingId: number) {
   const { error } = await supabase
     .from("bookings")
     .update({ status: "cancelled" })
@@ -77,6 +79,21 @@ export async function cancelBooking(bookingId: string) {
   return { success: true, message: "Booking cancelled" };
 }
 
+export const updateBookingStatus = async (bookingId: number, newStatus: BookingStatus) => {
+    try {
+      const { error } = await supabase
+        .from('bookings')
+        .update({ status: newStatus })
+        .eq('id', bookingId);
+      
+      if (error) {
+        console.error("Failed to update booking:", error);
+        return;
+      }
+    } catch (err) {
+      console.error("Error updating booking status:", err);
+    }
+  };
 // Fetch Booking
 
 export async function fetchBookingDetails(booking: Booking): Promise<{
