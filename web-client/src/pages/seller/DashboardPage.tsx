@@ -1,13 +1,7 @@
-// TODO: Refactor and split into multiple components
-
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { useUser } from "@supabase/auth-helpers-react";
-import supabase from "@/utils/supabase";
 import { Booking, BookingStatus, Seller, Service } from "@/types/types";
-import { Calendar, Users, Clock, Settings, CreditCard, CalendarDays, CheckSquare, XCircle, AlertTriangle } from "lucide-react";
-import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
 import { fetchAllSellerData } from "@/utils/seller";
 import BookingsList from "@/components/dashboard/BookingsList";
@@ -65,7 +59,7 @@ export default function DashboardPage() {
   const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
     try {
       await updateBookingStatus(bookingId, newStatus);
-      
+
       setBookings(bookings.map(booking => {
         if (booking.id === bookingId) {
           return { ...booking, status: newStatus };
