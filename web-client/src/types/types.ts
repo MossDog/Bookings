@@ -65,7 +65,7 @@ export interface Booking {
   service_id: number;
   start_time: string;
   end_time: string;
-  status: "pending" | "confirmed" | "cancelled";
+  status: "pending" | "confirmed" | "completed" | "cancelled";
 }
 
 export interface AllSellerData {
@@ -74,4 +74,15 @@ export interface AllSellerData {
   services: Service[];
 }
 
-export type BookingStatus = "confirmed" | "cancelled" | "pending";
+export type BookingStatus = "confirmed" | "cancelled" | "pending" | "completed";
+
+export interface Review {
+  id: string;
+  booking_id: string;
+  seller_id: string;
+  user_id: string;
+  rating: number;
+  comment: string | null;
+  verified: boolean;
+  created_at: string;
+}

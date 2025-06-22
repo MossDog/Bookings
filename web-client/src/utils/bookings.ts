@@ -2,6 +2,8 @@ import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
 import { BookingStatus } from "@/types/types";
 
+import { getServiceById, getSellers } from '@/utils/seller';
+import { Booking, Seller, Service } from '@/types/types';
 
 export async function bookSlot(
   userId: string,
@@ -92,3 +94,41 @@ export const updateBookingStatus = async (bookingId: number, newStatus: BookingS
       console.error("Error updating booking status:", err);
     }
   };
+// Fetch Booking
+
+export async function fetchBookingDetails(booking: Booking): Promise<{
+  service: Service | null;
+  seller: Seller | null;
+}> {
+  const fetchedService = await getServiceById(booking.service_id);
+  let matchedSeller: Seller | null = null;
+
+  if (fetchedService?.user_id) {
+    const allSellers = await getSellers();
+    matchedSeller = allSellers.find(
+      (s) => s.user_id === fetchedService.user_id
+    ) ?? null;
+  }
+
+  return {
+    service: fetchedService ?? null,
+    seller: matchedSeller,
+  };
+}
+
+// Fetch User Bookings
+
+export async function fetchUserBookings(userId: string): Promise<Booking[]> {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("user_id", userId)
+    .order("start_time", { ascending: true });
+
+  if (error || !data) {
+    console.error("Failed to fetch bookings:", error);
+    return [];
+  }
+
+  return data;
+}
