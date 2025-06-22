@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { submitReview } from "@/utils/reviews";
+import { toast } from "sonner";
 
 interface ReviewModalProps {
   bookingId: number;
@@ -35,12 +36,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     });
 
     if (!result.success) {
+      toast.error("Failed to submit review. Please try again.");
       setError("Failed to submit review. Please try again.");
       setSubmitting(false);
       return;
     }
 
     if (onSubmitSuccess) onSubmitSuccess();
+    toast.success("Review submitted successfully!");
     onClose();
   };
 

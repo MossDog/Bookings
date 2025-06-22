@@ -12,6 +12,7 @@ import {
   getProfileFromSlug,
   getServicesFromId,
 } from "@/utils/sellerProfile";
+import { toast } from "sonner";
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -31,6 +32,7 @@ export default function SellerPage() {
   useEffect(() => {
     const fetchSeller = async () => {
       if (!slug) {
+        toast.error("URL is invalid");
         navigate("/");
         return;
       }
@@ -38,6 +40,7 @@ export default function SellerPage() {
       const data = await getProfileFromSlug(slug);
 
       if (!data) {
+        toast.error("Business Page not Found");
         navigate("/");
         return;
       }

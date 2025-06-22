@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import supabase from "../../utils/supabase";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -22,6 +23,7 @@ export default function LoginForm() {
       setError("Invalid email or password. Please try again.");
       console.error("Error logging in: ", error);
     } else {
+      toast.success("Login successful!");
       console.log("Successful login: ", data);
       navigate("/");
     }
