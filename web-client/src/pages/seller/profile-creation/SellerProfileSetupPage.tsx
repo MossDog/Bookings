@@ -121,6 +121,26 @@ function SellerProfileSetupPage() {
 
       if (success) {
         toast.success("Business profile successfully created!");
+        // Reset all form and image state, and revoke blob URLs
+        setProfileData({ name: "", description: "", address: "", category: "" });
+        setServices([]);
+        setSchedule(days.reduce((acc, day) => ({
+          ...acc,
+          [day.id]: {
+            isClosed: false,
+            openTime: "9:00 AM",
+            closeTime: "5:00 PM",
+            breaks: [],
+          },
+        }), {}));
+        if (profileImage.previewUrl) {
+          URL.revokeObjectURL(profileImage.previewUrl);
+        }
+        if (bannerImage.previewUrl) {
+          URL.revokeObjectURL(bannerImage.previewUrl);
+        }
+        setProfileImage({ file: null, previewUrl: null });
+        setBannerImage({ file: null, previewUrl: null });
       } else {
         toast.error("Failed to create business profile. Please try again.");
         throw new Error("Error creating business");
