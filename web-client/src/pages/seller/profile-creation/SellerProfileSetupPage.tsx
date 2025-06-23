@@ -27,6 +27,10 @@ function SellerProfileSetupPage() {
     category: "",
   });
 
+  // NEW: Add image state for banner and profile images
+  const [bannerImage, setBannerImage] = useState<{ file: File | null, previewUrl: string | null }>({ file: null, previewUrl: null });
+  const [profileImage, setProfileImage] = useState<{ file: File | null, previewUrl: string | null }>({ file: null, previewUrl: null });
+
   // On load init profile data
   useEffect(() => {
     if(!user){
@@ -146,6 +150,10 @@ function SellerProfileSetupPage() {
                 setProfileData={setProfileData}
                 onInvalidData={handleInvalidFormData}
                 onValidData={handleValidFormData}
+                bannerImage={bannerImage}
+                setBannerImage={setBannerImage}
+                profileImage={profileImage}
+                setProfileImage={setProfileImage}
               />
             </div>
             <div className="w-full h-full max-w-[1200px] mx-auto p-6">

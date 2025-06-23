@@ -17,6 +17,10 @@ interface SellerProfileCreationFormProps {
   onInvalidData: () => void;
   setProfileData: Dispatch<SetStateAction<ProfileCreationData>>;
   profileData: ProfileCreationData;
+  bannerImage: { file: File | null; previewUrl: string | null };
+  setBannerImage: (img: { file: File | null; previewUrl: string | null }) => void;
+  profileImage: { file: File | null; previewUrl: string | null };
+  setProfileImage: (img: { file: File | null; previewUrl: string | null }) => void;
 }
 
 function SellerProfileCreationForm({
@@ -24,6 +28,10 @@ function SellerProfileCreationForm({
   onInvalidData,
   profileData,
   setProfileData,
+  bannerImage,
+  setBannerImage,
+  profileImage,
+  setProfileImage,
 }: SellerProfileCreationFormProps) {
   const user = useUser();
   const [error, setError] = useState<string | null>(null);
@@ -195,7 +203,9 @@ function SellerProfileCreationForm({
               <div className="relative w-full h-[200px] rounded-lg bg-base-200 overflow-hidden">
                 <ImageSlot
                   bucketName="public.images"
-                  filePath={`${user?.id}/bannerimage`}
+                  filePath="bannerimage"
+                  imagePreviewUrl={bannerImage.previewUrl}
+                  onImageSelected={(file, previewUrl) => setBannerImage({ file, previewUrl })}
                 />
               </div>
             </div>
@@ -211,7 +221,9 @@ function SellerProfileCreationForm({
                 <div className="w-32 h-32 relative rounded-full overflow-hidden bg-base-200">
                   <ImageSlot
                     bucketName="public.images"
-                    filePath={`${user?.id}/profileimage`}
+                    filePath="profileimage"
+                    imagePreviewUrl={profileImage.previewUrl}
+                    onImageSelected={(file, previewUrl) => setProfileImage({ file, previewUrl })}
                     circle
                   />
                 </div>
