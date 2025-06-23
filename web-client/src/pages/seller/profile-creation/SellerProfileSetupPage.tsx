@@ -85,12 +85,14 @@ function SellerProfileSetupPage() {
 
   // Helper to safely set new image state and revoke old blob URLs
   function setProfileImageSafe(img: { file: File | null, previewUrl: string | null }) {
+    console.log("setProfileImageSafe called with file:", img.file, "previewUrl:", img.previewUrl);
     if (profileImage.previewUrl && profileImage.previewUrl !== img.previewUrl) {
       URL.revokeObjectURL(profileImage.previewUrl);
     }
     setProfileImage(img);
   }
   function setBannerImageSafe(img: { file: File | null, previewUrl: string | null }) {
+    console.log("setBannerImageSafe called with file:", img.file, "previewUrl:", img.previewUrl);
     if (bannerImage.previewUrl && bannerImage.previewUrl !== img.previewUrl) {
       URL.revokeObjectURL(bannerImage.previewUrl);
     }
@@ -114,12 +116,9 @@ function SellerProfileSetupPage() {
       // Upload images if present
       let profileImagePath: string | undefined = undefined;
       let bannerImagePath: string | undefined = undefined;
-      const bucketName = "public.images"; // Use your actual bucket name
-
-      // Debug: Log file objects before upload
-      console.log("Uploading profile image:", profileImage.file);
-      console.log("Uploading banner image:", bannerImage.file);
-
+      const bucketName = "public.images";
+      console.log("onSubmit: profileImage.file:", profileImage.file);
+      console.log("onSubmit: bannerImage.file:", bannerImage.file);
       if (profileImage.file) {
         profileImagePath = `${user.id}/profile.jpg`;
         await upload(bucketName, profileImagePath, profileImage.file);
