@@ -115,8 +115,6 @@ function SellerProfileSetupPage() {
         {
           ...profileData,
           services,
-          profile_image_path: profileImagePath,
-          banner_image_path: bannerImagePath,
         },
         schedule,
       );
