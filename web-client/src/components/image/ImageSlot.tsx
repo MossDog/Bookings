@@ -1,7 +1,6 @@
 // TODO: Implement edit functionality.
 // TODO: Disable upload if necessary
 
-import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 import { Edit, Plus } from "lucide-react";
 
@@ -32,22 +31,10 @@ export default function ImageSlot({
   void bucketName;
   void filePath;
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Only allow local blob URLs or empty
-    if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
-      setImageUrl(imagePreviewUrl);
-    } else {
-      setImageUrl(null);
-    }
-  }, [imagePreviewUrl]);
-
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
-      setImageUrl(previewUrl);
       if (onImageSelected) onImageSelected(file, previewUrl);
     }
   };
@@ -66,7 +53,7 @@ export default function ImageSlot({
     <div
       className={cn(
         "relative group w-full h-full",
-        imageUrl != null
+        imagePreviewUrl != null
           ? ""
           : "border-2 border-dotted border-base-300 bg-base-100 hover:bg-base-200",
         "flex items-center justify-center",
@@ -74,8 +61,8 @@ export default function ImageSlot({
       )}
       style={gridStyles}
     >
-      {imageUrl != null ? (
-        <ImagePart imageUrl={imageUrl} rounding={rounding} />
+      {imagePreviewUrl != null ? (
+        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} />
       ) : (
         <UploadPart onChange={handleFileUpload} />
       )}
