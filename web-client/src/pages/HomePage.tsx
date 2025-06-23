@@ -7,7 +7,6 @@ import HeroSection from "@/components/home_page/HeroSection";
 
 export default function HomePage() {
   const [sellers, setSellers] = useState<Seller[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -17,8 +16,6 @@ export default function HomePage() {
       } catch (err) {
         setError("Failed to load sellers");
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -28,7 +25,6 @@ export default function HomePage() {
   return (
     <div>
       <Navbar />
-      {loading && <p>Loading...</p>}
       {error && <p className="text-error">{error}</p>}
       <main className="container mx-auto px-4 py-8 bg-base-100 text-base-content min-h-screen">
         <HeroSection />

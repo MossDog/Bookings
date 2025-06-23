@@ -19,7 +19,6 @@ export default function SellerCard({ seller }: SellerCardProps) {
           "public.images",
           `${seller.user_id}/bannerimage`,
         );
-
         setBannerUrl(url || null);
       } catch (error) {
         console.error("Error loading banner:", error);
@@ -45,7 +44,7 @@ export default function SellerCard({ seller }: SellerCardProps) {
           <div className="w-full h-full animate-pulse bg-base-300"></div>
         ) : bannerUrl ? (
           <img
-            src={bannerUrl!}
+            src={bannerUrl}
             alt={seller.name}
             className="w-full h-full object-cover"
           />
@@ -60,49 +59,42 @@ export default function SellerCard({ seller }: SellerCardProps) {
           </div>
         </div>
       </figure>
+
       <div className="card-body p-6">
         {/* Title and Rating */}
         <div className="flex justify-between items-start mb-2">
           <h2 className="card-title text-lg group-hover:text-primary transition-colors">
             {seller.name || "Unnamed Business"}
           </h2>
-          <div className="flex items-center gap-1">
-            <div className="rating rating-sm">
-              <input
-                type="radio"
-                name={`rating-${seller.user_id}`}
-                className="mask mask-star-2 bg-orange-400"
-                checked
-                readOnly
-              />
-              <input
-                type="radio"
-                name={`rating-${seller.user_id}`}
-                className="mask mask-star-2 bg-orange-400"
-                checked
-                readOnly
-              />
-              <input
-                type="radio"
-                name={`rating-${seller.user_id}`}
-                className="mask mask-star-2 bg-orange-400"
-                checked
-                readOnly
-              />
-              <input
-                type="radio"
-                name={`rating-${seller.user_id}`}
-                className="mask mask-star-2 bg-orange-400"
-                checked
-                readOnly
-              />
-              <input
-                type="radio"
-                name={`rating-${seller.user_id}`}
-                className="mask mask-star-2 bg-orange-400"
-              />
-            </div>
-            <span className="text-sm text-base-content/70">(4.0)</span>
+          <div className="flex flex-col items-end gap-1">
+            {typeof seller.average_rating === "number" ? (
+              <>
+                <div className="rating rating-sm">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <input
+                      key={i}
+                      type="radio"
+                      name={`rating-${seller.user_id}`}
+                      className="mask mask-star-2 bg-orange-400"
+                      readOnly
+                      checked={i === Math.floor(seller.average_rating || 0)}
+                      />
+                  ))}
+                </div>
+                <span className="text-sm text-base-content/70">
+                  ({seller.average_rating.toFixed(1)})
+                </span>
+              </>
+            ) : (
+              <span className="text-sm text-base-content/50 italic">
+                Not rated
+              </span>
+            )}
+            {seller.popularity_score !== undefined && (
+              <div className="text-xs text-base-content/50">
+                {seller.popularity_score} bookings
+              </div>
+            )}
           </div>
         </div>
 
@@ -114,12 +106,11 @@ export default function SellerCard({ seller }: SellerCardProps) {
         {/* Footer Info */}
         <div className="card-actions flex-col gap-2">
           <div className="flex items-center gap-2 text-sm text-base-content/60">
-           <MapPin size={18} />
+            <MapPin size={18} />
             {seller.address || "Location not specified"}
           </div>
-
           <div className="flex items-center gap-2 text-xs text-base-content/50">
-            <Calendar size={18}/>
+            <Calendar size={18} />
             Joined {new Date(seller.created_at).toLocaleDateString()}
           </div>
         </div>

@@ -19,6 +19,8 @@ export interface Seller {
   slug: string;
   created_at: string;
   timezone: string;
+  average_rating: number;
+  popularity_score: number;
 }
 
 export interface WorkingHours {
@@ -85,4 +87,12 @@ export interface Review {
   comment: string | null;
   verified: boolean;
   created_at: string;
+}
+
+// types/SellerPreview.ts
+export interface SellerPreview {
+  user_id: string;
+  name: string;
+  slug: string;
+  category: string;
 }
