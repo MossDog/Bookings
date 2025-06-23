@@ -1,9 +1,9 @@
 import { debounce } from "lodash";
 
-// No any, clean generic typing
-export const useDebouncedCallback = <T extends (...args: unknown[]) => void>(
-  fn: T,
+export const useDebouncedCallback = <Args extends unknown[]>(
+  fn: (...args: Args) => void,
   delay: number
 ) => {
-  return debounce(fn, delay);
+  const debounced = debounce(fn, delay);
+  return debounced;
 };
