@@ -83,6 +83,20 @@ function SellerProfileSetupPage() {
     return true;
   };
 
+  // Helper to safely set new image state and revoke old blob URLs
+  function setProfileImageSafe(img: { file: File | null, previewUrl: string | null }) {
+    if (profileImage.previewUrl && profileImage.previewUrl !== img.previewUrl) {
+      URL.revokeObjectURL(profileImage.previewUrl);
+    }
+    setProfileImage(img);
+  }
+  function setBannerImageSafe(img: { file: File | null, previewUrl: string | null }) {
+    if (bannerImage.previewUrl && bannerImage.previewUrl !== img.previewUrl) {
+      URL.revokeObjectURL(bannerImage.previewUrl);
+    }
+    setBannerImage(img);
+  }
+
   const onSubmit = async () => {
     if (!user || !profileData || !schedule) {
       return;
@@ -125,7 +139,11 @@ function SellerProfileSetupPage() {
 
       if (success) {
         toast.success("Business profile successfully created!");
-        // Reset all form and image state, and revoke blob URLs
+        // Revoke blob URLs and reset state
+        if (profileImage.previewUrl) URL.revokeObjectURL(profileImage.previewUrl);
+        if (bannerImage.previewUrl) URL.revokeObjectURL(bannerImage.previewUrl);
+        setProfileImage({ file: null, previewUrl: null });
+        setBannerImage({ file: null, previewUrl: null });
         setProfileData({ name: "", description: "", address: "", category: "" });
         setServices([]);
         setSchedule(days.reduce((acc, day) => ({
@@ -137,17 +155,6 @@ function SellerProfileSetupPage() {
             breaks: [],
           },
         }), {}));
-        if (profileImage.previewUrl) {
-          URL.revokeObjectURL(profileImage.previewUrl);
-        }
-        if (bannerImage.previewUrl) {
-          URL.revokeObjectURL(bannerImage.previewUrl);
-        }
-        setProfileImage({ file: null, previewUrl: null });
-        setBannerImage({ file: null, previewUrl: null });
-        // Debug: Confirm state reset
-        console.log("After reset, profileImage:", profileImage);
-        console.log("After reset, bannerImage:", bannerImage);
       } else {
         toast.error("Failed to create business profile. Please try again.");
         throw new Error("Error creating business");
@@ -192,9 +199,9 @@ function SellerProfileSetupPage() {
                 onInvalidData={handleInvalidFormData}
                 onValidData={handleValidFormData}
                 bannerImage={bannerImage}
-                setBannerImage={setBannerImage}
+                setBannerImage={setBannerImageSafe}
                 profileImage={profileImage}
-                setProfileImage={setProfileImage}
+                setProfileImage={setProfileImageSafe}
               />
             </div>
             <div className="w-full h-full max-w-[1200px] mx-auto p-6">

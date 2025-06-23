@@ -3,6 +3,7 @@
 
 import { cn } from "../../utils/cn";
 import { Edit, Plus } from "lucide-react";
+import { useRef } from "react";
 
 interface ImageSlotProps {
   gridOptions?: {
@@ -31,11 +32,21 @@ export default function ImageSlot({
   void bucketName;
   void filePath;
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const lastPreviewUrl = useRef<string | null>(null);
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Revoke previous preview URL if it exists
+      if (lastPreviewUrl.current) {
+        URL.revokeObjectURL(lastPreviewUrl.current);
+      }
       const previewUrl = URL.createObjectURL(file);
+      lastPreviewUrl.current = previewUrl;
       if (onImageSelected) onImageSelected(file, previewUrl);
+      // Reset file input so selecting the same file again triggers change
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -64,7 +75,7 @@ export default function ImageSlot({
       {imagePreviewUrl != null ? (
         <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} />
       ) : (
-        <UploadPart onChange={handleFileUpload} />
+        <UploadPart onChange={handleFileUpload} fileInputRef={fileInputRef} />
       )}
     </div>
   );
@@ -105,12 +116,13 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
 
 interface UploadPartProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
-function UploadPart({ onChange }: UploadPartProps) {
+function UploadPart({ onChange, fileInputRef }: UploadPartProps) {
   return (
     <>
-      <input type="file" id="fileInput" hidden onChange={onChange} />
+      <input type="file" id="fileInput" hidden onChange={onChange} ref={fileInputRef} />
       <label htmlFor="fileInput">
         <Plus size={35} className="text-base-content/40" />
       </label>
