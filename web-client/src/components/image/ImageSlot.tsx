@@ -14,42 +14,21 @@ interface ImageSlotProps {
     height: number; // How many rows to span
   };
   circle?: boolean;
-  bucketName: string;
-  filePath: string;
-  imagePreviewUrl?: string | null; // NEW: preview URL from parent state
-  onImageSelected?: (file: File, previewUrl: string) => void; // NEW: callback to parent
+  imagePreviewUrl?: string | null; // Only used for display
+  onImageSelected?: (file: File, previewUrl: string) => void;
 }
 
 export default function ImageSlot({
   gridOptions,
   circle = false,
-  bucketName,
-  filePath,
   imagePreviewUrl = null,
   onImageSelected,
 }: ImageSlotProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(imagePreviewUrl);
 
   useEffect(() => {
-    if (imagePreviewUrl) {
-      setImageUrl(imagePreviewUrl);
-    } else if (filePath) {
-      // Generate the public URL for the image in the bucket
-      // Example: https://<project>.supabase.co/storage/v1/object/public/<bucketName>/<filePath>
-      const supabaseUrl =
-        process.env.REACT_APP_SUPABASE_URL ||
-        import.meta.env.VITE_SUPABASE_URL;
-      if (supabaseUrl && bucketName && filePath) {
-        setImageUrl(
-          `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`,
-        );
-      } else {
-        setImageUrl(null);
-      }
-    } else {
-      setImageUrl(null);
-    }
-  }, [imagePreviewUrl, bucketName, filePath]);
+    setImageUrl(imagePreviewUrl);
+  }, [imagePreviewUrl]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -103,7 +82,7 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
     <>
       <img
         src={imageUrl}
-        alt="Image"
+        alt="Image preview"
         className={cn("w-full h-full object-cover", rounding)}
       />
       <button
@@ -113,6 +92,10 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
           "transition-all duration-200 backdrop-blur-sm",
           "cursor-pointer opacity-0 group-hover:opacity-100",
         )}
+        type="button"
+        title="Edit image"
+        tabIndex={-1}
+        aria-label="Edit image"
       >
         <Edit size={24} className="text-base-100 drop-shadow-md" />
       </button>
