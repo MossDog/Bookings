@@ -14,6 +14,8 @@ interface ImageSlotProps {
     height: number; // How many rows to span
   };
   circle?: boolean;
+  bucketName?: string; // Accept but ignore
+  filePath?: string;   // Accept but ignore
   imagePreviewUrl?: string | null; // Only used for display
   onImageSelected?: (file: File, previewUrl: string) => void;
 }
@@ -21,9 +23,15 @@ interface ImageSlotProps {
 export default function ImageSlot({
   gridOptions,
   circle = false,
+  bucketName, // accepted but unused
+  filePath,   // accepted but unused
   imagePreviewUrl = null,
   onImageSelected,
 }: ImageSlotProps) {
+  // Mark as intentionally unused to satisfy linter/build
+  void bucketName;
+  void filePath;
+
   const [imageUrl, setImageUrl] = useState<string | null>(imagePreviewUrl);
 
   useEffect(() => {
