@@ -23,8 +23,8 @@ interface ImageSlotProps {
 export default function ImageSlot({
   gridOptions,
   circle = false,
-  filePath,
-  bucketName,
+  //filePath,
+  //bucketName,
   imagePreviewUrl = null,
   onImageSelected,
 }: ImageSlotProps) {
