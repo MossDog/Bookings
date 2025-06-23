@@ -13,6 +13,11 @@ import { toast } from "sonner";
 import { getServicesFromId } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
 import { swapArrayElements } from "@/utils/array";
+import AboutUsWidget from "@/components/AboutUsWidget";
+import FAQWidget from "@/components/FAQWidget";
+import ReviewsWidget from "@/components/ReviewsWidget";
+
+const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -44,7 +49,7 @@ export default function SellerPage() {
       }
 
       setSeller(data);
-      setWidgets(data.widget_order || ["highlight", "services", "map"]);
+      setWidgets(data.widget_order || ALL_WIDGETS);
 
       const servs = await getServicesFromId(data.user_id);
       setServices(servs || []);
@@ -62,6 +67,8 @@ export default function SellerPage() {
     fetchSeller().finally(() => setLoading(false));
   }, [slug, navigate]);
 
+  const hiddenWidgets = ALL_WIDGETS.filter((w) => !widgets.includes(w));
+
   const moveWidgetUp = (index: number) => {
     if (index === 0) return;
     setWidgets((prev) => swapArrayElements(prev, index, index - 1));
@@ -70,6 +77,34 @@ export default function SellerPage() {
   const moveWidgetDown = (index: number) => {
     if (index === widgets.length - 1) return;
     setWidgets((prev) => swapArrayElements(prev, index, index + 1));
+  };
+
+  const moveWidgetTop = (index: number) => {
+    if (index === 0) return;
+    setWidgets((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(index, 1);
+      updated.unshift(moved);
+      return updated;
+    });
+  };
+
+  const moveWidgetBottom = (index: number) => {
+    if (index === widgets.length - 1) return;
+    setWidgets((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(index, 1);
+      updated.push(moved);
+      return updated;
+    });
+  };
+
+  const handleRemoveWidget = (widget: string) => {
+    setWidgets((prev) => prev.filter((w) => w !== widget));
+  };
+
+  const handleAddWidget = (widget: string) => {
+    setWidgets((prev) => [...prev, widget]);
   };
 
   const handleSave = async () => {
@@ -93,6 +128,12 @@ export default function SellerPage() {
         return <ServicesWidget key="services" services={services} isLoading={loading} />;
       case "map":
         return <MapsWidget key="map" seller={seller!} />;
+      case "about":
+        return <AboutUsWidget key="about" aboutUs={seller?.about_us} isLoading={loading} />;
+      case "faq":
+        return <FAQWidget key="faq" seller={seller!} />;
+      case "reviews":
+        return <ReviewsWidget key="reviews" seller={seller!} />;
       default:
         return null;
     }
@@ -107,6 +148,40 @@ export default function SellerPage() {
         
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
+            {userId === seller.user_id && (
+              <>
+                {!isEditing ? (
+                  <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>
+                    Edit Widgets
+                  </button>
+                ) : (
+                  <div className="flex gap-2 mt-4">
+                    <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+                      {saving ? "Saving..." : "Save Order"}
+                    </button>
+                    <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+            {isEditing && hiddenWidgets.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <p className="label-text mb-2">Add Widget:</p>
+                <div className="flex flex-wrap gap-2">
+                  {hiddenWidgets.map((widget) => (
+                    <div
+                      key={widget}
+                      className="badge badge-outline badge-lg cursor-pointer hover:bg-primary hover:text-primary-content transition"
+                      onClick={() => handleAddWidget(widget)}
+                    >
+                      + {widget.charAt(0).toUpperCase() + widget.slice(1)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {widgets.map((widget, index) => (
               <div key={widget} className="relative group flex gap-2 items-start">
                 
@@ -126,6 +201,26 @@ export default function SellerPage() {
                     >
                       ↓
                     </button>
+                    <button
+                      className="btn btn-xs btn-outline"
+                      onClick={() => moveWidgetTop(index)}
+                      disabled={index === 0}
+                    >
+                      Top
+                    </button>
+                    <button
+                      className="btn btn-xs btn-outline"
+                      onClick={() => moveWidgetBottom(index)}
+                      disabled={index === widgets.length - 1}
+                    >
+                      Bottom
+                    </button>
+                    <button
+                      className="btn btn-xs btn-error mt-2"
+                      onClick={() => handleRemoveWidget(widget)}
+                    >
+                      Remove
+                    </button>
                   </div>
                 )}
 
@@ -136,24 +231,6 @@ export default function SellerPage() {
               </div>
             ))}
 
-            {userId === seller.user_id && (
-              <>
-                {!isEditing ? (
-                  <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>
-                    Edit Order
-                  </button>
-                ) : (
-                  <div className="flex gap-2 mt-4">
-                    <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-                      {saving ? "Saving..." : "Save Order"}
-                    </button>
-                    <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>
-                      Cancel
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
           </div>
         )}
 

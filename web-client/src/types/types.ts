@@ -22,6 +22,7 @@ export interface Seller {
   average_rating: number;
   popularity_score: number;
   widget_order?: string[];
+  about_us?: string;
 }
 
 export interface WorkingHours {
@@ -96,4 +97,12 @@ export interface SellerPreview {
   name: string;
   slug: string;
   category: string;
+}
+
+export interface DisplayReview {
+  id: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+  user_id: string;
 }
