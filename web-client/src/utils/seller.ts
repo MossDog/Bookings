@@ -136,3 +136,35 @@ export async function searchSellersByName(name: string): Promise<SellerPreview[]
 
   return (data || []) as SellerPreview[];
 }
+
+export async function getProfileFromSlug(slug: string): Promise<Seller | null> {
+  const { data, error } = await supabase
+    .from("seller")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("Error fetching seller by slug:", error.message);
+    return null;
+  }
+
+  return data as Seller;
+}
+
+export const updateWidgetOrder = async (
+  sellerId: string,
+  widgetOrder: string[]
+): Promise<boolean> => {
+  const { error } = await supabase
+    .from("seller")
+    .update({ widget_order: widgetOrder })
+    .eq("user_id", sellerId);
+
+  if (error) {
+    console.error("Error updating widget order:", error.message);
+    return false;
+  }
+
+  return true;
+};
