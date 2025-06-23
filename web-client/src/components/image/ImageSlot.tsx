@@ -32,7 +32,8 @@ export default function ImageSlot({
   void bucketName;
   void filePath;
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Change the type to allow null
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const lastPreviewUrl = useRef<string | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +117,7 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
 
 interface UploadPartProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 function UploadPart({ onChange, fileInputRef }: UploadPartProps) {
