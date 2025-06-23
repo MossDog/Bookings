@@ -102,6 +102,10 @@ function SellerProfileSetupPage() {
       let bannerImagePath: string | undefined = undefined;
       const bucketName = "public.images"; // Use your actual bucket name
 
+      // Debug: Log file objects before upload
+      console.log("Uploading profile image:", profileImage.file);
+      console.log("Uploading banner image:", bannerImage.file);
+
       if (profileImage.file) {
         profileImagePath = `${user.id}/profile.jpg`;
         await upload(bucketName, profileImagePath, profileImage.file);
@@ -141,6 +145,9 @@ function SellerProfileSetupPage() {
         }
         setProfileImage({ file: null, previewUrl: null });
         setBannerImage({ file: null, previewUrl: null });
+        // Debug: Confirm state reset
+        console.log("After reset, profileImage:", profileImage);
+        console.log("After reset, bannerImage:", bannerImage);
       } else {
         toast.error("Failed to create business profile. Please try again.");
         throw new Error("Error creating business");
