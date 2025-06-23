@@ -25,8 +25,6 @@ export interface ProfileCreationData {
   address?: string;
   category: string;
   services?: Service[];
-  profile_image_path?: string;
-  banner_image_path?: string;
 }
 
 export const getProfileFromSlug = async (slug: string) => {
@@ -76,8 +74,6 @@ export const createSellerProfile = async (
       address: details.address || "",
       category: details.category,
       slug,
-      profile_image_path: details.profile_image_path || null,
-      banner_image_path: details.banner_image_path || null,
     });
 
     if (sellerError) {
