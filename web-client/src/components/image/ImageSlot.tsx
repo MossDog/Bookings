@@ -4,11 +4,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 import { Edit, Plus } from "lucide-react";
-import {
-  fileExistsInBucket,
-  getPublicUrl,
-  upload,
-} from "../../utils/bucket";
 
 interface ImageSlotProps {
   gridOptions?: {
@@ -18,9 +13,11 @@ interface ImageSlotProps {
     width: number; // How many columns to span
     height: number; // How many rows to span
   };
-  circle?: boolean; // Makes the image a circle
+  circle?: boolean;
   bucketName: string;
-  filePath: string; // Path within the bucket for uploading and downloading (e.g, userid/profilepicture)
+  filePath: string;
+  imagePreviewUrl?: string | null; // NEW: preview URL from parent state
+  onImageSelected?: (file: File, previewUrl: string) => void; // NEW: callback to parent
 }
 
 export default function ImageSlot({
@@ -28,40 +25,23 @@ export default function ImageSlot({
   circle = false,
   filePath,
   bucketName,
+  imagePreviewUrl = null,
+  onImageSelected,
 }: ImageSlotProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  // This function checks if the image exists in the bucket.
-  // If so, the imageUrl is set and the image will be displayed.
-  const fetchImage = async () => {
-    setIsLoading(true);
-
-    try {
-      const imageExists = await fileExistsInBucket(bucketName, filePath);
-      if (imageExists) {
-        const url = await getPublicUrl(bucketName, filePath);
-        setImageUrl(url);
-      } else {
-        setImageUrl(null);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      await upload(bucketName, filePath, file);
-      await fetchImage();
-    }
-  };
+  const [imageUrl, setImageUrl] = useState<string | null>(imagePreviewUrl);
 
   useEffect(() => {
-    fetchImage();
-  }, [bucketName, filePath, fetchImage]);
+    setImageUrl(imagePreviewUrl);
+  }, [imagePreviewUrl]);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImageUrl(previewUrl);
+      if (onImageSelected) onImageSelected(file, previewUrl);
+    }
+  };
 
   const rounding = circle ? "rounded-full" : "rounded-md";
 
@@ -85,9 +65,7 @@ export default function ImageSlot({
       )}
       style={gridStyles}
     >
-      {isLoading ? (
-        <span className="loading loading-dots loading-xl"></span>
-      ) : imageUrl != null ? (
+      {imageUrl != null ? (
         <ImagePart imageUrl={imageUrl} rounding={rounding} />
       ) : (
         <UploadPart onChange={handleFileUpload} />
