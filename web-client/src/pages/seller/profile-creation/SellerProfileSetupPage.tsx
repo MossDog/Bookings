@@ -9,7 +9,7 @@ import {
 import { useUser } from "@supabase/auth-helpers-react";
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service, WeekSchedule } from "@/types/types";
-import { upload, getPublicUrl } from "@/utils/bucket";
+import { upload } from "@/utils/bucket";
 
 import { useNavigate } from "react-router-dom";
 import { days } from "@/utils/availability";
@@ -98,27 +98,25 @@ function SellerProfileSetupPage() {
 
     try {
       // Upload images if present
-      let profileImageUrl: string | undefined = undefined;
-      let bannerImageUrl: string | undefined = undefined;
-      const bucketName = "images"; // Change if your bucket is named differently
+      let profileImagePath: string | undefined = undefined;
+      let bannerImagePath: string | undefined = undefined;
+      const bucketName = "public.images"; // Use your actual bucket name
 
       if (profileImage.file) {
-        const profilePath = `profiles/${user.id}/profile.jpg`;
-        await upload(bucketName, profilePath, profileImage.file);
-        profileImageUrl = await getPublicUrl(bucketName, profilePath) || undefined;
+        profileImagePath = `${user.id}/profile.jpg`;
+        await upload(bucketName, profileImagePath, profileImage.file);
       }
       if (bannerImage.file) {
-        const bannerPath = `profiles/${user.id}/banner.jpg`;
-        await upload(bucketName, bannerPath, bannerImage.file);
-        bannerImageUrl = await getPublicUrl(bucketName, bannerPath) || undefined;
+        bannerImagePath = `${user.id}/banner.jpg`;
+        await upload(bucketName, bannerImagePath, bannerImage.file);
       }
 
       const { success } = await createSellerProfile(
         {
           ...profileData,
           services,
-          profile_image_url: profileImageUrl,
-          banner_image_url: bannerImageUrl,
+          profile_image_path: profileImagePath,
+          banner_image_path: bannerImagePath,
         },
         schedule,
       );

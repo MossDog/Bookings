@@ -23,16 +23,33 @@ interface ImageSlotProps {
 export default function ImageSlot({
   gridOptions,
   circle = false,
-  //filePath,
-  //bucketName,
+  bucketName,
+  filePath,
   imagePreviewUrl = null,
   onImageSelected,
 }: ImageSlotProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(imagePreviewUrl);
 
   useEffect(() => {
-    setImageUrl(imagePreviewUrl);
-  }, [imagePreviewUrl]);
+    if (imagePreviewUrl) {
+      setImageUrl(imagePreviewUrl);
+    } else if (filePath) {
+      // Generate the public URL for the image in the bucket
+      // Example: https://<project>.supabase.co/storage/v1/object/public/<bucketName>/<filePath>
+      const supabaseUrl =
+        process.env.REACT_APP_SUPABASE_URL ||
+        import.meta.env.VITE_SUPABASE_URL;
+      if (supabaseUrl && bucketName && filePath) {
+        setImageUrl(
+          `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`,
+        );
+      } else {
+        setImageUrl(null);
+      }
+    } else {
+      setImageUrl(null);
+    }
+  }, [imagePreviewUrl, bucketName, filePath]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

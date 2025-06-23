@@ -17,7 +17,7 @@ const getDayNumber = (day: string): number => {
   return dayMap[day];
 };
 
-// Add image URLs to the type
+// Add image path fields to the type
 export interface ProfileCreationData {
   user?: User;
   name: string;
@@ -25,8 +25,8 @@ export interface ProfileCreationData {
   address?: string;
   category: string;
   services?: Service[];
-  profile_image_url?: string;
-  banner_image_url?: string;
+  profile_image_path?: string;
+  banner_image_path?: string;
 }
 
 export const getProfileFromSlug = async (slug: string) => {
@@ -76,8 +76,8 @@ export const createSellerProfile = async (
       address: details.address || "",
       category: details.category,
       slug,
-      profile_image_url: details.profile_image_url || null,
-      banner_image_url: details.banner_image_url || null,
+      profile_image_path: details.profile_image_path || null,
+      banner_image_path: details.banner_image_path || null,
     });
 
     if (sellerError) {
