@@ -32,10 +32,15 @@ export default function ImageSlot({
   void bucketName;
   void filePath;
 
-  const [imageUrl, setImageUrl] = useState<string | null>(imagePreviewUrl);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setImageUrl(imagePreviewUrl);
+    // Only allow local blob URLs or empty
+    if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+      setImageUrl(imagePreviewUrl);
+    } else {
+      setImageUrl(null);
+    }
   }, [imagePreviewUrl]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
