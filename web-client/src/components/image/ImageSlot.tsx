@@ -133,7 +133,7 @@ function UploadPart({ onChange, fileInputRef }: UploadPartProps) {
   return (
     <>
       <input type="file" hidden onChange={onChange} ref={fileInputRef} />
-      <label htmlFor="fileInput">
+      <label onClick={() => fileInputRef.current?.click()}>
         <Plus size={35} className="text-base-content/40" />
       </label>
     </>
