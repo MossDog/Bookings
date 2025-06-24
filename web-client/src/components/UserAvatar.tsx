@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fileExistsInBucket, getPublicUrl } from "../utils/bucket";
+import { fileExistsInBucket, getSupabaseImageUrl } from "../utils/bucket";
 import { getUser } from "../utils/auth";
 import SellerAvatarDropdown from "./seller/SellerAvatarDropdown";
 
@@ -21,16 +21,8 @@ export default function UserAvatar() {
         `${user.id}/profilepicture`,
       );
 
-      if (!imageExists) {
-        return;
-      }
-
-      const imageUrl = await getPublicUrl(
-        "public.images",
-        `${user.id}/profilepicture`,
-      );
-
-      if (imageUrl) {
+      if (imageExists) {
+        const imageUrl = getSupabaseImageUrl(user.id, "profileimage");
         setProfileImageSrc(imageUrl);
       }
     }

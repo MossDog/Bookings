@@ -18,9 +18,9 @@ interface SellerProfileCreationFormProps {
   setProfileData: Dispatch<SetStateAction<ProfileCreationData>>;
   profileData: ProfileCreationData;
   bannerImage: { file: File | null; previewUrl: string | null };
-  setBannerImage: (img: { file: File | null; previewUrl: string | null }) => void;
+  setBannerImage: (file: File | null) => void;
   profileImage: { file: File | null; previewUrl: string | null };
-  setProfileImage: (img: { file: File | null; previewUrl: string | null }) => void;
+  setProfileImage: (file: File | null) => void;
 }
 
 function SellerProfileCreationForm({
@@ -202,10 +202,8 @@ function SellerProfileCreationForm({
               </label>
               <div className="relative w-full h-[200px] rounded-lg bg-base-200 overflow-hidden">
                 <ImageSlot
-                  bucketName="public.images"
-                  filePath="bannerimage"
                   imagePreviewUrl={bannerImage.previewUrl}
-                  onImageSelected={(file, previewUrl) => setBannerImage({ file, previewUrl })}
+                  onImageSelected={setBannerImage}
                 />
               </div>
             </div>
@@ -220,10 +218,8 @@ function SellerProfileCreationForm({
               <div className="flex justify-center">
                 <div className="w-32 h-32 relative rounded-full overflow-hidden bg-base-200">
                   <ImageSlot
-                    bucketName="public.images"
-                    filePath="profileimage"
                     imagePreviewUrl={profileImage.previewUrl}
-                    onImageSelected={(file, previewUrl) => setProfileImage({ file, previewUrl })}
+                    onImageSelected={setProfileImage}
                     circle
                   />
                 </div>

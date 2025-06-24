@@ -7,7 +7,7 @@ import ServicesWidget from "@/components/widgets/ServicesWidget";
 import SellerTitle from "@/components/seller/SellerTitle";
 import HighlightWidget from "@/components/widgets/HighlightWidget";
 import SellerTitleCard from "../../components/seller/SellerTitleCard";
-import { getPublicUrl } from "@/utils/bucket";
+import { getSupabaseImageUrl } from "@/utils/bucket";
 import {
   getProfileFromSlug,
   getServicesFromId,
@@ -49,14 +49,8 @@ export default function SellerPage() {
       const servs = await getServicesFromId(data.user_id);
       setServices(servs || []);
 
-      const bannerUrl = await getPublicUrl(
-        "public.images",
-        `${data.user_id}/bannerimage`,
-      );
-      const profileUrl = await getPublicUrl(
-        "public.images",
-        `${data.user_id}/profileimage`,
-      );
+      const bannerUrl = getSupabaseImageUrl(data.user_id, "bannerimage");
+      const profileUrl = getSupabaseImageUrl(data.user_id, "profileimage");
 
       setBannerImageUrl(bannerUrl || undefined);
       setProfileImageUrl(profileUrl || undefined);

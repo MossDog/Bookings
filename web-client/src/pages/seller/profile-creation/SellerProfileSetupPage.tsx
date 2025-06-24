@@ -9,7 +9,7 @@ import {
 import { useUser } from "@supabase/auth-helpers-react";
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service, WeekSchedule } from "@/types/types";
-import { upload } from "@/utils/bucket";
+import { upload} from "@/utils/bucket";
 
 import { useNavigate } from "react-router-dom";
 import { days } from "@/utils/availability";
@@ -84,31 +84,41 @@ function SellerProfileSetupPage() {
   };
 
   // Helper to safely set new image state and revoke old blob URLs
-  function setProfileImageSafe(img: { file: File | null, previewUrl: string | null }) {
-    console.log("setProfileImageSafe called with file:", img.file, "previewUrl:", img.previewUrl);
-    if (profileImage.previewUrl && profileImage.previewUrl !== img.previewUrl) {
+  function setProfileImageSafe(file: File | null) {
+    console.log('[setProfileImageSafe] called with:', file);
+    if (profileImage.previewUrl) {
+      console.log('[setProfileImageSafe] revoking old previewUrl:', profileImage.previewUrl);
       URL.revokeObjectURL(profileImage.previewUrl);
     }
-    setProfileImage(img);
+    const previewUrl = file ? URL.createObjectURL(file) : null;
+    console.log('[setProfileImageSafe] new previewUrl:', previewUrl);
+    setProfileImage({ file, previewUrl });
   }
-  function setBannerImageSafe(img: { file: File | null, previewUrl: string | null }) {
-    console.log("setBannerImageSafe called with file:", img.file, "previewUrl:", img.previewUrl);
-    if (bannerImage.previewUrl && bannerImage.previewUrl !== img.previewUrl) {
+  function setBannerImageSafe(file: File | null) {
+    console.log('[setBannerImageSafe] called with:', file);
+    if (bannerImage.previewUrl) {
+      console.log('[setBannerImageSafe] revoking old previewUrl:', bannerImage.previewUrl);
       URL.revokeObjectURL(bannerImage.previewUrl);
     }
-    setBannerImage(img);
+    const previewUrl = file ? URL.createObjectURL(file) : null;
+    console.log('[setBannerImageSafe] new previewUrl:', previewUrl);
+    setBannerImage({ file, previewUrl });
   }
 
   const onSubmit = async () => {
+    console.log('[onSubmit] called');
     if (!user || !profileData || !schedule) {
+      console.log('[onSubmit] missing user, profileData, or schedule');
       return;
     }
 
     // Destructure the required fields to ensure they exist
     const { name, description, address, category } = profileData;
+    console.log('[onSubmit] profileData:', profileData);
 
     // Check if all required fields are present
     if (!name || !description || !address || !category) {
+      console.log('[onSubmit] missing required fields');
       return;
     }
 
@@ -117,15 +127,29 @@ function SellerProfileSetupPage() {
       let profileImagePath: string | undefined = undefined;
       let bannerImagePath: string | undefined = undefined;
       const bucketName = "public.images";
-      console.log("onSubmit: profileImage.file:", profileImage.file);
-      console.log("onSubmit: bannerImage.file:", bannerImage.file);
+      console.log('[onSubmit] profileImage.file:', profileImage.file);
+      console.log('[onSubmit] bannerImage.file:', bannerImage.file);
       if (profileImage.file) {
         profileImagePath = `${user.id}/profileimage`;
-        await upload(bucketName, profileImagePath, profileImage.file);
+        console.log('[onSubmit] uploading profileImage to:', profileImagePath);
+        console.log('[onSubmit] profileImage.file object:', profileImage.file);
+        try {
+          await upload(bucketName, profileImagePath, profileImage.file);
+        } catch (uploadError) {
+          console.error('[onSubmit] profileImage upload error:', uploadError, 'File:', profileImage.file);
+          toast.error('Failed to upload profile image. Please try again.');
+        }
       }
       if (bannerImage.file) {
         bannerImagePath = `${user.id}/bannerimage`;
-        await upload(bucketName, bannerImagePath, bannerImage.file);
+        console.log('[onSubmit] uploading bannerImage to:', bannerImagePath);
+        console.log('[onSubmit] bannerImage.file object:', bannerImage.file);
+        try {
+          await upload(bucketName, bannerImagePath, bannerImage.file);
+        } catch (uploadError) {
+          console.error('[onSubmit] bannerImage upload error:', uploadError, 'File:', bannerImage.file);
+          toast.error('Failed to upload banner image. Please try again.');
+        }
       }
 
       const { success } = await createSellerProfile(
@@ -135,12 +159,19 @@ function SellerProfileSetupPage() {
         },
         schedule,
       );
+      console.log('[onSubmit] createSellerProfile result:', success);
 
       if (success) {
         toast.success("Business profile successfully created!");
         // Revoke blob URLs and reset state
-        if (profileImage.previewUrl) URL.revokeObjectURL(profileImage.previewUrl);
-        if (bannerImage.previewUrl) URL.revokeObjectURL(bannerImage.previewUrl);
+        if (profileImage.previewUrl) {
+          console.log('[onSubmit] revoking profileImage.previewUrl:', profileImage.previewUrl);
+          URL.revokeObjectURL(profileImage.previewUrl);
+        }
+        if (bannerImage.previewUrl) {
+          console.log('[onSubmit] revoking bannerImage.previewUrl:', bannerImage.previewUrl);
+          URL.revokeObjectURL(bannerImage.previewUrl);
+        }
         setProfileImage({ file: null, previewUrl: null });
         setBannerImage({ file: null, previewUrl: null });
         setProfileData({ name: "", description: "", address: "", category: "" });
@@ -159,7 +190,7 @@ function SellerProfileSetupPage() {
         throw new Error("Error creating business");
       }
     } catch (error) {
-      console.error(error);
+      console.error('[onSubmit] error:', error);
     }
   };
 
@@ -197,9 +228,15 @@ function SellerProfileSetupPage() {
                 setProfileData={setProfileData}
                 onInvalidData={handleInvalidFormData}
                 onValidData={handleValidFormData}
-                bannerImage={bannerImage}
+                bannerImage={{
+                  ...bannerImage,
+                  previewUrl: bannerImage.file ? bannerImage.previewUrl : null,
+                }}
                 setBannerImage={setBannerImageSafe}
-                profileImage={profileImage}
+                profileImage={{
+                  ...profileImage,
+                  previewUrl: profileImage.file ? profileImage.previewUrl : null,
+                }}
                 setProfileImage={setProfileImageSafe}
               />
             </div>

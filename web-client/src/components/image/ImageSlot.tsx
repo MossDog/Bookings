@@ -14,38 +14,22 @@ interface ImageSlotProps {
     height: number; // How many rows to span
   };
   circle?: boolean;
-  bucketName?: string; // Accept but ignore
-  filePath?: string;   // Accept but ignore
   imagePreviewUrl?: string | null; // Only used for display
-  onImageSelected?: (file: File, previewUrl: string) => void;
+  onImageSelected?: (file: File) => void;
 }
 
 export default function ImageSlot({
   gridOptions,
   circle = false,
-  bucketName, // accepted but unused
-  filePath,   // accepted but unused
   imagePreviewUrl = null,
   onImageSelected,
 }: ImageSlotProps) {
-  // Mark as intentionally unused to satisfy linter/build
-  void bucketName;
-  void filePath;
-
-  // Change the type to allow null
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const lastPreviewUrl = useRef<string | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Revoke previous preview URL if it exists
-      if (lastPreviewUrl.current) {
-        URL.revokeObjectURL(lastPreviewUrl.current);
-      }
-      const previewUrl = URL.createObjectURL(file);
-      lastPreviewUrl.current = previewUrl;
-      if (onImageSelected) onImageSelected(file, previewUrl);
+    if (file && onImageSelected) {
+      onImageSelected(file);
       // Reset file input so selecting the same file again triggers change
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -65,77 +49,44 @@ export default function ImageSlot({
     <div
       className={cn(
         "relative group w-full h-full",
-        imagePreviewUrl != null
-          ? ""
-          : "border-2 border-dotted border-base-300 bg-base-100 hover:bg-base-200",
+        imagePreviewUrl ? "" : "border-2 border-dotted border-base-300 bg-base-100 hover:bg-base-200",
         "flex items-center justify-center",
         rounding,
       )}
       style={gridStyles}
     >
-      {imagePreviewUrl != null ? (
-        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} fileInputRef={fileInputRef} onFileChange={handleFileUpload} />
+      {imagePreviewUrl ? (
+        <>
+          <img
+            src={imagePreviewUrl}
+            alt="Image preview"
+            className={cn("w-full h-full object-cover", rounding)}
+          />
+          <button
+            className={cn(
+              "absolute top-2 right-2 p-2 rounded-full",
+              "bg-base-content/40 hover:bg-base-content/60",
+              "transition-all duration-200 backdrop-blur-sm",
+              "cursor-pointer opacity-0 group-hover:opacity-100",
+            )}
+            type="button"
+            title="Edit image"
+            tabIndex={0}
+            aria-label="Edit image"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Edit size={24} className="text-base-100 drop-shadow-md" />
+          </button>
+          <input type="file" hidden onChange={handleFileUpload} ref={fileInputRef} />
+        </>
       ) : (
-        <UploadPart onChange={handleFileUpload} fileInputRef={fileInputRef} />
+        <>
+          <input type="file" hidden onChange={handleFileUpload} ref={fileInputRef} />
+          <label onClick={() => fileInputRef.current?.click()}>
+            <Plus size={35} className="text-base-content/40" />
+          </label>
+        </>
       )}
     </div>
-  );
-}
-
-interface ImagePartProps {
-  imageUrl: string;
-  rounding: string;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-// Subcomponent to display the image when it is present in the bucket.
-
-function ImagePart({ imageUrl, rounding, fileInputRef, onFileChange }: ImagePartProps) {
-  const handleEditClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-  return (
-    <>
-      <img
-        src={imageUrl}
-        alt="Image preview"
-        className={cn("w-full h-full object-cover", rounding)}
-      />
-      <button
-        className={cn(
-          "absolute top-2 right-2 p-2 rounded-full",
-          "bg-base-content/40 hover:bg-base-content/60",
-          "transition-all duration-200 backdrop-blur-sm",
-          "cursor-pointer opacity-0 group-hover:opacity-100",
-        )}
-        type="button"
-        title="Edit image"
-        tabIndex={0}
-        aria-label="Edit image"
-        onClick={handleEditClick}
-      >
-        <Edit size={24} className="text-base-100 drop-shadow-md" />
-      </button>
-      <input type="file" hidden onChange={onFileChange} ref={fileInputRef} />
-    </>
-  );
-}
-
-interface UploadPartProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
-}
-
-function UploadPart({ onChange, fileInputRef }: UploadPartProps) {
-  return (
-    <>
-      <input type="file" hidden onChange={onChange} ref={fileInputRef} />
-      <label onClick={() => fileInputRef.current?.click()}>
-        <Plus size={35} className="text-base-content/40" />
-      </label>
-    </>
   );
 }
