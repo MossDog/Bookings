@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Seller } from "@/types/types";
-import supabase from "@/utils/supabase";
 import ReviewViewModal from "@/components/ReviewViewModal";
+import { getPaginatedReviews } from "@/utils/reviews";
 
 interface DisplayReview {
   id: string;
@@ -26,27 +26,12 @@ export default function ReviewsWidget({ seller }: ReviewsWidgetProps) {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      setLoading(true);
-
-      const from = (page - 1) * REVIEWS_PER_PAGE;
-      const to = from + REVIEWS_PER_PAGE - 1;
-
-      const { data, count, error } = await supabase
-        .from("reviews")
-        .select("id, rating, comment, created_at, user_id", { count: "exact" })
-        .eq("seller_id", seller.user_id)
-        .order("created_at", { ascending: false })
-        .range(from, to);
-
-      if (error) {
-        console.error("Error fetching reviews:", error.message);
-      } else {
-        setReviews(data || []);
-        setTotalCount(count || 0);
-      }
-
-      setLoading(false);
-    };
+        setLoading(true);
+        const { data, count } = await getPaginatedReviews(seller.user_id, page, REVIEWS_PER_PAGE);
+        setReviews(data);
+        setTotalCount(count);
+        setLoading(false);
+      };
 
     fetchReviews();
   }, [seller.user_id, page]);
