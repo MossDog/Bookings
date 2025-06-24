@@ -26,11 +26,11 @@ const router = createBrowserRouter([
   { path: "/sign-up", element: <SignUpPage /> },
   { path: "/login", element: <LoginPage /> },
   { path: "/profile-creation", element: <SellerProfileSetupPage /> },
-  { path: "/:slug", element: <SellerPage /> },
   { path: "/confirm", element: <ConfirmEmailPage /> },
   { path: "/settings", element: <Settings /> },
   { path: "/my-bookings", element: <ViewUserBookings /> },
-  { path: "/dashboard", element: <DashboardPage />}
+  { path: "/dashboard", element: <DashboardPage /> },
+  { path: "/:slug", element: <SellerPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

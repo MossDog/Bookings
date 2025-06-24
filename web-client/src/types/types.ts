@@ -21,6 +21,7 @@ export interface Seller {
   timezone: string;
   average_rating: number;
   popularity_score: number;
+  widget_order?: string[];
 }
 
 export interface WorkingHours {
