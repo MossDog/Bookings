@@ -120,11 +120,11 @@ function SellerProfileSetupPage() {
       console.log("onSubmit: profileImage.file:", profileImage.file);
       console.log("onSubmit: bannerImage.file:", bannerImage.file);
       if (profileImage.file) {
-        profileImagePath = `${user.id}/profilepicture.jpg`;
+        profileImagePath = `${user.id}/profileimage`;
         await upload(bucketName, profileImagePath, profileImage.file);
       }
       if (bannerImage.file) {
-        bannerImagePath = `${user.id}/bannerimage.jpg`;
+        bannerImagePath = `${user.id}/bannerimage`;
         await upload(bucketName, bannerImagePath, bannerImage.file);
       }
 
