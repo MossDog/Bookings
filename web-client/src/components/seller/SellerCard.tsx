@@ -1,5 +1,5 @@
 import { Seller } from "@/types/types";
-import { getSupabaseImageUrl } from "@/utils/bucket";
+import { getSupabaseImageUrl, fileExistsInBucket } from "@/utils/bucket";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, Store } from "lucide-react";
@@ -15,11 +15,16 @@ export default function SellerCard({ seller }: SellerCardProps) {
   useEffect(() => {
     async function getBanner() {
       try {
-        // Use cache-busting helper for banner image
-        const url = seller.user_id
-          ? getSupabaseImageUrl(seller.user_id, "bannerimage")
-          : null;
-        setBannerUrl(url || null);
+        if (seller.user_id) {
+          const exists = await fileExistsInBucket("public.images", `${seller.user_id}/bannerimage`);
+          if (exists) {
+            setBannerUrl(getSupabaseImageUrl(seller.user_id, "bannerimage"));
+          } else {
+            setBannerUrl(null);
+          }
+        } else {
+          setBannerUrl(null);
+        }
       } catch (error) {
         console.error("Error loading banner:", error);
         setBannerUrl(null);
