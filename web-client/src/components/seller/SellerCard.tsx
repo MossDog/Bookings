@@ -17,7 +17,7 @@ export default function SellerCard({ seller }: SellerCardProps) {
       try {
         const url = await getPublicUrl(
           "public.images",
-          `${seller.user_id}/bannerimage.jpg`,
+          `${seller.user_id}/bannerimage`,
         );
         setBannerUrl(url || null);
       } catch (error) {
