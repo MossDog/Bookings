@@ -12,7 +12,12 @@ import { getProfileFromSlug, updateWidgetOrder } from "@/utils/seller";
 import { toast } from "sonner";
 import { getServicesFromId } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
-import { swapArrayElements } from "@/utils/array";
+import AboutUsWidget from "@/components/AboutUsWidget";
+import FAQWidget from "@/components/FAQWidget";
+import ReviewsWidget from "@/components/ReviewsWidget";
+import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
+
+const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -44,17 +49,10 @@ export default function SellerPage() {
       }
 
       setSeller(data);
-      setWidgets(data.widget_order || ["highlight", "services", "map"]);
-
-      const servs = await getServicesFromId(data.user_id);
-      setServices(servs || []);
-
-      const bannerUrl = await getPublicUrl("public.images", `${data.user_id}/bannerimage`);
-      const profileUrl = await getPublicUrl("public.images", `${data.user_id}/profileimage`);
-
-      setBannerImageUrl(bannerUrl || undefined);
-      setProfileImageUrl(profileUrl || undefined);
-
+      setWidgets(data.widget_order || ALL_WIDGETS);
+      setServices(await getServicesFromId(data.user_id) || []);
+      setBannerImageUrl(await getPublicUrl("public.images", `${data.user_id}/bannerimage`) || undefined);
+      setProfileImageUrl(await getPublicUrl("public.images", `${data.user_id}/profileimage`) || undefined);
       const user = await getUser();
       setUserId(user?.id || null);
     };
@@ -62,14 +60,18 @@ export default function SellerPage() {
     fetchSeller().finally(() => setLoading(false));
   }, [slug, navigate]);
 
-  const moveWidgetUp = (index: number) => {
-    if (index === 0) return;
-    setWidgets((prev) => swapArrayElements(prev, index, index - 1));
-  };
+  const hiddenWidgets = ALL_WIDGETS.filter((w) => !widgets.includes(w));
 
-  const moveWidgetDown = (index: number) => {
-    if (index === widgets.length - 1) return;
-    setWidgets((prev) => swapArrayElements(prev, index, index + 1));
+  const renderWidget = (widget: string) => {
+    switch (widget) {
+      case "highlight": return <HighlightWidget key="highlight" services={services} isLoading={loading} />;
+      case "services": return <ServicesWidget key="services" services={services} isLoading={loading} />;
+      case "map": return <MapsWidget key="map" seller={seller!} />;
+      case "about": return <AboutUsWidget key="about" aboutUs={seller?.about_us} isLoading={loading} />;
+      case "faq": return <FAQWidget key="faq" seller={seller!} />;
+      case "reviews": return <ReviewsWidget key="reviews" seller={seller!} />;
+      default: return null;
+    }
   };
 
   const handleSave = async () => {
@@ -85,75 +87,52 @@ export default function SellerPage() {
     setSaving(false);
   };
 
-  const renderWidget = (widget: string) => {
-    switch (widget) {
-      case "highlight":
-        return <HighlightWidget key="highlight" services={services} isLoading={loading} />;
-      case "services":
-        return <ServicesWidget key="services" services={services} isLoading={loading} />;
-      case "map":
-        return <MapsWidget key="map" seller={seller!} />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <div>
       <Navbar />
       <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl} />
 
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
-        
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
+            {userId === seller.user_id && (
+              !isEditing ? (
+                <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>Edit Widgets</button>
+              ) : (
+                <div className="flex gap-2 mt-4">
+                  <button className="btn btn-primary" onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Order"}</button>
+                  <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>Cancel</button>
+                </div>
+              )
+            )}
+
+            {isEditing && hiddenWidgets.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <p className="label-text mb-2">Add Widget:</p>
+                <div className="flex flex-wrap gap-2">
+                  {hiddenWidgets.map((widget) => (
+                    <div key={widget} className="badge badge-outline badge-lg cursor-pointer hover:bg-primary hover:text-primary-content" onClick={() => setWidgets((prev) => addItem(prev, widget))}>
+                      + {capitalize(widget)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {widgets.map((widget, index) => (
               <div key={widget} className="relative group flex gap-2 items-start">
-                
                 {isEditing && (
                   <div className="flex flex-col space-y-1 pt-2">
-                    <button
-                      className="btn btn-xs btn-outline"
-                      onClick={() => moveWidgetUp(index)}
-                      disabled={index === 0}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      className="btn btn-xs btn-outline"
-                      onClick={() => moveWidgetDown(index)}
-                      disabled={index === widgets.length - 1}
-                    >
-                      ↓
-                    </button>
+                    <button className="btn btn-xs btn-outline" onClick={() => setWidgets((prev) => moveItemUp(prev, index))} disabled={index === 0}>↑</button>
+                    <button className="btn btn-xs btn-outline" onClick={() => setWidgets((prev) => moveItemDown(prev, index))} disabled={index === widgets.length - 1}>↓</button>
+                    <button className="btn btn-xs btn-outline" onClick={() => setWidgets((prev) => moveItemTop(prev, index))} disabled={index === 0}>Top</button>
+                    <button className="btn btn-xs btn-outline" onClick={() => setWidgets((prev) => moveItemBottom(prev, index))} disabled={index === widgets.length - 1}>Bottom</button>
+                    <button className="btn btn-xs btn-error mt-2" onClick={() => setWidgets((prev) => removeItem(prev, widget))}>Remove</button>
                   </div>
                 )}
-
-                <div className="flex-1">
-                  {renderWidget(widget)}
-                </div>
-                
+                <div className="flex-1">{renderWidget(widget)}</div>
               </div>
             ))}
-
-            {userId === seller.user_id && (
-              <>
-                {!isEditing ? (
-                  <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>
-                    Edit Order
-                  </button>
-                ) : (
-                  <div className="flex gap-2 mt-4">
-                    <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-                      {saving ? "Saving..." : "Save Order"}
-                    </button>
-                    <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>
-                      Cancel
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
           </div>
         )}
 

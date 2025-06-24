@@ -40,3 +40,21 @@ export async function getUserReviewsForSeller(sellerId: string) {
   return data as Review[];
 }
 
+export async function getPaginatedReviews(sellerId: string, page: number, limit: number = 5) {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, count, error } = await supabase
+    .from("reviews")
+    .select("id, rating, comment, created_at, user_id", { count: "exact" })
+    .eq("seller_id", sellerId)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    console.error("Error fetching reviews:", error.message);
+    return { data: [], count: 0 };
+  }
+
+  return { data: data || [], count: count || 0 };
+}
