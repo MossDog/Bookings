@@ -1,5 +1,5 @@
 import { Seller } from "@/types/types";
-import { getPublicUrl } from "@/utils/bucket";
+import { getSupabaseImageUrl, fileExistsInBucket } from "@/utils/bucket";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, Store } from "lucide-react";
@@ -15,11 +15,16 @@ export default function SellerCard({ seller }: SellerCardProps) {
   useEffect(() => {
     async function getBanner() {
       try {
-        const url = await getPublicUrl(
-          "public.images",
-          `${seller.user_id}/bannerimage`,
-        );
-        setBannerUrl(url || null);
+        if (seller.user_id) {
+          const exists = await fileExistsInBucket("public.images", `${seller.user_id}/bannerimage`);
+          if (exists) {
+            setBannerUrl(getSupabaseImageUrl(seller.user_id, "bannerimage"));
+          } else {
+            setBannerUrl(null);
+          }
+        } else {
+          setBannerUrl(null);
+        }
       } catch (error) {
         console.error("Error loading banner:", error);
         setBannerUrl(null);
@@ -31,26 +36,36 @@ export default function SellerCard({ seller }: SellerCardProps) {
     getBanner();
   }, [seller]);
 
+  // Accessibility: fallback alt text
+  const bannerAlt = seller.name ? `${seller.name} banner` : "Business banner";
+
   return (
     <Link
       key={seller.slug}
-      to={`${seller.slug}`}
+      to={`/${seller.slug}`}
       className="card bg-base-100 hover:shadow-lg transition-all duration-200 group"
+      aria-label={`View details for ${seller.name || "business"}`}
     >
       {/* Card Image */}
       <figure className="relative h-48 bg-base-300">
         <div className="absolute inset-0 bg-gradient-to-t from-base-300 to-transparent opacity-50"></div>
         {isLoading ? (
-          <div className="w-full h-full animate-pulse bg-base-300"></div>
+          <div
+            className="w-full h-full animate-pulse bg-base-300"
+            aria-label="Loading banner image"
+          ></div>
         ) : bannerUrl ? (
           <img
             src={bannerUrl}
-            alt={seller.name}
+            alt={bannerAlt}
             className="w-full h-full object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-base-200">
-            <Store className="w-12 h-12 text-base-content" />
+            <Store
+              className="w-12 h-12 text-base-content"
+              aria-label="No banner image"
+            />
           </div>
         )}
         <div className="absolute top-4 right-4">
@@ -59,7 +74,6 @@ export default function SellerCard({ seller }: SellerCardProps) {
           </div>
         </div>
       </figure>
-
       <div className="card-body p-6">
         {/* Title and Rating */}
         <div className="flex justify-between items-start mb-2">
@@ -69,7 +83,12 @@ export default function SellerCard({ seller }: SellerCardProps) {
           <div className="flex flex-col items-end gap-1">
             {typeof seller.average_rating === "number" ? (
               <>
-                <div className="rating rating-sm">
+                <div
+                  className="rating rating-sm"
+                  aria-label={`Rating: ${seller.average_rating.toFixed(
+                    1
+                  )} out of 5`}
+                >
                   {[1, 2, 3, 4, 5].map((i) => (
                     <input
                       key={i}
@@ -78,7 +97,9 @@ export default function SellerCard({ seller }: SellerCardProps) {
                       className="mask mask-star-2 bg-orange-400"
                       readOnly
                       checked={i === Math.floor(seller.average_rating || 0)}
-                      />
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
                   ))}
                 </div>
                 <span className="text-sm text-base-content/70">

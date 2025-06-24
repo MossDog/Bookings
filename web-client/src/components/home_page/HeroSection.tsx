@@ -1,12 +1,16 @@
 import SellerSearchBar from "@/components/SellerSearchBar";
+import { getCacheBustedSupabaseImageUrl } from "@/utils/bucket";
 
 export default function HeroSection() {
+  // Use a static cache-busted URL for the hero background
+  const heroBgUrl = getCacheBustedSupabaseImageUrl(
+    "city_maps/gregory-dalleau-KT4dOfvtZSg-unsplash.jpg"
+  );
   return (
     <div
       className="hero min-h-[40vh] rounded-box mb-12 px-6 py-24"
       style={{
-        backgroundImage:
-          "url('https://diuvtcenidxquipjwyzh.supabase.co/storage/v1/object/public/public.images/city_maps/gregory-dalleau-KT4dOfvtZSg-unsplash.jpg')",
+        backgroundImage: `url('${heroBgUrl}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

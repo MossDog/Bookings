@@ -7,10 +7,10 @@ import ServicesWidget from "@/components/widgets/ServicesWidget";
 import SellerTitle from "@/components/seller/SellerTitle";
 import HighlightWidget from "@/components/widgets/HighlightWidget";
 import SellerTitleCard from "@/components/seller/SellerTitleCard";
-import { getPublicUrl } from "@/utils/bucket";
+import { getSupabaseImageUrl } from "@/utils/bucket";
+import { getServicesFromId } from "@/utils/sellerProfile";
 import { getProfileFromSlug, updateWidgetOrder } from "@/utils/seller";
 import { toast } from "sonner";
-import { getServicesFromId } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
@@ -49,10 +49,11 @@ export default function SellerPage() {
       }
 
       setSeller(data);
+      setSeller(data);
       setWidgets(data.widget_order || ALL_WIDGETS);
       setServices(await getServicesFromId(data.user_id) || []);
-      setBannerImageUrl(await getPublicUrl("public.images", `${data.user_id}/bannerimage`) || undefined);
-      setProfileImageUrl(await getPublicUrl("public.images", `${data.user_id}/profileimage`) || undefined);
+      setBannerImageUrl(getSupabaseImageUrl(data.user_id, "bannerimage"));
+      setProfileImageUrl(getSupabaseImageUrl(data.user_id, "profileimage"));
       const user = await getUser();
       setUserId(user?.id || null);
     };
