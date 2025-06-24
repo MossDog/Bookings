@@ -74,7 +74,7 @@ export default function ImageSlot({
       style={gridStyles}
     >
       {imagePreviewUrl != null ? (
-        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} />
+        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} fileInputRef={fileInputRef} />
       ) : (
         <UploadPart onChange={handleFileUpload} fileInputRef={fileInputRef} />
       )}
@@ -85,11 +85,17 @@ export default function ImageSlot({
 interface ImagePartProps {
   imageUrl: string;
   rounding: string;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 // Subcomponent to display the image when it is present in the bucket.
 
-function ImagePart({ imageUrl, rounding }: ImagePartProps) {
+function ImagePart({ imageUrl, rounding, fileInputRef }: ImagePartProps) {
+  const handleEditClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
   return (
     <>
       <img
@@ -108,6 +114,7 @@ function ImagePart({ imageUrl, rounding }: ImagePartProps) {
         title="Edit image"
         tabIndex={-1}
         aria-label="Edit image"
+        onClick={handleEditClick}
       >
         <Edit size={24} className="text-base-100 drop-shadow-md" />
       </button>
