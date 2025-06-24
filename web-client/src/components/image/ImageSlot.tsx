@@ -74,7 +74,7 @@ export default function ImageSlot({
       style={gridStyles}
     >
       {imagePreviewUrl != null ? (
-        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} fileInputRef={fileInputRef} />
+        <ImagePart imageUrl={imagePreviewUrl} rounding={rounding} fileInputRef={fileInputRef} onFileChange={handleFileUpload} />
       ) : (
         <UploadPart onChange={handleFileUpload} fileInputRef={fileInputRef} />
       )}
@@ -86,11 +86,12 @@ interface ImagePartProps {
   imageUrl: string;
   rounding: string;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 // Subcomponent to display the image when it is present in the bucket.
 
-function ImagePart({ imageUrl, rounding, fileInputRef }: ImagePartProps) {
+function ImagePart({ imageUrl, rounding, fileInputRef, onFileChange }: ImagePartProps) {
   const handleEditClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -112,12 +113,13 @@ function ImagePart({ imageUrl, rounding, fileInputRef }: ImagePartProps) {
         )}
         type="button"
         title="Edit image"
-        tabIndex={-1}
+        tabIndex={0}
         aria-label="Edit image"
         onClick={handleEditClick}
       >
         <Edit size={24} className="text-base-100 drop-shadow-md" />
       </button>
+      <input type="file" hidden onChange={onFileChange} ref={fileInputRef} />
     </>
   );
 }
@@ -130,7 +132,7 @@ interface UploadPartProps {
 function UploadPart({ onChange, fileInputRef }: UploadPartProps) {
   return (
     <>
-      <input type="file" id="fileInput" hidden onChange={onChange} ref={fileInputRef} />
+      <input type="file" hidden onChange={onChange} ref={fileInputRef} />
       <label htmlFor="fileInput">
         <Plus size={35} className="text-base-content/40" />
       </label>
