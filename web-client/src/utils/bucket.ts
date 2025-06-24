@@ -76,7 +76,7 @@ export function getSupabaseImageUrl(
  * @param filePath The full path to the image in the bucket (e.g. 'city_maps/filename.jpg' or 'userId/profileimage').
  * @returns The cache-busted public image URL.
  */
-export function getSupabaseImageUrlForPath(filePath: string) {
+export function getCacheBustedSupabaseImageUrl(filePath: string) {
   const base = `https://diuvtcenidxquipjwyzh.supabase.co/storage/v1/object/public/public.images/${filePath}`;
   return `${base}?cb=${Date.now()}`;
 }

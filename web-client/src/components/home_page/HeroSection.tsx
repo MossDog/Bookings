@@ -1,9 +1,9 @@
 import SellerSearchBar from "@/components/SellerSearchBar";
-import { getSupabaseImageUrlForPath } from "@/utils/bucket";
+import { getCacheBustedSupabaseImageUrl } from "@/utils/bucket";
 
 export default function HeroSection() {
   // Use a static cache-busted URL for the hero background
-  const heroBgUrl = getSupabaseImageUrlForPath(
+  const heroBgUrl = getCacheBustedSupabaseImageUrl(
     "city_maps/gregory-dalleau-KT4dOfvtZSg-unsplash.jpg"
   );
   return (
