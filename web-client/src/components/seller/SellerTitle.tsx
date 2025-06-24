@@ -11,6 +11,8 @@ interface SellerTitleProps {
   profileUrl?: string;
   rating: number;
   reviewCount: number;
+  isOpen?: boolean;
+  nextOpeningTime?: string;
 }
 
 const SellerTitle: React.FC<SellerTitleProps> = ({ seller, bannerUrl, profileUrl, rating, reviewCount }) => {

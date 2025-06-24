@@ -1,7 +1,6 @@
-// SellerPage.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Seller, Service } from "@/types/types";
+import { Seller, Service, WorkingHours } from "@/types/types";
 import Navbar from "@/components/Navbar";
 import MapsWidget from "@/components/MapWidget";
 import ServicesWidget from "@/components/widgets/ServicesWidget";
@@ -16,8 +15,9 @@ import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
 import ReviewsWidget from "@/components/ReviewsWidget";
-import supabase from "@/utils/supabase";
 import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
+import { fetchTable } from "@/utils/dbdao";
+import { DateTime } from "luxon";
 
 const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
@@ -32,8 +32,8 @@ export default function SellerPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [averageRating, setAverageRating] = useState(0);
-  const [reviewCount, setReviewCount] = useState(0);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [nextOpeningTime, setNextOpeningTime] = useState<string | undefined>();
 
   const navigate = useNavigate();
 
@@ -60,15 +60,24 @@ export default function SellerPage() {
       const user = await getUser();
       setUserId(user?.id || null);
 
-      const { data: reviews, error } = await supabase
-        .from("reviews")
-        .select("rating", { count: "exact" })
-        .eq("seller_id", data.user_id);
+      // Determine open/closed status
+      const now = DateTime.local();
+      const weekday = now.weekday % 7;
+      const workingHours = await fetchTable<WorkingHours>("seller_working_hours", {
+        user_id: data.user_id,
+        day_of_week: weekday,
+      });
 
-      if (!error && reviews?.length) {
-        const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
-        setAverageRating(sum / reviews.length);
-        setReviewCount(reviews.length);
+      if (workingHours.length) {
+        const start = DateTime.fromFormat(workingHours[0].start_time, "HH:mm");
+        const end = DateTime.fromFormat(workingHours[0].end_time, "HH:mm");
+        const currentTime = now.set({ second: 0, millisecond: 0 });
+
+        if (currentTime >= start && currentTime <= end) {
+          setIsOpen(true);
+        } else if (currentTime < start) {
+          setNextOpeningTime(start.toFormat("HH:mm"));
+        }
       }
     };
 
@@ -105,8 +114,15 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-      <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl} rating={averageRating} reviewCount={reviewCount} />
-
+<SellerTitle
+  seller={seller}
+  bannerUrl={bannerImageUrl}
+  profileUrl={profileImageUrl}
+  isOpen={isOpen}
+  nextOpeningTime={nextOpeningTime}
+  rating={seller?.average_rating || 5}
+  reviewCount={seller?.review_count || 0}
+/>
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
