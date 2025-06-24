@@ -1,3 +1,4 @@
+// SellerPage.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Seller, Service } from "@/types/types";
@@ -15,6 +16,7 @@ import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
 import ReviewsWidget from "@/components/ReviewsWidget";
+import supabase from "@/utils/supabase";
 import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
 
 const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
@@ -30,6 +32,8 @@ export default function SellerPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -55,6 +59,17 @@ export default function SellerPage() {
       setProfileImageUrl(await getPublicUrl("public.images", `${data.user_id}/profileimage`) || undefined);
       const user = await getUser();
       setUserId(user?.id || null);
+
+      const { data: reviews, error } = await supabase
+        .from("reviews")
+        .select("rating", { count: "exact" })
+        .eq("seller_id", data.user_id);
+
+      if (!error && reviews?.length) {
+        const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+        setAverageRating(sum / reviews.length);
+        setReviewCount(reviews.length);
+      }
     };
 
     fetchSeller().finally(() => setLoading(false));
@@ -90,7 +105,7 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-      <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl} />
+      <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl} rating={averageRating} reviewCount={reviewCount} />
 
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {seller && (
