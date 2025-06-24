@@ -27,21 +27,6 @@ export interface ProfileCreationData {
   services?: Service[];
 }
 
-export const getProfileFromSlug = async (slug: string) => {
-  const { data, error } = await supabase
-    .from("seller")
-    .select("*")
-    .eq("slug", slug)
-    .single();
-
-  if (error) {
-    console.error(error);
-    return null;
-  } else {
-    return data;
-  }
-};
-
 export const getServicesFromId = async (userId: string) => {
   const { data, error } = await supabase
     .from("service")
