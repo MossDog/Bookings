@@ -18,7 +18,7 @@ export default function UserAvatar() {
 
       const imageExists = await fileExistsInBucket(
         "public.images",
-        `${user.id}/profilepicture`,
+        `${user.id}/profilepicture.jpg`,
       );
 
       if (!imageExists) {
@@ -27,7 +27,7 @@ export default function UserAvatar() {
 
       const imageUrl = await getPublicUrl(
         "public.images",
-        `${user.id}/profilepicture`,
+        `${user.id}/profilepicture.jpg`,
       );
 
       if (imageUrl) {

@@ -51,11 +51,11 @@ export default function SellerPage() {
 
       const bannerUrl = await getPublicUrl(
         "public.images",
-        `${data.user_id}/bannerimage`,
+        `${data.user_id}/bannerimage.jpg`,
       );
       const profileUrl = await getPublicUrl(
         "public.images",
-        `${data.user_id}/profileimage`,
+        `${data.user_id}/profileimage.jpg`,
       );
 
       setBannerImageUrl(bannerUrl || undefined);
