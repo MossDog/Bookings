@@ -1,6 +1,5 @@
 import supabase from "./supabase";
 
-
 export async function fetchTable<T = unknown>(
   table: string,
   match: Record<string, unknown>,

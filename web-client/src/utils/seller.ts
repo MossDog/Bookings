@@ -20,54 +20,57 @@ export async function getSellers(): Promise<Seller[]> {
   }
 }
 
-export async function fetchAllSellerData(sellerId: string): Promise<AllSellerData> {
+export async function fetchAllSellerData(
+  sellerId: string,
+): Promise<AllSellerData> {
   const { data: sellerData, error: sellerError } = await supabase
-    .from('seller')
-    .select('*')
-    .eq('user_id', sellerId)
+    .from("seller")
+    .select("*")
+    .eq("user_id", sellerId)
     .single();
-   
-  if(sellerError) {
+
+  if (sellerError) {
     console.error("Seller not found");
   }
 
   const { data: servicesData, error: servicesError } = await supabase
-    .from('service')
-    .select('*')
-    .eq('user_id', sellerId)
+    .from("service")
+    .select("*")
+    .eq("user_id", sellerId);
 
   if (servicesError) {
-   console.error("Seller services error");
+    console.error("Seller services error");
   }
 
   const { data: bookingsData, error: bookingsError } = await supabase
-    .from('bookings')
-    .select('*')
-    .eq('seller_id', sellerId);
+    .from("bookings")
+    .select("*")
+    .eq("seller_id", sellerId);
 
   if (bookingsError) {
-   console.error("Seller bookings error");
+    console.error("Seller bookings error");
   }
 
   const data: AllSellerData = {
     seller: sellerData,
     services: servicesData || [],
-    bookings: bookingsData || []
+    bookings: bookingsData || [],
   };
 
   return data;
 }
 
 export async function getAvailableDates(sellerId: string): Promise<string[]> {
-  const { data, error } = await supabase
-    .rpc('get_available_dates', { seller_uuid: sellerId });
+  const { data, error } = await supabase.rpc("get_available_dates", {
+    seller_uuid: sellerId,
+  });
 
   if (error || !data) {
     console.error("Error fetching available dates:", error?.message);
     return [];
   }
 
-  return data.map((row: { day: string }) => row.day.split('T')[0]);
+  return data.map((row: { day: string }) => row.day.split("T")[0]);
 }
 
 export const fetchServices = async (
@@ -93,7 +96,9 @@ export const fetchServices = async (
   }
 };
 
-export async function fetchAddressBySellerId(sellerId: string): Promise<string | null> {
+export async function fetchAddressBySellerId(
+  sellerId: string,
+): Promise<string | null> {
   const { data, error } = await supabase
     .from("seller")
     .select("address")
@@ -110,20 +115,22 @@ export async function fetchAddressBySellerId(sellerId: string): Promise<string |
 
 export const getServiceById = async (id: number) => {
   const { data, error } = await supabase
-    .from('service')
-    .select('*')
-    .eq('id', id)
+    .from("service")
+    .select("*")
+    .eq("id", id)
     .single();
 
-  if(error){
+  if (error) {
     console.log(`Error fetching service with ID ${id}`);
     return null;
   }
 
   return data as Service;
-}
+};
 
-export async function searchSellersByName(name: string): Promise<SellerPreview[]> {
+export async function searchSellersByName(
+  name: string,
+): Promise<SellerPreview[]> {
   const { data, error } = await supabase
     .from("seller")
     .select("user_id, name, slug, category")
@@ -154,7 +161,7 @@ export async function getProfileFromSlug(slug: string): Promise<Seller | null> {
 
 export const updateWidgetOrder = async (
   sellerId: string,
-  widgetOrder: string[]
+  widgetOrder: string[],
 ): Promise<boolean> => {
   const { error } = await supabase
     .from("seller")

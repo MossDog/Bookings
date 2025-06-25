@@ -19,7 +19,9 @@ const CATEGORIES = [
 
 export default function SellerBrowser({ sellers }: SellerBrowserProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("View All");
-  const [sortBy, setSortBy] = useState<"Newest" | "Popular" | "Rating">("Popular");
+  const [sortBy, setSortBy] = useState<"Newest" | "Popular" | "Rating">(
+    "Popular",
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const sellersPerPage = 9;
 

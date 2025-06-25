@@ -2,7 +2,7 @@ import { Seller } from "@/types/types";
 
 export function filterSellersByCategory(
   sellers: Seller[],
-  category: string
+  category: string,
 ): Seller[] {
   return category === "View All"
     ? sellers

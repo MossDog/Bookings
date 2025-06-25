@@ -1,8 +1,8 @@
-import { Booking, Seller, Service } from '@/types/types';
-import { useEffect, useState } from 'react';
-import UserBookingModal from './UserBookingModal';
-import { fetchBookingDetails } from '@/utils/bookings';
-import { Calendar, Clock, Euro, Store } from 'lucide-react';
+import { Booking, Seller, Service } from "@/types/types";
+import { useEffect, useState } from "react";
+import UserBookingModal from "./UserBookingModal";
+import { fetchBookingDetails } from "@/utils/bookings";
+import { Calendar, Clock, Euro, Store } from "lucide-react";
 
 interface UserBookingCardProps {
   booking: Booking;
@@ -58,7 +58,9 @@ export default function UserBookingCard({ booking }: UserBookingCardProps) {
               Status: {booking.status}
             </p>
           </div>
-          <div className="text-xs badge badge-outline">{seller?.category || 'Service'}</div>
+          <div className="text-xs badge badge-outline">
+            {seller?.category || "Service"}
+          </div>
         </div>
 
         {/* Date & Time */}
@@ -68,8 +70,15 @@ export default function UserBookingCard({ booking }: UserBookingCardProps) {
         </div>
         <div className="flex items-center gap-2 text-sm text-base-content/70 mb-2">
           <Clock size={16} />
-          {new Date(booking.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} –{' '}
-          {new Date(booking.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {new Date(booking.start_time).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}{" "}
+          –{" "}
+          {new Date(booking.end_time).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </div>
 
         {/* Seller */}
@@ -82,8 +91,7 @@ export default function UserBookingCard({ booking }: UserBookingCardProps) {
 
         {/* Price */}
         <div className="flex items-center gap-2 text-sm font-medium text-base-content mt-2">
-          <Euro size={16} />
-          €{service.price}
+          <Euro size={16} />€{service.price}
         </div>
       </div>
 

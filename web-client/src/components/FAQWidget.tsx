@@ -29,6 +29,7 @@ export default function FAQWidget({ seller }: FAQWidgetProps) {
     <div className="card bg-base-100 shadow-md p-6">
       <h2 className="card-title mb-4">Frequently Asked Questions</h2>
 
+
       {faqs.length === 0 ? (
         <p className="text-base-content/70">No FAQs available currently.</p>
       ) : (
