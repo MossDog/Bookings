@@ -1,4 +1,4 @@
-import { AllSellerData, Seller, Service, SellerPreview } from "@/types/types";
+import { AllSellerData, Seller, Service, SellerPreview, FAQ } from "@/types/types";
 import supabase from "./supabase";
 
 export async function getSellers(): Promise<Seller[]> {
@@ -193,5 +193,96 @@ export async function updateAboutUs(sellerId: string, aboutUs: string): Promise<
   } catch (err) {
     console.error("Error updating seller's about us:", err);
     return false;
+  }
+}
+
+export async function fetchFAQs(sellerId: string): Promise<FAQ[]> {
+  try {
+    const { data, error } = await supabase
+      .from("faq")
+      .select("*")
+      .eq("user_id", sellerId)
+      .order("is_featured", { ascending: false }); // Featured FAQs first
+
+    if (error) {
+      throw error;
+    }
+
+    return data as FAQ[];
+  } catch (err) {
+    console.error("Error fetching FAQs:", err);
+    return [];
+  }
+}
+
+export async function insertFAQ(sellerId: string, question: string, answer: string, isFeatured: boolean = false): Promise<{ success: boolean; data?: FAQ; error?: string }> {
+  try {
+    const { data, error } = await supabase
+      .from("faq")
+      .insert({
+        user_id: sellerId,
+        question: question.trim(),
+        answer: answer.trim(),
+        is_featured: isFeatured
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return { success: true, data: data as FAQ };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to create FAQ";
+    console.error("Error inserting FAQ:", err);
+    return { success: false, error: errorMessage };
+  }
+}
+
+export async function updateFAQ(faqId: string, updates: Partial<Pick<FAQ, 'question' | 'answer' | 'is_featured'>>): Promise<{ success: boolean; data?: FAQ; error?: string }> {
+  try {
+    // Trim text fields if they exist in updates
+    const cleanUpdates = {
+      ...updates,
+      ...(updates.question && { question: updates.question.trim() }),
+      ...(updates.answer && { answer: updates.answer.trim() })
+    };
+
+    const { data, error } = await supabase
+      .from("faq")
+      .update(cleanUpdates)
+      .eq("id", faqId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return { success: true, data: data as FAQ };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to update FAQ";
+    console.error("Error updating FAQ:", err);
+    return { success: false, error: errorMessage };
+  }
+}
+
+export async function deleteFAQ(faqId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { error } = await supabase
+      .from("faq")
+      .delete()
+      .eq("id", faqId);
+
+    if (error) {
+      throw error;
+    }
+
+    return { success: true };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to delete FAQ";
+    console.error("Error deleting FAQ:", err);
+    return { success: false, error: errorMessage };
   }
 }

@@ -7,6 +7,7 @@ import { updateWidgetOrder } from '@/utils/seller';
 import { toast } from 'sonner';
 import EditAbout from './edit_widgets/EditAbout';
 import { Seller } from '@/types/types';
+import EditFAQ from './edit_widgets/EditFAQ';
 
 interface EditWidgetProps {
     enabledWidgets?: string[];
@@ -87,6 +88,7 @@ export default function EditWidgets({
           <div className="flex-1">
             { selectedWidget === "services" && <EditServices />}
             { selectedWidget === "about" && <EditAbout initialAboutUs={seller.about_us || ""} sellerId={seller.user_id}/>}
+            { selectedWidget === "faq" && <EditFAQ sellerId={seller.user_id} />}
           </div>
         </div>
       ) : (          <div className="p-4">
