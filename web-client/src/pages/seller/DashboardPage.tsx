@@ -69,11 +69,6 @@ export default function DashboardPage() {
         return booking;
       }));
       
-      // Close the modal if open
-      if (selectedBooking?.id === bookingId) {
-        setSelectedBooking(null);
-      }
-      
     } catch (err) {
       console.error("Error updating booking status:", err);
     }

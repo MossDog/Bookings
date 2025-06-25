@@ -1,7 +1,6 @@
 import {
   AlignCenter,
   Calendar,
-  CalendarDays,
   CreditCard,
   Settings,
   Timer,

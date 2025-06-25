@@ -115,9 +115,11 @@ export default function BookingDetailsModal({
                 {selectedBooking.status !== "cancelled" && (
                   <button
                     className="btn btn-outline btn-error btn-block"
-                    onClick={() =>
-                      handleStatusChange(selectedBooking.id, "cancelled")
-                    }
+                    onClick={() => {
+                      handleStatusChange(selectedBooking.id, "cancelled");
+                      // Close the modal if open
+                      setSelectedBooking(null);
+                    }}
                   >
                     <XCircle className="w-4 h-4 mr-2" />
                     Cancel Booking
