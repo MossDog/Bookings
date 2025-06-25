@@ -10,7 +10,7 @@ import SellerTitleCard from "@/components/seller/SellerTitleCard";
 import { getPublicUrl } from "@/utils/bucket";
 import { getProfileFromSlug, updateWidgetOrder } from "@/utils/seller";
 import { toast } from "sonner";
-import { getServicesFromId } from "@/utils/sellerProfile";
+import { getServicesFromId, isSellerOpen } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
@@ -18,7 +18,7 @@ import ReviewsWidget from "@/components/ReviewsWidget";
 import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
 import { fetchTable } from "@/utils/dbdao";
 import { DateTime } from "luxon";
-import supabase from "@/utils/supabase";
+import { getReviewCount } from "@/utils/reviews";
 
 const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
@@ -34,7 +34,6 @@ export default function SellerPage() {
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [nextOpeningTime, setNextOpeningTime] = useState<string | undefined>();
   const [reviewCount, setReviewCount] = useState<number>(0);
 
   const navigate = useNavigate();
@@ -62,7 +61,6 @@ export default function SellerPage() {
       const user = await getUser();
       setUserId(user?.id || null);
 
-      // Determine open/closed status
       const now = DateTime.local();
       const weekday = now.weekday % 7;
       const workingHours = await fetchTable<WorkingHours>("seller_working_hours", {
@@ -70,28 +68,8 @@ export default function SellerPage() {
         day_of_week: weekday,
       });
 
-      if (workingHours.length) {
-        const start = DateTime.fromFormat(workingHours[0].start_time, "HH:mm");
-        const end = DateTime.fromFormat(workingHours[0].end_time, "HH:mm");
-        const currentTime = now.set({ second: 0, millisecond: 0 });
-
-        if (currentTime >= start && currentTime <= end) {
-          setIsOpen(true);
-        } else if (currentTime < start) {
-          setNextOpeningTime(start.toFormat("HH:mm"));
-        }
-      }
-
-      // Fetch review count
-      const { count, error: reviewError } = await supabase
-        .from("reviews")
-        .select("*", { count: "exact", head: true })
-        .eq("seller_id", data.user_id);
-
-      if (reviewError) {
-        console.error("Error fetching review count:", reviewError.message);
-      }
-      setReviewCount(count || 0);
+      setIsOpen(isSellerOpen(now, workingHours));
+      setReviewCount(await getReviewCount(data.user_id));
     };
 
     fetchSeller().finally(() => setLoading(false));
@@ -132,24 +110,20 @@ export default function SellerPage() {
         bannerUrl={bannerImageUrl}
         profileUrl={profileImageUrl}
         isOpen={isOpen}
-        nextOpeningTime={nextOpeningTime}
-        rating={seller?.average_rating || 0}
+        rating={seller?.average_rating || 5}
         reviewCount={reviewCount}
       />
-
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
-            {userId === seller.user_id && (
-              !isEditing ? (
-                <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>Edit Widgets</button>
-              ) : (
-                <div className="flex gap-2 mt-4">
-                  <button className="btn btn-primary" onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Order"}</button>
-                  <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>Cancel</button>
-                </div>
-              )
-            )}
+            {userId === seller.user_id && (!isEditing ? (
+              <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>Edit Widgets</button>
+            ) : (
+              <div className="flex gap-2 mt-4">
+                <button className="btn btn-primary" onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Order"}</button>
+                <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>Cancel</button>
+              </div>
+            ))}
 
             {isEditing && hiddenWidgets.length > 0 && (
               <div className="mt-4 space-y-2">
