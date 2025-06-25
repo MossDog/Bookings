@@ -18,6 +18,7 @@ import ReviewsWidget from "@/components/ReviewsWidget";
 import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
 import { fetchTable } from "@/utils/dbdao";
 import { DateTime } from "luxon";
+import supabase from "@/utils/supabase";
 
 const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
@@ -34,6 +35,7 @@ export default function SellerPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [nextOpeningTime, setNextOpeningTime] = useState<string | undefined>();
+  const [reviewCount, setReviewCount] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -79,6 +81,17 @@ export default function SellerPage() {
           setNextOpeningTime(start.toFormat("HH:mm"));
         }
       }
+
+      // Fetch review count
+      const { count, error: reviewError } = await supabase
+        .from("reviews")
+        .select("*", { count: "exact", head: true })
+        .eq("seller_id", data.user_id);
+
+      if (reviewError) {
+        console.error("Error fetching review count:", reviewError.message);
+      }
+      setReviewCount(count || 0);
     };
 
     fetchSeller().finally(() => setLoading(false));
@@ -114,15 +127,16 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-<SellerTitle
-  seller={seller}
-  bannerUrl={bannerImageUrl}
-  profileUrl={profileImageUrl}
-  isOpen={isOpen}
-  nextOpeningTime={nextOpeningTime}
-  rating={seller?.average_rating || 5}
-  reviewCount={seller?.review_count || 0}
-/>
+      <SellerTitle
+        seller={seller}
+        bannerUrl={bannerImageUrl}
+        profileUrl={profileImageUrl}
+        isOpen={isOpen}
+        nextOpeningTime={nextOpeningTime}
+        rating={seller?.average_rating || 0}
+        reviewCount={reviewCount}
+      />
+
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
