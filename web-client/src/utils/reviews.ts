@@ -40,7 +40,11 @@ export async function getUserReviewsForSeller(sellerId: string) {
   return data as Review[];
 }
 
-export async function getPaginatedReviews(sellerId: string, page: number, limit: number = 5) {
+export async function getPaginatedReviews(
+  sellerId: string,
+  page: number,
+  limit: number = 5,
+) {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 

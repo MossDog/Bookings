@@ -78,7 +78,7 @@ export default function SellerCard({ seller }: SellerCardProps) {
                       className="mask mask-star-2 bg-orange-400"
                       readOnly
                       checked={i === Math.floor(seller.average_rating || 0)}
-                      />
+                    />
                   ))}
                 </div>
                 <span className="text-sm text-base-content/70">

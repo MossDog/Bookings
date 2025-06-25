@@ -9,7 +9,10 @@ interface HighlightWidgetProps {
   isLoading: boolean;
 }
 
-const HighlightWidget: React.FC<HighlightWidgetProps> = ({ services, isLoading }) => {
+const HighlightWidget: React.FC<HighlightWidgetProps> = ({
+  services,
+  isLoading,
+}) => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   if (isLoading) {

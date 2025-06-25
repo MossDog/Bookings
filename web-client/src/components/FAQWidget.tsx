@@ -39,9 +39,7 @@ export default function FAQWidget({ seller }: FAQWidgetProps) {
             <input
               type="checkbox"
               checked={expanded === faq.id}
-              onChange={() =>
-                setExpanded(expanded === faq.id ? null : faq.id)
-              }
+              onChange={() => setExpanded(expanded === faq.id ? null : faq.id)}
             />
             <div className="collapse-title font-medium flex justify-between items-center">
               {faq.question}

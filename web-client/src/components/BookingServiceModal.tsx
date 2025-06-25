@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import type { Service } from "@/types/types";
 import { useUser } from "@supabase/auth-helpers-react";
 import { format } from "date-fns";
+import ProtectedRoute from "./ProtectedRoute";
 
 interface BookServiceModalProps {
   service: Service | null;
@@ -65,7 +66,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
       service.user_id,
       service.id,
       selectedDate,
-      selectedSlot
+      selectedSlot,
     );
 
     if (result.success) {
@@ -79,7 +80,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
   if (!service) return null;
 
   return (
-    <>
+    <ProtectedRoute>
       <input type="checkbox" className="modal-toggle" checked readOnly />
       <div className="modal modal-open">
         <div className="modal-box rounded-2xl space-y-5">
@@ -146,7 +147,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
           </div>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 };
 
