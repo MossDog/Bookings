@@ -17,7 +17,7 @@ export default function SellerStats({
 
   return (
     <div className="flex flex-wrap justify-center items-center gap-2 text-base-content/70">
-      
+
       {/* Rating */}
       <div className="flex items-center gap-1">
         <div className="rating rating-sm">
@@ -27,7 +27,7 @@ export default function SellerStats({
               type="radio"
               name="rating-display"
               className="mask mask-star-2 bg-primary"
-              checked={i === Math.round(rating)}
+              checked={i <= Math.round(rating)}
               readOnly
             />
           ))}

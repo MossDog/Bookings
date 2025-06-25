@@ -110,7 +110,7 @@ export default function SellerPage() {
         bannerUrl={bannerImageUrl}
         profileUrl={profileImageUrl}
         isOpen={isOpen}
-        rating={seller?.average_rating || 5}
+        rating={seller?.average_rating || 0}
         reviewCount={reviewCount}
       />
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
