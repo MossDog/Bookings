@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Seller, Service } from "@/types/types";
+import { Seller, Service, WorkingHours } from "@/types/types";
 import Navbar from "@/components/Navbar";
 import MapsWidget from "@/components/MapWidget";
 import ServicesWidget from "@/components/widgets/ServicesWidget";
@@ -10,12 +10,15 @@ import SellerTitleCard from "@/components/seller/SellerTitleCard";
 import { getPublicUrl } from "@/utils/bucket";
 import { getProfileFromSlug, updateWidgetOrder } from "@/utils/seller";
 import { toast } from "sonner";
-import { getServicesFromId } from "@/utils/sellerProfile";
+import { getServicesFromId, isSellerOpen } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
 import ReviewsWidget from "@/components/ReviewsWidget";
 import { addItem, moveItemUp, moveItemDown, moveItemTop, moveItemBottom, removeItem, capitalize } from "@/utils/widgetorder";
+import { fetchTable } from "@/utils/dbdao";
+import { DateTime } from "luxon";
+import { getReviewCount } from "@/utils/reviews";
 
 const ALL_WIDGETS = ["highlight", "services", "map", "about", "faq", "reviews"];
 
@@ -30,6 +33,8 @@ export default function SellerPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [reviewCount, setReviewCount] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -55,6 +60,16 @@ export default function SellerPage() {
       setProfileImageUrl(await getPublicUrl("public.images", `${data.user_id}/profileimage`) || undefined);
       const user = await getUser();
       setUserId(user?.id || null);
+
+      const now = DateTime.local();
+      const weekday = now.weekday % 7;
+      const workingHours = await fetchTable<WorkingHours>("seller_working_hours", {
+        user_id: data.user_id,
+        day_of_week: weekday,
+      });
+
+      setIsOpen(isSellerOpen(now, workingHours));
+      setReviewCount(await getReviewCount(data.user_id));
     };
 
     fetchSeller().finally(() => setLoading(false));
@@ -90,21 +105,25 @@ export default function SellerPage() {
   return (
     <div>
       <Navbar />
-      <SellerTitle seller={seller} bannerUrl={bannerImageUrl} profileUrl={profileImageUrl} />
-
+      <SellerTitle
+        seller={seller}
+        bannerUrl={bannerImageUrl}
+        profileUrl={profileImageUrl}
+        isOpen={isOpen}
+        rating={seller?.average_rating || 0}
+        reviewCount={reviewCount}
+      />
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
         {seller && (
           <div className="flex-1 max-w-4xl flex flex-col gap-6">
-            {userId === seller.user_id && (
-              !isEditing ? (
-                <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>Edit Widgets</button>
-              ) : (
-                <div className="flex gap-2 mt-4">
-                  <button className="btn btn-primary" onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Order"}</button>
-                  <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>Cancel</button>
-                </div>
-              )
-            )}
+            {userId === seller.user_id && (!isEditing ? (
+              <button className="btn btn-outline mt-4 self-start" onClick={() => setIsEditing(true)}>Edit Widgets</button>
+            ) : (
+              <div className="flex gap-2 mt-4">
+                <button className="btn btn-primary" onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Order"}</button>
+                <button className="btn btn-ghost" onClick={() => setIsEditing(false)}>Cancel</button>
+              </div>
+            ))}
 
             {isEditing && hiddenWidgets.length > 0 && (
               <div className="mt-4 space-y-2">

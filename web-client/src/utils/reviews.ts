@@ -40,6 +40,20 @@ export async function getUserReviewsForSeller(sellerId: string) {
   return data as Review[];
 }
 
+export async function getReviewCount(userId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from("reviews")
+    .select("*", { count: "exact", head: true })
+    .eq("seller_id", userId);
+
+  if (error) {
+    console.error("Failed to fetch review count:", error.message);
+    return 0;
+  }
+
+  return count || 0;
+}
+
 export async function getPaginatedReviews(sellerId: string, page: number, limit: number = 5) {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
