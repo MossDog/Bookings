@@ -14,13 +14,12 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
   isLoading,
 }) => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [hoveredServiceId, setHoveredServiceId] = useState<string | null>(null);
 
   if (isLoading) {
     return (
       <div className="p-6 space-y-4">
-        <h2 className="text-2xl font-bold text-base-content">
-          Featured Services
-        </h2>
+        <h2 className="text-2xl font-bold text-base-content">Featured Services</h2>
         <div className="flex overflow-x-auto space-x-4 pb-4">
           {[1, 2, 3].map((i) => (
             <div
@@ -45,9 +44,7 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-base-content">
-          Featured Services
-        </h2>
+        <h2 className="text-2xl font-bold text-base-content">Featured Services</h2>
         {services.length > 0 && (
           <div className="badge badge-primary">{services.length} services</div>
         )}
@@ -80,12 +77,19 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
           {services.map((service) => (
             <div
               key={service.id}
+              onMouseEnter={() => setHoveredServiceId(String(service.id))}
+              onMouseLeave={() => setHoveredServiceId(null)}
               onClick={() => setSelectedService(service)}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group"
+              className={`card bg-base-100 shadow-xl transition-all duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group ${
+                hoveredServiceId === String(service.id) ? "shadow-2xl" : ""
+              }`}
             >
-              {" "}
               <div className="card-body">
-                <h3 className="card-title text-base-content group-hover:text-primary transition-colors">
+                <h3
+                  className={`card-title text-base-content transition-colors ${
+                    hoveredServiceId === String(service.id) ? "text-primary" : ""
+                  }`}
+                >
                   {service.name}
                 </h3>
 
@@ -96,9 +100,7 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
                 <div className="flex items-center gap-4 mt-4 text-base-content/70">
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    <span className="text-sm">
-                      {formatDuration(service.duration)}
-                    </span>
+                    <span className="text-sm">{formatDuration(service.duration)}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Euro className="w-4 h-4" />

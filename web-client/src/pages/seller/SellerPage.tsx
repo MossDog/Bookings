@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Seller, Service } from "@/types/types";
+import { Seller, Service, WorkingHours } from "@/types/types";
 import Navbar from "@/components/Navbar";
 import MapsWidget from "@/components/MapWidget";
 import ServicesWidget from "@/components/widgets/ServicesWidget";
@@ -10,7 +10,7 @@ import SellerTitleCard from "@/components/seller/SellerTitleCard";
 import { getPublicUrl } from "@/utils/bucket";
 import { getProfileFromSlug, updateWidgetOrder } from "@/utils/seller";
 import { toast } from "sonner";
-import { getServicesFromId } from "@/utils/sellerProfile";
+import { getServicesFromId, isSellerOpen } from "@/utils/sellerProfile";
 import { getUser } from "@/utils/auth";
 import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
@@ -24,6 +24,10 @@ import {
   ArrowDown,
   ArrowUp,
 } from "lucide-react";
+import { fetchTable } from "@/utils/dbdao";
+import { DateTime } from "luxon";
+import { getReviewCount } from "@/utils/reviews";
+
 
 export default function SellerPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -40,6 +44,8 @@ export default function SellerPage() {
     new Set(),
   );
   const widgetRefs = useState(() => new Map<number, HTMLDivElement>())[0];
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [reviewCount, setReviewCount] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -71,6 +77,16 @@ export default function SellerPage() {
       );
       const user = await getUser();
       setUserId(user?.id || null);
+
+      const now = DateTime.local();
+      const weekday = now.weekday % 7;
+      const workingHours = await fetchTable<WorkingHours>("seller_working_hours", {
+        user_id: data.user_id,
+        day_of_week: weekday,
+      });
+
+      setIsOpen(isSellerOpen(now, workingHours));
+      setReviewCount(await getReviewCount(data.user_id));
     };
 
     fetchSeller().finally(() => setLoading(false));
@@ -199,6 +215,9 @@ export default function SellerPage() {
         seller={seller}
         bannerUrl={bannerImageUrl}
         profileUrl={profileImageUrl}
+        isOpen={isOpen}
+        rating={seller?.average_rating || 0}
+        reviewCount={reviewCount}
       />
 
       <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-4 md:px-10 gap-6 mt-8">
@@ -231,19 +250,7 @@ export default function SellerPage() {
                   </div>
                 ))}
             </div>
-            {/* TODO: Add this functionality in dashboard */}
-            {/* {isEditing && hiddenWidgets.length > 0 && (
-              <div className="mt-4 space-y-2">
-                <p className="label-text mb-2">Add Widget:</p>
-                <div className="flex flex-wrap gap-2">
-                  {hiddenWidgets.map((widget) => (
-                    <div key={widget} className="badge badge-outline badge-lg cursor-pointer hover:bg-primary hover:text-primary-content" onClick={() => setWidgets((prev) => addItem(prev, widget))}>
-                      + {capitalize(widget)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )} */}{" "}
+              
             {widgets.map((widget, index) => (
               <div
                 key={widget}
