@@ -104,6 +104,7 @@ export default function DashboardPage() {
             
             { selectedAction === "widgets" && (
               <EditWidgets 
+                sellerId={seller?.user_id}
                 enabledWidgets={seller?.widget_order}
               />
             )}
