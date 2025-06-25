@@ -17,9 +17,7 @@ export default function EditWidgets({
 }: EditWidgetProps) {
   const [widgets, setWidgets] = useState<string[]>(enabledWidgets);
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
-  
-  // Get widgets that are not currently enabled
-  const availableWidgets = ALL_WIDGETS.filter(widget => !enabledWidgets.includes(widget));
+  const [availableWidgets, setAvailableWidgets] = useState<string[]>(ALL_WIDGETS.filter(widget => !enabledWidgets.includes(widget)))
 
   const addWidget = async (widget: string) => {
     if(!sellerId){
@@ -32,6 +30,7 @@ export default function EditWidgets({
       await updateWidgetOrder(sellerId, newWidgets);
       setWidgets(newWidgets);
       toast.success(`${widget} added!`);
+      setAvailableWidgets(ALL_WIDGETS.filter(w => !newWidgets.includes(w)));
     } catch (error){
       console.log("Error adding widgets");
       toast.error("Failed to add widget.");
@@ -48,13 +47,13 @@ export default function EditWidgets({
     // Calculate the new widgets array without the removed widget
     const newWidgets = widgets.filter(w => w !== widget);
     
-    // Update local state optimistically
-    setWidgets(newWidgets);
-
+  
     try {
       // Update the database with the new array
       await updateWidgetOrder(sellerId, newWidgets);
       toast.success(`${widget} widget removed!`);
+      setWidgets(newWidgets);
+      setAvailableWidgets(ALL_WIDGETS.filter(w => !newWidgets.includes(w)));
     } catch (error){
       console.log("Error removing widget:", error);
       toast.error("Failed to remove widget.");
