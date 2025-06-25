@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import EditServices from './edit_widgets/EditServices';
-import { Delete, Plus, XIcon } from 'lucide-react';
+import { Plus, XIcon } from 'lucide-react';
 
 import { ALL_WIDGETS } from '@/utils/widgetorder';
 import { updateWidgetOrder } from '@/utils/seller';
