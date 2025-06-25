@@ -16,10 +16,8 @@ import AboutUsWidget from "@/components/AboutUsWidget";
 import FAQWidget from "@/components/FAQWidget";
 import ReviewsWidget from "@/components/ReviewsWidget";
 import {
-  addItem,
   moveItemUp,
   moveItemDown,
-  capitalize,
   ALL_WIDGETS,
 } from "@/utils/widgetorder";
 import {
@@ -78,7 +76,8 @@ export default function SellerPage() {
     fetchSeller().finally(() => setLoading(false));
   }, [slug, navigate]);
 
-  const hiddenWidgets = ALL_WIDGETS.filter((w) => !widgets.includes(w));
+  // TODO: Dont need below any more but just leaving it in case lol
+  //const hiddenWidgets = ALL_WIDGETS.filter((w) => !widgets.includes(w));
   const handleMoveUp = async (index: number) => {
     if (index === 0) return;
 
