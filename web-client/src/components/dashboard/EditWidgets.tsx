@@ -1,33 +1,35 @@
 import { useState } from 'react'
 import EditServices from './edit_widgets/EditServices';
-import { Plus, XIcon } from 'lucide-react';
+import { ArrowRight, Plus, XIcon } from 'lucide-react';
 
 import { ALL_WIDGETS } from '@/utils/widgetorder';
 import { updateWidgetOrder } from '@/utils/seller';
 import { toast } from 'sonner';
+import EditAbout from './edit_widgets/EditAbout';
+import { Seller } from '@/types/types';
 
 interface EditWidgetProps {
     enabledWidgets?: string[];
-    sellerId?: string;
+    seller: Seller;
 }
 
 export default function EditWidgets({
     enabledWidgets = [],
-    sellerId
+    seller
 }: EditWidgetProps) {
   const [widgets, setWidgets] = useState<string[]>(enabledWidgets);
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
   const [availableWidgets, setAvailableWidgets] = useState<string[]>(ALL_WIDGETS.filter(widget => !enabledWidgets.includes(widget)))
 
   const addWidget = async (widget: string) => {
-    if(!sellerId){
+    if(!seller.user_id){
       return;
     }
 
     const newWidgets = [...widgets, widget];
     
     try {
-      await updateWidgetOrder(sellerId, newWidgets);
+      await updateWidgetOrder(seller.user_id, newWidgets);
       setWidgets(newWidgets);
       toast.success(`${widget} added!`);
       setAvailableWidgets(ALL_WIDGETS.filter(w => !newWidgets.includes(w)));
@@ -40,7 +42,7 @@ export default function EditWidgets({
   }
 
   const removeWidget = async (widget: string) => {
-    if(!sellerId){
+    if(!seller.user_id){
       return;
     }
 
@@ -50,7 +52,7 @@ export default function EditWidgets({
   
     try {
       // Update the database with the new array
-      await updateWidgetOrder(sellerId, newWidgets);
+      await updateWidgetOrder(seller.user_id, newWidgets);
       toast.success(`${widget} widget removed!`);
       setWidgets(newWidgets);
       setAvailableWidgets(ALL_WIDGETS.filter(w => !newWidgets.includes(w)));
@@ -81,9 +83,10 @@ export default function EditWidgets({
               Edit {selectedWidget.charAt(0).toUpperCase() + selectedWidget.slice(1)} Widget
             </h3>
           </div>
-          {/* Widget edit form will go here */}
+          
           <div className="flex-1">
-            <EditServices />
+            { selectedWidget === "services" && <EditServices />}
+            { selectedWidget === "about" && <EditAbout initialAboutUs={seller.about_us || ""} sellerId={seller.user_id}/>}
           </div>
         </div>
       ) : (          <div className="p-4">
@@ -123,15 +126,10 @@ export default function EditWidgets({
                 <div className="card-body py-4 px-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <button 
-                        className="btn btn-xs btn-circle btn-ghost text-error hover:bg-error hover:text-error-content transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          removeWidget(widget);
-                        }}
-                      >
-                        <XIcon size={14} />
-                      </button>
+                      <div className="text-base-content">
+                        <ArrowRight size={18}/>
+                      </div>
+                      
                       <div>
                         <h3 className="font-semibold">
                           {widget.charAt(0).toUpperCase() + widget.slice(1)} Widget
@@ -141,9 +139,15 @@ export default function EditWidgets({
                         </p>
                       </div>
                     </div>
-                    <div className="text-base-content/50">
-                      →
-                    </div>
+                    <button 
+                      className="btn btn-xs btn-ghost text-error hover:bg-error hover:text-error-content gap-1 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation(); 
+                        removeWidget(widget);
+                      }}
+                    >
+                      Remove <XIcon size={14} />
+                    </button>
                   </div>
                 </div>
               </div>

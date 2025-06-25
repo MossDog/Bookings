@@ -175,3 +175,23 @@ export const updateWidgetOrder = async (
 
   return true;
 };
+
+export async function updateAboutUs(sellerId: string, aboutUs: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from("seller")
+      .update({
+        about_us: aboutUs
+      })
+      .eq("user_id", sellerId);
+
+    if (error) {
+      throw error;
+    }
+
+    return true;
+  } catch (err) {
+    console.error("Error updating seller's about us:", err);
+    return false;
+  }
+}
