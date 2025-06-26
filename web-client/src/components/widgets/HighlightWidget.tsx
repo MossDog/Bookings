@@ -73,14 +73,14 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-2 px-2 snap-x">
+        <div className="flex overflow-x-auto space-x-4 pb-4 px-2 snap-x">
           {services.map((service) => (
             <div
               key={service.id}
               onMouseEnter={() => setHoveredServiceId(String(service.id))}
               onMouseLeave={() => setHoveredServiceId(null)}
               onClick={() => setSelectedService(service)}
-              className={`card bg-base-100 shadow-xl transition-all duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group ${
+              className={`card bg-base-100 shadow-md transition-all duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group ${
                 hoveredServiceId === String(service.id) ? "shadow-2xl" : ""
               }`}
             >

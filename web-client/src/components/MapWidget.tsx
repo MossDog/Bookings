@@ -14,7 +14,7 @@ const ShopMapWidget: React.FC<ShopMapWidgetProps> = ({ seller }) => {
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold text-base-content">Visit Us</h2>
 
-      <div className="bg-base-100 rounded-xl shadow-md p-6 space-y-4">
+      <div className="bg-base-100 rounded-xl p-6 space-y-4">
         {address ? (
           <>
             <div className="flex items-start gap-3">
