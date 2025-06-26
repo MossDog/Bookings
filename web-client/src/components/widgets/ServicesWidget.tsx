@@ -63,7 +63,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
     }
   });
 
-  const categories = ["All", ...Array.from(categoryMap.values()).sort()];
+  //const categories = ["All", ...Array.from(categoryMap.values()).sort()];
   const normalizedActive = normalizeCategory(activeCategory);
   const filtered =
     normalizedActive === "all"
