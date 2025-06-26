@@ -75,6 +75,7 @@ export const createSellerProfile = async (
       address: details.address || "",
       category: details.category,
       slug,
+      widget_order: ["highlight", "services", "map"]
     });
 
     if (sellerError) {
