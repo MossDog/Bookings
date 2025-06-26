@@ -63,7 +63,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
     }
   });
 
-  const categories = ["All", ...Array.from(categoryMap.values()).sort()];
+  //const categories = ["All", ...Array.from(categoryMap.values()).sort()];
   const normalizedActive = normalizeCategory(activeCategory);
   const filtered =
     normalizedActive === "all"
@@ -88,7 +88,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
         </div>
 
         {/* Categories */}
-        <div className="tabs tabs-bordered w-full justify-center">
+        {/* <div className="tabs tabs-bordered w-full justify-center">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -102,7 +102,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
               {cat}
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Empty State */}
@@ -125,8 +125,8 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
             onClick={() => setSelectedService(service)}
             onMouseEnter={() => setHoveredServiceId(String(service.id))}
             onMouseLeave={() => setHoveredServiceId(null)}
-            className={`card bg-base-100 shadow-lg transition-all duration-300 cursor-pointer ${
-              hoveredServiceId === String(service.id) ? "hover:shadow-xl" : ""
+            className={`card bg-base-100 shadow-md transition-all duration-300 cursor-pointer ${
+              hoveredServiceId === String(service.id) ? "hover:shadow-lg" : ""
             }`}
           >
             <div className="card-body">
@@ -160,7 +160,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedService(service);
@@ -168,7 +168,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
                   className="btn btn-primary btn-sm"
                 >
                   Book Now
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

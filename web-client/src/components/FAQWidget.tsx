@@ -26,7 +26,7 @@ export default function FAQWidget({ seller }: FAQWidgetProps) {
   }, [seller.user_id]);
 
   return (
-    <div className="card bg-base-100 shadow-md p-6">
+    <div className="card bg-base-100 p-6">
       <h2 className="card-title mb-4">Frequently Asked Questions</h2>
 
 

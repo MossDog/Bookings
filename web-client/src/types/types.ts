@@ -106,3 +106,11 @@ export interface DisplayReview {
   created_at: string;
   user_id: string;
 }
+
+export interface FAQ {
+  id: string;
+  user_id: string;
+  question: string;
+  answer: string;
+  is_featured: boolean;
+}

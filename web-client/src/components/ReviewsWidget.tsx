@@ -50,7 +50,7 @@ export default function ReviewsWidget({ seller }: ReviewsWidgetProps) {
 
   if (reviews.length === 0) {
     return (
-      <div className="card bg-base-100 shadow-md p-6">
+      <div className="card bg-base-100 p-6">
         <h2 className="card-title mb-4">Customer Reviews</h2>
         <p className="text-base-content/70">No reviews yet.</p>
       </div>
@@ -60,7 +60,7 @@ export default function ReviewsWidget({ seller }: ReviewsWidgetProps) {
   const totalPages = Math.ceil(totalCount / REVIEWS_PER_PAGE);
 
   return (
-    <div className="card bg-base-100 shadow-md p-6">
+    <div className="card bg-base-100 p-6">
       <h2 className="card-title mb-4">Customer Reviews</h2>
       <div className="space-y-4">
         {reviews.map((review) => (

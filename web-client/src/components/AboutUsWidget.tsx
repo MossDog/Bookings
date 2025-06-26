@@ -13,7 +13,7 @@ export default function AboutUsWidget({
 
   if (!aboutUs) {
     return (
-      <div className="card bg-base-100 shadow-md p-4">
+      <div className="card bg-base-100 p-4">
         <h2 className="text-lg font-bold mb-2">About Us</h2>
         <p className="text-base-content/70 italic">
           This business hasn't provided information yet.
@@ -23,7 +23,7 @@ export default function AboutUsWidget({
   }
 
   return (
-    <div className="card bg-base-100 shadow-md p-4">
+    <div className="card bg-base-100 p-4">
       <h2 className="text-lg font-bold mb-2">About Us</h2>
       <p className="text-base-content/70">{aboutUs}</p>
     </div>
