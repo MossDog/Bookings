@@ -106,3 +106,13 @@ export interface DisplayReview {
   created_at: string;
   user_id: string;
 }
+
+export interface UserProfile {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  profile_picture?: string;
+  birthday?: string;
+  created_at: string;
+}
