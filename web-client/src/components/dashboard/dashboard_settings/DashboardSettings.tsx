@@ -10,7 +10,7 @@ export default function DashboardSettings({
 }: DashboardSettingsProps) {
   return (
     <div className="col-span-3">
-      <DeleteProfileModal sellerName={seller.name}/>
+      <DeleteProfileModal sellerName={seller.name} sellerId={seller.user_id}/>
     </div>
   )
 }

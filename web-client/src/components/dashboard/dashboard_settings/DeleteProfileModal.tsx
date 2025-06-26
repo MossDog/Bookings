@@ -1,15 +1,18 @@
 
+import { deleteSellerProfile } from "@/utils/sellerProfile";
 import { ShieldAlert, AlertTriangle, X } from "lucide-react";
 import { useState } from "react"
 
 interface DeleteProfileModalProps {
   sellerName: string;
+  sellerId: string;
   onDelete?: () => void;
   isDeleting?: boolean;
 }
 
 export default function DeleteProfileModal({
   sellerName,
+  sellerId,
   onDelete,
   isDeleting = false
 }: DeleteProfileModalProps) {
@@ -18,8 +21,12 @@ export default function DeleteProfileModal({
   
   const isConfirmed = confirmationText === sellerName;
   
-  const handleDelete = () => {
-    if (isConfirmed && onDelete) {
+  const handleDelete = async () => {
+    if(!isConfirmed) return;
+
+    await deleteSellerProfile(sellerId);
+
+    if (onDelete) {
       onDelete();
     }
   };
@@ -37,7 +44,7 @@ export default function DeleteProfileModal({
         className="btn btn-error gap-2"
         onClick={() => setOpen(true)}
       >
-        <ShieldAlert size={18} /> 
+        <AlertTriangle size={18} /> 
         Delete Profile
       </button>
 
