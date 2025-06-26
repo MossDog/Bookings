@@ -160,7 +160,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedService(service);
@@ -168,7 +168,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
                   className="btn btn-primary btn-sm"
                 >
                   Book Now
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
