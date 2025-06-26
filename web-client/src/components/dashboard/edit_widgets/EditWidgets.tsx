@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import EditServices from './edit_widgets/EditServices';
+import EditServices from './EditServices';
 import { ArrowRight, Plus, XIcon } from 'lucide-react';
 
 import { ALL_WIDGETS } from '@/utils/widgetorder';
 import { updateWidgetOrder } from '@/utils/seller';
 import { toast } from 'sonner';
-import EditAbout from './edit_widgets/EditAbout';
+import EditAbout from './EditAbout';
 import { Seller } from '@/types/types';
-import EditFAQ from './edit_widgets/EditFAQ';
+import EditFAQ from './EditFAQ';
 
 interface EditWidgetProps {
     enabledWidgets?: string[];

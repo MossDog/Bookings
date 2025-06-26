@@ -9,7 +9,8 @@ import BookingStatsSummary from "@/components/dashboard/BookingStatsSummary";
 import QuickActions, { QuickAction } from "@/components/dashboard/QuickActions";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { updateBookingStatus } from "@/utils/bookings";
-import EditWidgets from "@/components/dashboard/EditWidgets";
+import EditWidgets from "@/components/dashboard/edit_widgets/EditWidgets";
+import DashboardSettings from "@/components/dashboard/dashboard_settings/DashboardSettings";
 
 export default function DashboardPage() {
   const user = useUser();
@@ -107,6 +108,10 @@ export default function DashboardPage() {
                 seller={seller}
                 enabledWidgets={seller.widget_order}
               />
+            )}
+
+            { selectedAction === "settings" && seller && (
+              <DashboardSettings seller={seller}/>
             )}
 
           </div>
