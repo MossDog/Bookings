@@ -60,8 +60,6 @@ export default function EditWidgets({
     } catch (error){
       console.log("Error removing widget:", error);
       toast.error("Failed to remove widget.");
-      // Revert the state change on error
-      setWidgets(widgets);
     }
   }
 
