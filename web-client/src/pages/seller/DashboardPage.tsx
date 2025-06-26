@@ -10,6 +10,7 @@ import QuickActions from "@/components/dashboard/QuickActions";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import BookingDetailsModal from "@/components/dashboard/BookingDetailsModal";
 import { updateBookingStatus } from "@/utils/bookings";
+import BusinessQrCode from "@/components/QRCodeWidget";
 
 export default function DashboardPage() {
   const user = useUser();
@@ -18,10 +19,9 @@ export default function DashboardPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  
+
   const navigate = useNavigate();
 
-  // Fetch seller data and bookings
   useEffect(() => {
     setIsLoading(true);
 
@@ -31,11 +31,12 @@ export default function DashboardPage() {
     }
 
     fetchAllSellerData(user.id)
-      .then(data => {
+      .then((data) => {
         if (!data.seller) {
           console.log("Seller not found");
           setIsLoading(false);
           navigate("/");
+          return;
         }
 
         setSeller(data.seller);
@@ -45,33 +46,26 @@ export default function DashboardPage() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [user]);
-  
-  
-  
-  // Get service name by ID
+  }, [user, navigate]);
+
   const getServiceName = (serviceId: number) => {
-    const service = services.find(s => s.id === serviceId);
+    const service = services.find((s) => s.id === serviceId);
     return service ? service.name : "Unknown Service";
   };
-  
-  // Handle booking status change
+
   const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
     try {
       await updateBookingStatus(bookingId, newStatus);
 
-      setBookings(bookings.map(booking => {
-        if (booking.id === bookingId) {
-          return { ...booking, status: newStatus };
-        }
-        return booking;
-      }));
-      
-      // Close the modal if open
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking.id === bookingId ? { ...booking, status: newStatus } : booking
+        )
+      );
+
       if (selectedBooking?.id === bookingId) {
         setSelectedBooking(null);
       }
-      
     } catch (err) {
       console.error("Error updating booking status:", err);
     }
@@ -82,19 +76,16 @@ export default function DashboardPage() {
       <Navbar />
       <div className="bg-base-200 min-h-[calc(100vh-64px)]">
         <div className="container mx-auto p-4">
-          {/* Dashboard Header */}
-          <DashboardHeader bookings={bookings} seller={seller} />
-          
-          {/* Main Dashboard */}
+          {seller && <DashboardHeader bookings={bookings} seller={seller} />}
+
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-4">
               <QuickActions />
               <BookingStatsSummary bookings={bookings} />
+              {seller && <BusinessQrCode seller={seller} />}
             </div>
-            
-            {/* Bookings List */}
-            <BookingsList 
+
+            <BookingsList
               bookings={bookings}
               isLoading={isLoading}
               setSelectedBooking={setSelectedBooking}
@@ -104,8 +95,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      
-      {/* Booking Details Modal */}
+
       {selectedBooking && (
         <BookingDetailsModal
           handleStatusChange={handleStatusChange}
