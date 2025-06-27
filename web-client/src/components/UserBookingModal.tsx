@@ -80,7 +80,10 @@ export default function UserBookingModal({
           </p>
         </div>
 
-        <a href={`/${seller.slug}`} className="btn btn-outline btn-primary w-full">
+        <a
+          href={`/${seller.slug}`}
+          className="btn btn-outline btn-primary w-full"
+        >
           Visit Business Page
         </a>
 

@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { fetchAllSellerData } from "@/utils/seller";
 import BookingsList from "@/components/dashboard/BookingsList";
 import BookingStatsSummary from "@/components/dashboard/BookingStatsSummary";
-import QuickActions from "@/components/dashboard/QuickActions";
+import QuickActions, { QuickAction } from "@/components/dashboard/QuickActions";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import BookingDetailsModal from "@/components/dashboard/BookingDetailsModal";
 import { updateBookingStatus } from "@/utils/bookings";
 import BusinessQrCode from "@/components/QRCodeWidget";
+import EditWidgets from "@/components/dashboard/edit_widgets/EditWidgets";
+import DashboardSettings from "@/components/dashboard/dashboard_settings/DashboardSettings";
+import DashboardCalendar from "@/components/dashboard/dashboard_calendar/DashboardCalendar";
 
 export default function DashboardPage() {
   const user = useUser();
@@ -18,7 +20,7 @@ export default function DashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [selectedAction, setSelectedAction] = useState<QuickAction>("bookingsList");
 
   const navigate = useNavigate();
 
@@ -57,53 +59,66 @@ export default function DashboardPage() {
     try {
       await updateBookingStatus(bookingId, newStatus);
 
-      setBookings((prev) =>
-        prev.map((booking) =>
-          booking.id === bookingId ? { ...booking, status: newStatus } : booking
-        )
-      );
 
-      if (selectedBooking?.id === bookingId) {
-        setSelectedBooking(null);
-      }
+      setBookings(bookings.map(booking => {
+        if (booking.id === bookingId) {
+          return { ...booking, status: newStatus };
+        }
+        return booking;
+      }));
+      
     } catch (err) {
       console.error("Error updating booking status:", err);
     }
   };
-
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="bg-base-200 min-h-[calc(100vh-64px)]">
-        <div className="container mx-auto p-4">
-          {seller && <DashboardHeader bookings={bookings} seller={seller} />}
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-1 space-y-4">
-              <QuickActions />
+      <div className="flex flex-col mb-10">
+        <div className="container mx-auto p-4 w-full h-full flex flex-col">
+          {/* Dashboard Header */}
+          <DashboardHeader bookings={bookings} seller={seller} />
+          
+          {/* Main Dashboard */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 w-full flex-1">
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <QuickActions 
+                currentAction={selectedAction}
+                onChange={(val) => setSelectedAction(val)}
+              />
               <BookingStatsSummary bookings={bookings} />
               {seller && <BusinessQrCode seller={seller} />}
             </div>
+            
+            {/* Dashboard Content */}
+            { selectedAction === "bookingsList" && (
+              <BookingsList 
+                bookings={bookings}
+                isLoading={isLoading}
+                handleStatusChange={handleStatusChange}
+                getServiceName={getServiceName}
+              />
+            )}
+            
+            { selectedAction === "widgets" && seller && (
+              <EditWidgets 
+                seller={seller}
+                enabledWidgets={seller.widget_order}
+              />
+            )}
 
-            <BookingsList
-              bookings={bookings}
-              isLoading={isLoading}
-              setSelectedBooking={setSelectedBooking}
-              handleStatusChange={handleStatusChange}
-              getServiceName={getServiceName}
-            />
+            { selectedAction === "settings" && seller && (
+              <DashboardSettings seller={seller}/>
+            )}
+
+            { selectedAction === "calendar" && seller && (
+              <DashboardCalendar seller={seller} bookings={bookings} services={services} handleStatusChange={handleStatusChange}/>
+            )}
+
           </div>
         </div>
       </div>
-
-      {selectedBooking && (
-        <BookingDetailsModal
-          handleStatusChange={handleStatusChange}
-          getServiceName={getServiceName}
-          selectedBooking={selectedBooking}
-          setSelectedBooking={setSelectedBooking}
-        />
-      )}
-    </>
+    </div>
   );
 }

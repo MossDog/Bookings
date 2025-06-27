@@ -116,3 +116,11 @@ export interface UserProfile {
   birthday?: string;
   created_at: string;
 }
+
+export interface FAQ {
+  id: string;
+  user_id: string;
+  question: string;
+  answer: string;
+  is_featured: boolean;
+}

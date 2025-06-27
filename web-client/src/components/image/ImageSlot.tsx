@@ -4,11 +4,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 import { Edit, Plus } from "lucide-react";
-import {
-  fileExistsInBucket,
-  getPublicUrl,
-  upload,
-} from "../../utils/bucket";
+import { fileExistsInBucket, getPublicUrl, upload } from "../../utils/bucket";
 
 interface ImageSlotProps {
   gridOptions?: {

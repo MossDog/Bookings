@@ -2,8 +2,8 @@ import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
 import { BookingStatus } from "@/types/types";
 
-import { getServiceById, getSellers } from '@/utils/seller';
-import { Booking, Seller, Service } from '@/types/types';
+import { getServiceById, getSellers } from "@/utils/seller";
+import { Booking, Seller, Service } from "@/types/types";
 
 export async function bookSlot(
   userId: string,
@@ -13,7 +13,6 @@ export async function bookSlot(
   slot: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
-
     if (!userId) {
       return { success: false, message: "User not authenticated" };
     }
@@ -31,13 +30,10 @@ export async function bookSlot(
 
     const duration = service.duration;
 
-    
-
     // Calculate start and end time
     const dateString = format(date, "yyyy-MM-dd");
     const startDateTime = new Date(`${dateString}T${slot}`);
     const endDateTime = addMinutes(startDateTime, duration);
-
 
     // Insert booking
     const { error: insertError } = await supabase.from("bookings").insert([
@@ -61,7 +57,7 @@ export async function bookSlot(
   } catch (err) {
     return {
       success: false,
-      message: err as string || "Unexpected error occurred",
+      message: (err as string) || "Unexpected error occurred",
     };
   }
 }
@@ -79,21 +75,24 @@ export async function cancelBooking(bookingId: number) {
   return { success: true, message: "Booking cancelled" };
 }
 
-export const updateBookingStatus = async (bookingId: number, newStatus: BookingStatus) => {
-    try {
-      const { error } = await supabase
-        .from('bookings')
-        .update({ status: newStatus })
-        .eq('id', bookingId);
-      
-      if (error) {
-        console.error("Failed to update booking:", error);
-        return;
-      }
-    } catch (err) {
-      console.error("Error updating booking status:", err);
+export const updateBookingStatus = async (
+  bookingId: number,
+  newStatus: BookingStatus,
+) => {
+  try {
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: newStatus })
+      .eq("id", bookingId);
+
+    if (error) {
+      console.error("Failed to update booking:", error);
+      return;
     }
-  };
+  } catch (err) {
+    console.error("Error updating booking status:", err);
+  }
+};
 // Fetch Booking
 
 export async function fetchBookingDetails(booking: Booking): Promise<{
@@ -105,9 +104,8 @@ export async function fetchBookingDetails(booking: Booking): Promise<{
 
   if (fetchedService?.user_id) {
     const allSellers = await getSellers();
-    matchedSeller = allSellers.find(
-      (s) => s.user_id === fetchedService.user_id
-    ) ?? null;
+    matchedSeller =
+      allSellers.find((s) => s.user_id === fetchedService.user_id) ?? null;
   }
 
   return {

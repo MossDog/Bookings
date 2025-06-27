@@ -43,7 +43,7 @@ createRoot(document.getElementById("root")!).render(
     <SessionContextProvider supabaseClient={supabase}>
       <div className="min-h-screen bg-base-100 text-base-content">
         <RouterProvider router={router} />
-        <Toaster 
+        <Toaster
           richColors={true}
           toastOptions={{
             className: "font-medium rounded-lg shadow-md border",

@@ -10,7 +10,6 @@ import { useUser } from "@supabase/auth-helpers-react";
 import SellerServicesSetup from "@/components/seller/profile-creation/SellerServicesSetup";
 import { Service, WeekSchedule } from "@/types/types";
 
-
 import { useNavigate } from "react-router-dom";
 import { days } from "@/utils/availability";
 import SellerOpeningHours from "@/components/seller/profile-creation/SellerOpeningHours";
@@ -29,8 +28,8 @@ function SellerProfileSetupPage() {
 
   // On load init profile data
   useEffect(() => {
-    if(!user){
-      navigate('/login');
+    if (!user) {
+      navigate("/login");
       return;
     }
 

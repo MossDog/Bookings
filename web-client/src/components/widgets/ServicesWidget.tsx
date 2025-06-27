@@ -13,7 +13,10 @@ const DISPLAY_LIMIT = 5;
 
 const normalizeCategory = (value?: string) => value?.trim().toLowerCase() || "";
 
-const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) => {
+const ServicesWidget: React.FC<ServicesWidgetProps> = ({
+  services,
+  isLoading,
+}) => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [hoveredServiceId, setHoveredServiceId] = useState<string | null>(null);
@@ -25,7 +28,10 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
           <h2 className="text-2xl font-bold text-base-content">Services</h2>
           <div className="tabs tabs-bordered w-full justify-center animate-pulse">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="tab tab-bordered h-10 px-6 bg-base-200 rounded-lg mx-1" />
+              <div
+                key={i}
+                className="tab tab-bordered h-10 px-6 bg-base-200 rounded-lg mx-1"
+              />
             ))}
           </div>
         </div>
@@ -57,12 +63,14 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
     }
   });
 
-  const categories = ["All", ...Array.from(categoryMap.values()).sort()];
+  //const categories = ["All", ...Array.from(categoryMap.values()).sort()];
   const normalizedActive = normalizeCategory(activeCategory);
   const filtered =
     normalizedActive === "all"
       ? services
-      : services.filter((s) => normalizeCategory(s.category) === normalizedActive);
+      : services.filter(
+          (s) => normalizeCategory(s.category) === normalizedActive,
+        );
 
   const limited = filtered.slice(0, DISPLAY_LIMIT);
 
@@ -73,12 +81,14 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
         <div className="flex items-center justify-between w-full">
           <h2 className="text-2xl font-bold text-base-content">Services</h2>
           {filtered.length > 0 && (
-            <div className="badge badge-primary badge-lg">{filtered.length} services</div>
+            <div className="badge badge-primary badge-lg">
+              {filtered.length} services
+            </div>
           )}
         </div>
 
         {/* Categories */}
-        <div className="tabs tabs-bordered w-full justify-center">
+        {/* <div className="tabs tabs-bordered w-full justify-center">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -92,7 +102,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
               {cat}
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Empty State */}
@@ -115,8 +125,8 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
             onClick={() => setSelectedService(service)}
             onMouseEnter={() => setHoveredServiceId(String(service.id))}
             onMouseLeave={() => setHoveredServiceId(null)}
-            className={`card bg-base-100 shadow-lg transition-all duration-300 cursor-pointer ${
-              hoveredServiceId === String(service.id) ? "hover:shadow-xl" : ""
+            className={`card bg-base-100 shadow-md transition-all duration-300 cursor-pointer ${
+              hoveredServiceId === String(service.id) ? "hover:shadow-lg" : ""
             }`}
           >
             <div className="card-body">
@@ -137,7 +147,9 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
                   <div className="flex items-center gap-6 text-base-content/70">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      <span className="text-sm">{formatDuration(service.duration)}</span>
+                      <span className="text-sm">
+                        {formatDuration(service.duration)}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Euro className="w-4 h-4" />
@@ -148,7 +160,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedService(service);
@@ -156,7 +168,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
                   className="btn btn-primary btn-sm"
                 >
                   Book Now
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -178,7 +190,10 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({ services, isLoading }) 
 
       {/* Modal */}
       {selectedService && (
-        <BookServiceModal service={selectedService} onClose={() => setSelectedService(null)} />
+        <BookServiceModal
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+        />
       )}
     </div>
   );

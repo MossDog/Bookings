@@ -7,6 +7,7 @@ import { getAvailableDates } from "@/utils/seller";
 import { toast } from "sonner";
 import type { Service } from "@/types/types";
 import { useUser } from "@supabase/auth-helpers-react";
+
 import { X } from "lucide-react";
 import {
   isDateAvailable,
@@ -75,7 +76,7 @@ const BookServiceModal: React.FC<BookServiceModalProps> = ({
       service.user_id,
       service.id,
       selectedDate,
-      selectedSlot
+      selectedSlot,
     );
 
     if (result.success) {

@@ -2,15 +2,17 @@ import { X } from "lucide-react";
 import { DisplayReview } from "@/types/types";
 
 interface ReviewViewModalProps {
-    review: DisplayReview;
-    onClose: () => void;
-  }
+  review: DisplayReview;
+  onClose: () => void;
+}
 
-export default function ReviewViewModal({ review, onClose }: ReviewViewModalProps) {
+export default function ReviewViewModal({
+  review,
+  onClose,
+}: ReviewViewModalProps) {
   return (
     <div className="fixed inset-0 bg-base-100/10 backdrop-blur-md z-50 flex justify-center items-center">
       <div className="bg-base-100 rounded-xl w-full max-w-md mx-4 shadow-lg p-6 space-y-6 relative">
-        
         <button
           onClick={onClose}
           className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
@@ -21,7 +23,6 @@ export default function ReviewViewModal({ review, onClose }: ReviewViewModalProp
         <h2 className="text-2xl font-bold text-center">Review Details</h2>
 
         <div className="space-y-4">
-          
           {/* Star Rating */}
           <div className="flex justify-center">
             <div className="rating rating-sm">

@@ -75,6 +75,7 @@ export const createSellerProfile = async (
       address: details.address || "",
       category: details.category,
       slug,
+      widget_order: ["highlight", "services", "map"]
     });
 
     if (sellerError) {
@@ -157,6 +158,62 @@ export const deleteSellerProfile = async (userId: string) => {
         `Failed to delete seller services: ${servicesError.message}`,
       );
     }
+
+    const { error: faqError } = await supabase
+      .from('faq')
+      .delete()
+      .eq("user_id", userId);
+
+    if(faqError) {
+      throw new Error(
+        `Failed to delete seller faq: ${faqError.message}`,
+      );
+    }
+
+    const { error: reviewsError } = await supabase
+      .from('reviews')
+      .delete()
+      .eq("seller_id", userId);
+
+    if(reviewsError) {
+      throw new Error(
+        `Failed to delete seller reviews: ${reviewsError.message}`,
+      );
+    }
+
+    const { error: sellerBreaksError } = await supabase
+      .from('seller_breaks')
+      .delete()
+      .eq("user_id", userId);
+
+    if(sellerBreaksError) {
+      throw new Error(
+        `Failed to delete seller breaks: ${sellerBreaksError.message}`,
+      );
+    }
+
+    const { error: sellerHolidaysError } = await supabase
+      .from('seller_holidays')
+      .delete()
+      .eq("user_id", userId);
+
+    if(sellerHolidaysError) {
+      throw new Error(
+        `Failed to delete seller holidays: ${sellerHolidaysError.message}`,
+      );
+    }
+
+    const { error: sellerWorkingHoursError } = await supabase
+      .from('seller_working_hours')
+      .delete()
+      .eq("user_id", userId);
+
+    if(sellerWorkingHoursError) {
+      throw new Error(
+        `Failed to delete seller working hours: ${sellerWorkingHoursError.message}`,
+      );
+    }
+
 
     // Then delete seller profile
     const { error: sellerError } = await supabase
