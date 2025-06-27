@@ -12,20 +12,28 @@ export default function LoginForm() {
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setError(null);
 
-    setError(null); // Clear previous errors
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
       setError("Invalid email or password. Please try again.");
-      console.error("Error logging in: ", error);
+      console.error("Error logging in:", error);
     } else {
       toast.success("Login successful!");
-      console.log("Successful login: ", data);
       navigate("/");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+
+    if (error) {
+      toast.error("Google sign-in failed.");
+      console.error(error);
     }
   };
 
@@ -63,13 +71,21 @@ export default function LoginForm() {
         </button>
       </div>
 
-      <div className="flex w-full items-center justify-center">
-        <span>
-          Don't have an account?{" "}
-          <a href="/sign-up" className="underline">
-            Sign up
-          </a>
-        </span>
+      <div className="divider">OR</div>
+
+      <button
+        type="button"
+        onClick={handleGoogleSignIn}
+        className="btn btn-outline w-full"
+      >
+        Continue with Google
+      </button>
+
+      <div className="text-center mt-2">
+        Don't have an account?{" "}
+        <a href="/sign-up" className="underline">
+          Sign up
+        </a>
       </div>
     </form>
   );

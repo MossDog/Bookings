@@ -115,6 +115,7 @@ export interface UserProfile {
   profile_picture?: string;
   birthday?: string;
   created_at: string;
+  has_password: boolean;
 }
 
 export interface FAQ {
