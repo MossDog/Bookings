@@ -1,75 +1,109 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Menu } from "lucide-react";
+import { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import { useUser } from "@supabase/auth-helpers-react";
+import { Booking, BookingStatus, Seller, Service } from "@/types/types";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "@/utils/auth";
-import { toast } from "sonner";
-// import { Button } from "react-day-picker";
-import { Button } from "@/components/ui/button";
+import { fetchAllSellerData } from "@/utils/seller";
+import BookingsList from "@/components/dashboard/BookingsList";
+import BookingStatsSummary from "@/components/dashboard/BookingStatsSummary";
+import QuickActions from "@/components/dashboard/QuickActions";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import BookingDetailsModal from "@/components/dashboard/BookingDetailsModal";
+import { updateBookingStatus } from "@/utils/bookings";
+import BusinessQrCode from "@/components/QRCodeWidget";
 
-export default function NavbarDialogMenu() {
+export default function DashboardPage() {
+  const user = useUser();
+  const [seller, setSeller] = useState<Seller>();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+
   const navigate = useNavigate();
 
-  async function handleSignout() {
-    await signOut();
-    toast.success("Signed out successfully");
-    navigate(0);
-  }
+  useEffect(() => {
+    setIsLoading(true);
+
+    if (!user) {
+      console.log("User not authenticated");
+      return;
+    }
+
+    fetchAllSellerData(user.id)
+      .then((data) => {
+        if (!data.seller) {
+          console.log("Seller not found");
+          setIsLoading(false);
+          navigate("/");
+          return;
+        }
+
+        setSeller(data.seller);
+        setBookings(data.bookings);
+        setServices(data.services);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [user, navigate]);
+
+  const getServiceName = (serviceId: number) => {
+    const service = services.find((s) => s.id === serviceId);
+    return service ? service.name : "Unknown Service";
+  };
+
+  const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
+    try {
+      await updateBookingStatus(bookingId, newStatus);
+
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking.id === bookingId ? { ...booking, status: newStatus } : booking
+        )
+      );
+
+      if (selectedBooking?.id === bookingId) {
+        setSelectedBooking(null);
+      }
+    } catch (err) {
+      console.error("Error updating booking status:", err);
+    }
+  };
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <div className="bg-base-100 rounded-full p-3 shadow cursor-pointer hover:bg-base-200 transition">
-          <Menu className="text-base-content w-5 h-5" />
-        </div>
-      </DialogTrigger>
+    <>
+      <Navbar />
+      <div className="bg-base-200 min-h-[calc(100vh-64px)]">
+        <div className="container mx-auto p-4">
+          {seller && <DashboardHeader bookings={bookings} seller={seller} />}
 
-      <DialogContent className="p-0 bg-transparent border-0 max-w-xs">
-        <div className="card bg-base-100 shadow-lg p-6 space-y-4 w-full">
-          <h2 className="text-lg font-bold text-base-content">My Account</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1 space-y-4">
+              <QuickActions />
+              <BookingStatsSummary bookings={bookings} />
+              {seller && <BusinessQrCode seller={seller} />}
+            </div>
 
-          <div className="flex flex-col gap-3">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => navigate("/my-account")}
-            >
-              Account
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => navigate("/my-bookings")}
-            >
-              My Bookings
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => navigate("/settings")}
-            >
-              Settings
-            </Button>
-            <Button
-              variant="destructive"
-              className="w-full justify-start"
-              onClick={handleSignout}
-            >
-              Sign Out
-            </Button>
+            <BookingsList
+              bookings={bookings}
+              isLoading={isLoading}
+              setSelectedBooking={setSelectedBooking}
+              handleStatusChange={handleStatusChange}
+              getServiceName={getServiceName}
+            />
           </div>
-
-          <Button
-            className="w-full mt-4"
-            onClick={() => navigate("/profile-creation")}
-          >
-            Add Your Business
-          </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+
+      {selectedBooking && (
+        <BookingDetailsModal
+          handleStatusChange={handleStatusChange}
+          getServiceName={getServiceName}
+          selectedBooking={selectedBooking}
+          setSelectedBooking={setSelectedBooking}
+        />
+      )}
+    </>
   );
 }
