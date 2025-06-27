@@ -45,9 +45,6 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-base-content">Featured Services</h2>
-        {services.length > 0 && (
-          <div className="badge badge-primary">{services.length} services</div>
-        )}
       </div>
 
       {services.length === 0 ? (
@@ -73,14 +70,14 @@ const HighlightWidget: React.FC<HighlightWidgetProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex overflow-x-auto space-x-4 pb-4 px-2 snap-x">
-          {services.map((service) => (
+        <div className="flex justify-between gap-3 -mx-2 pb-4 px-2 snap-x">
+          {services.slice(0, 3).map((service) =>  (
             <div
               key={service.id}
               onMouseEnter={() => setHoveredServiceId(String(service.id))}
               onMouseLeave={() => setHoveredServiceId(null)}
               onClick={() => setSelectedService(service)}
-              className={`card bg-base-100 shadow-md transition-all duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group ${
+              className={`card bg-base-100 shadow-md transition-all hover:scale-105  border border-base-300 duration-300 min-w-[280px] max-w-[280px] shrink-0 snap-start cursor-pointer group ${
                 hoveredServiceId === String(service.id) ? "shadow-2xl" : ""
               }`}
             >
