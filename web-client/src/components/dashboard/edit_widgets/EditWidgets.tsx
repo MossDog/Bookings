@@ -64,7 +64,7 @@ export default function EditWidgets({
   }
 
   return (
-    <div className="bg-base-100 rounded-box shadow-lg overflow-hidden lg:col-span-3 flex flex-col">
+    <div className="bg-base-100 rounded-box shadow-lg overflow-hidden lg:col-span-3 flex flex-col border border-base-300">
       <div className="bg-base-200 text-base-content p-4">
         <h2 className="text-xl font-bold">Edit Widgets</h2>
       </div>

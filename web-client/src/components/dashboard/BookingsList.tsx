@@ -47,7 +47,7 @@ export default function BookingsList({
   return (
     <>
       <div className="lg:col-span-3">
-        <div className="bg-base-100 rounded-box shadow-lg overflow-hidden">
+        <div className="bg-base-100 rounded-box shadow-lg overflow-hidden border border-base-300">
           <div className="bg-base-200 p-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-base-content">Bookings</h2>
             <div className="tabs tabs-boxed bg-base-300">

@@ -9,7 +9,7 @@ export default function BookingStatsSummary({
   bookings,
 }: BookingStatsSummaryProps) {
   return (
-    <div className="mt-6 bg-base-100 rounded-box shadow-lg p-4">
+    <div className="mt-6 bg-base-100 rounded-box shadow-lg p-4  border border-base-300">
       <h3 className="font-bold mb-4">Booking Stats</h3>
 
       <div className="flex items-center justify-between mb-2">
