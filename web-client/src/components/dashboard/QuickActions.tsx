@@ -23,7 +23,7 @@ export default function QuickActions({
   currentAction,
 }: QuickActionsProps) {
   return (
-    <div className="bg-base-100 rounded-box shadow-lg overflow-hidden">
+    <div className="bg-base-100 rounded-box shadow-lg overflow-hidden border border-base-300">
       <div className="bg-primary text-primary-content p-4">
         <h2 className="text-xl font-bold">Quick Actions</h2>
       </div>

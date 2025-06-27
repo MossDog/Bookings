@@ -140,7 +140,7 @@ export default function DashboardCalendar({
 
   return (
     <div className="lg:col-span-3 h-full">
-      <div className="card bg-base-100 shadow-xl h-full">
+      <div className="card bg-base-100 shadow-xl h-full  border border-base-300">
         <div className="card-body p-3 sm:p-4 lg:p-6 h-full flex flex-col">
           {/* Calendar Header */}
           <div className="flex items-center justify-between mb-4 sm:mb-6">
