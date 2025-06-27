@@ -17,6 +17,8 @@ import ViewUserBookings from "./pages/ViewUserBookings.tsx";
 import { theme } from "./utils/theme.ts";
 import DashboardPage from "./pages/seller/DashboardPage.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
+import ResetPasswordPage from "./pages/ResetPassword.tsx";
+import Account from "./pages/Account.tsx";
 
 // Sets the theme
 document.documentElement.setAttribute("data-theme", theme);
@@ -30,7 +32,10 @@ const router = createBrowserRouter([
   { path: "/settings", element: <Settings /> },
   { path: "/my-bookings", element: <ViewUserBookings /> },
   { path: "/dashboard", element: <DashboardPage /> },
+  { path: "/reset-password", element: <ResetPasswordPage /> }, 
   { path: "/:slug", element: <SellerPage /> },
+  { path: "/my-account", element: <Account /> },
+
 ]);
 
 createRoot(document.getElementById("root")!).render(

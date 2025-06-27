@@ -107,6 +107,16 @@ export interface DisplayReview {
   user_id: string;
 }
 
+export interface UserProfile {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  profile_picture?: string;
+  birthday?: string;
+  created_at: string;
+}
+
 export interface FAQ {
   id: string;
   user_id: string;

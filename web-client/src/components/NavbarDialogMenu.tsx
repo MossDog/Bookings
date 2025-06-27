@@ -8,22 +8,11 @@ import {
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
-import { getUser, signOut } from "@/utils/auth";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
+import { signOut } from "@/utils/auth";
 import { toast } from "sonner";
 
 export default function NavbarDialogMenu() {
-  const [user, setUser] = useState<User | null>();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function fetchUser() {
-      setUser(await getUser());
-    }
-
-    fetchUser();
-  }, []);
 
   async function handleSignout() {
     await signOut();
@@ -34,37 +23,54 @@ export default function NavbarDialogMenu() {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="bg-base-100 rounded-full p-3 cursor-pointer">
-          <Menu className="text-base-content" />
+        <div className="bg-base-100 rounded-full p-3 shadow cursor-pointer hover:bg-base-200 transition">
+          <Menu className="text-base-content w-5 h-5" />
         </div>
       </DialogTrigger>
-      <DialogContent className="bg-base-100 border-base-100">
-        <DialogHeader className="mb-5 text-base-content">
-          <DialogTitle>My Account</DialogTitle>
+
+      <DialogContent className="bg-base-100 border border-base-300 rounded-xl max-w-xs p-6">
+        <DialogHeader className="text-center mb-4">
+          <DialogTitle className="text-xl font-bold text-base-content">
+            My Menu
+          </DialogTitle>
         </DialogHeader>
-        <div className="min-h-[200px] flex flex-col text-base-content justify-between">
-          <div className="flex flex-col gap-2 text-base-content">
-            <button
-              className="w-fit cursor-pointer font-semibold"
-              onClick={() => navigate(`${user?.id}/profile`)}
-            >
-              Profile
-            </button>
-            <button
-              className="w-fit cursor-pointer font-semibold"
-              onClick={() => navigate(`/settings`)}
-            >
-              Settings
-            </button>
-            <button
-              className="w-fit cursor-pointer font-semibold"
-              onClick={handleSignout}
-            >
-              Sign out
-            </button>
-          </div>
-          <Button className="w-full bg-primary text-primary-foreground">
-            Add your business
+
+        <div className="flex flex-col gap-4">
+          <button
+            className="btn btn-outline"
+            onClick={() => navigate("/my-account")}
+          >
+            Account
+          </button>
+
+          <button
+            className="btn btn-outline w-full"
+            onClick={() => navigate("/my-bookings")}
+          >
+            My Bookings
+          </button>
+
+          <button
+            className="btn btn-outline w-full"
+            onClick={() => navigate("/settings")}
+          >
+            Settings
+          </button>
+
+          <button
+            className="btn btn-error w-full"
+            onClick={handleSignout}
+          >
+            Sign out
+          </button>
+        </div>
+
+        <div className="mt-6">
+          <Button
+            className="btn btn-primary w-full"
+            onClick={() => navigate("/profile-creation")}
+          >
+            Add Your Business
           </Button>
         </div>
       </DialogContent>

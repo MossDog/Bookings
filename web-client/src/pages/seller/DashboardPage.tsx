@@ -9,6 +9,7 @@ import BookingStatsSummary from "@/components/dashboard/BookingStatsSummary";
 import QuickActions, { QuickAction } from "@/components/dashboard/QuickActions";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { updateBookingStatus } from "@/utils/bookings";
+import BusinessQrCode from "@/components/QRCodeWidget";
 import EditWidgets from "@/components/dashboard/edit_widgets/EditWidgets";
 import DashboardSettings from "@/components/dashboard/dashboard_settings/DashboardSettings";
 import DashboardCalendar from "@/components/dashboard/dashboard_calendar/DashboardCalendar";
@@ -19,13 +20,10 @@ export default function DashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  
   const [selectedAction, setSelectedAction] = useState<QuickAction>("bookingsList");
 
   const navigate = useNavigate();
 
-  // Fetch seller data and bookings
   useEffect(() => {
     setIsLoading(true);
 
@@ -35,11 +33,12 @@ export default function DashboardPage() {
     }
 
     fetchAllSellerData(user.id)
-      .then(data => {
+      .then((data) => {
         if (!data.seller) {
           console.log("Seller not found");
           setIsLoading(false);
           navigate("/");
+          return;
         }
 
         setSeller(data.seller);
@@ -49,20 +48,17 @@ export default function DashboardPage() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [user]);
-  
-  
-  
-  // Get service name by ID
+  }, [user, navigate]);
+
   const getServiceName = (serviceId: number) => {
-    const service = services.find(s => s.id === serviceId);
+    const service = services.find((s) => s.id === serviceId);
     return service ? service.name : "Unknown Service";
   };
-  
-  // Handle booking status change
+
   const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
     try {
       await updateBookingStatus(bookingId, newStatus);
+
 
       setBookings(bookings.map(booking => {
         if (booking.id === bookingId) {
@@ -92,6 +88,7 @@ export default function DashboardPage() {
                 onChange={(val) => setSelectedAction(val)}
               />
               <BookingStatsSummary bookings={bookings} />
+              {seller && <BusinessQrCode seller={seller} />}
             </div>
             
             {/* Dashboard Content */}
