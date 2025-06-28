@@ -23,6 +23,8 @@ export interface Seller {
   popularity_score: number;
   widget_order?: string[];
   about_us?: string;
+  lat: number;
+  lng: number;
 }
 
 export interface WorkingHours {
