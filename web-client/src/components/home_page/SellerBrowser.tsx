@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Seller } from "@/types/types";
 import SellerCard from "../seller/SellerCard";
-import { filterSellersByCategory } from "@/utils/filter";
+import { filterSellersByCategory, filterSellersByDistance } from "@/utils/filter";
 import { sortSellers } from "@/utils/sort";
 
 interface SellerBrowserProps {
   sellers: Seller[];
+  coords: { lat: number; lng: number } | null;
 }
 
 const CATEGORIES = [
@@ -17,16 +18,20 @@ const CATEGORIES = [
   "Food & Dining",
 ];
 
-export default function SellerBrowser({ sellers }: SellerBrowserProps) {
+export default function SellerBrowser({ sellers, coords }: SellerBrowserProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("View All");
-  const [sortBy, setSortBy] = useState<"Newest" | "Popular" | "Rating">(
-    "Popular",
-  );
+  const [sortBy, setSortBy] = useState<"Newest" | "Popular" | "Rating">("Popular");
+  const [radius, setRadius] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const sellersPerPage = 9;
 
-  const filteredSellers = filterSellersByCategory(sellers, selectedCategory);
-  const sortedSellers = sortSellers(filteredSellers, sortBy);
+  // Apply filtering
+  const filteredByCategory = filterSellersByCategory(sellers, selectedCategory);
+  const filteredByDistance = coords
+    ? filterSellersByDistance(filteredByCategory, coords, radius)
+    : filteredByCategory;
+
+  const sortedSellers = sortSellers(filteredByDistance, sortBy);
 
   // Pagination logic
   const totalPages = Math.ceil(sortedSellers.length / sellersPerPage);
@@ -34,7 +39,6 @@ export default function SellerBrowser({ sellers }: SellerBrowserProps) {
   const indexOfFirst = indexOfLast - sellersPerPage;
   const currentSellers = sortedSellers.slice(indexOfFirst, indexOfLast);
 
-  // Reset to first page when category or sort changes
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setCurrentPage(1);
@@ -47,7 +51,7 @@ export default function SellerBrowser({ sellers }: SellerBrowserProps) {
 
   return (
     <>
-      {/* Categories Section */}
+      {/* Categories */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Categories</h2>
@@ -67,25 +71,45 @@ export default function SellerBrowser({ sellers }: SellerBrowserProps) {
         </div>
       </div>
 
-      {/* Results Header */}
-      <div className="flex justify-between items-center mb-6">
+      {/* Filter & Sort Controls */}
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <h2 className="text-2xl font-bold">
-          {selectedCategory === "View All"
-            ? "Featured Businesses"
-            : selectedCategory}
+          {selectedCategory === "View All" ? "Featured Businesses" : selectedCategory}
         </h2>
-        <div className="join">
-          {["Newest", "Popular", "Rating"].map((label) => (
-            <button
-              key={label}
-              className={`btn join-item btn-sm ${
-                sortBy === label ? "btn-active" : ""
-              }`}
-              onClick={() => handleSortChange(label as typeof sortBy)}
-            >
-              {label}
-            </button>
-          ))}
+
+        <div className="flex items-center gap-4">
+          {/* Radius Selector */}
+          {coords && (
+            <div className="flex items-center gap-2">
+              <span className="whitespace-nowrap">Seeing businesses within</span>
+              <select
+                className="select select-bordered select-sm"
+                value={radius}
+                onChange={(e) => setRadius(Number(e.target.value))}
+              >
+                {[5, 10, 15, 20, 25, 50].map((km) => (
+                  <option key={km} value={km}>
+                    {km} km
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Sort Buttons */}
+          <div className="join">
+            {["Newest", "Popular", "Rating"].map((label) => (
+              <button
+                key={label}
+                className={`btn join-item btn-sm ${
+                  sortBy === label ? "btn-active" : ""
+                }`}
+                onClick={() => handleSortChange(label as typeof sortBy)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -94,10 +118,7 @@ export default function SellerBrowser({ sellers }: SellerBrowserProps) {
         <div className="text-center py-16 bg-base-200 rounded-box">
           <div className="max-w-md mx-auto">
             <h3 className="font-semibold text-lg mb-2">No businesses found</h3>
-            <p className="text-base-content/70 mb-4">
-              Be the first to add your business to our platform!
-            </p>
-            <button className="btn btn-primary">Add Your Business</button>
+            <p className="text-base-content/70">Try adjusting your filters or search radius.</p>
           </div>
         </div>
       ) : (
@@ -123,7 +144,9 @@ export default function SellerBrowser({ sellers }: SellerBrowserProps) {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
-                className={`join-item btn ${page === currentPage ? "btn-active" : ""}`}
+                className={`join-item btn ${
+                  page === currentPage ? "btn-active" : ""
+                }`}
                 onClick={() => setCurrentPage(page)}
               >
                 {page}

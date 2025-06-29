@@ -286,3 +286,23 @@ export async function deleteFAQ(faqId: string): Promise<{ success: boolean; erro
     return { success: false, error: errorMessage };
   }
 }
+
+export async function getSellerByUserId(userId: string): Promise<Seller | null> {
+  try {
+    const { data, error } = await supabase
+      .from("seller")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !data) {
+      console.error("Error fetching seller by user ID:", error?.message);
+      return null;
+    }
+
+    return data as Seller;
+  } catch (err) {
+    console.error("Unexpected error fetching seller by user ID:", err);
+    return null;
+  }
+}

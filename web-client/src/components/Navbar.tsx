@@ -17,7 +17,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="navbar px-10 bg-base-200 drop-shadow-sm min-h-[90px]">
+    <div className="navbar px-10 bg-base-100 drop-shadow-xs min-h-[90px]">
       <div className="navbar-start">
         <Link to="/" className="flex gap-2">
           <Calendar size={35} className="text-primary" strokeWidth={2} />

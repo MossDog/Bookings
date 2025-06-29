@@ -2,8 +2,9 @@ import { format, addMinutes } from "date-fns";
 import supabase from "./supabase";
 import { BookingStatus } from "@/types/types";
 
-import { getServiceById, getSellers } from "@/utils/seller";
+import { getServiceById, getSellers, getSellerByUserId } from "@/utils/seller";
 import { Booking, Seller, Service } from "@/types/types";
+import { sendBookingConfirmation } from "./email";
 
 export async function bookSlot(
   userId: string,
@@ -17,26 +18,22 @@ export async function bookSlot(
       return { success: false, message: "User not authenticated" };
     }
 
-    // Fetch the selected service (name + duration)
     const { data: service, error: serviceError } = await supabase
-      .from("service")
-      .select("name,duration")
-      .eq("id", serviceId)
-      .single();
+  .from("service")
+  .select("id, name, description, price, category, duration, user_id")
+  .eq("id", serviceId)
+  .single();
 
     if (serviceError || !service) {
       return { success: false, message: "Service not found" };
     }
 
     const duration = service.duration;
-
-    // Calculate start and end time
     const dateString = format(date, "yyyy-MM-dd");
     const startDateTime = new Date(`${dateString}T${slot}`);
     const endDateTime = addMinutes(startDateTime, duration);
 
-    // Insert booking
-    const { error: insertError } = await supabase.from("bookings").insert([
+    const { data: inserted, error: insertError } = await supabase.from("bookings").insert([
       {
         seller_id: sellerId,
         user_id: userId,
@@ -44,21 +41,23 @@ export async function bookSlot(
         start_time: startDateTime.toISOString(),
         end_time: endDateTime.toISOString(),
       },
-    ]);
+    ]).select("*").single();
 
-    if (insertError) {
-      return {
-        success: false,
-        message: `Failed to book slot: ${insertError.message}`,
-      };
+    if (insertError || !inserted) {
+      return { success: false, message: `Failed to book slot: ${insertError?.message}` };
+    }
+
+    // Fetch seller and send confirmation
+    const seller = await getSellerByUserId(sellerId);
+    const user = await supabase.auth.getUser();
+    if (user?.data?.user?.email && seller) {
+      await sendBookingConfirmation(user.data.user.email, inserted, service, seller);
     }
 
     return { success: true, message: "Booking successful!" };
   } catch (err) {
-    return {
-      success: false,
-      message: (err as string) || "Unexpected error occurred",
-    };
+    console.error(err);
+    return { success: false, message: "Unexpected error occurred" };
   }
 }
 

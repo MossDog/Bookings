@@ -60,6 +60,8 @@ export const getServicesFromId = async (userId: string) => {
 export const createSellerProfile = async (
   details: ProfileCreationData,
   schedule: WeekSchedule,
+  lat: number,
+  lng: number
 ) => {
   try {
     if (!details.user) {
@@ -75,12 +77,14 @@ export const createSellerProfile = async (
       address: details.address || "",
       category: details.category,
       slug,
-      widget_order: ["highlight", "services", "map"]
+      lat,
+      lng,
+      widget_order: ["highlight", "services", "map"],
     });
 
     if (sellerError) {
       throw new Error(
-        `Failed to create seller profile: ${sellerError.message}`,
+        `Failed to create seller profile: ${sellerError.message}`
       );
     }
 
@@ -89,7 +93,7 @@ export const createSellerProfile = async (
         details.services.map((service) => ({
           ...service,
           user_id: details.user!.id,
-        })),
+        }))
       );
 
       if (servicesError) {
@@ -107,12 +111,12 @@ export const createSellerProfile = async (
             day_of_week: getDayNumber(day),
             start_time: daySchedule.openTime,
             end_time: daySchedule.closeTime,
-          })),
+          }))
       );
 
     if (openingHoursError) {
       throw new Error(
-        `Failed to create working hours: ${openingHoursError.message}`,
+        `Failed to create working hours: ${openingHoursError.message}`
       );
     }
 
@@ -125,13 +129,13 @@ export const createSellerProfile = async (
             day_of_week: getDayNumber(day),
             start_time: breakTime.startTime,
             end_time: breakTime.endTime,
-          })),
-        ),
+          }))
+        )
       );
 
     if (breakHoursError) {
       throw new Error(
-        `Failed to create break hours: ${breakHoursError.message}`,
+        `Failed to create break hours: ${breakHoursError.message}`
       );
     }
 

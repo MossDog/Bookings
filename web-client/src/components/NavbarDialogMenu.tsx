@@ -59,7 +59,10 @@ export default function NavbarDialogMenu() {
 
           <button
             className="btn btn-error w-full"
-            onClick={handleSignout}
+            onClick={() => {
+    handleSignout();
+    navigate("/profile-creation");
+  }}
           >
             Sign out
           </button>
