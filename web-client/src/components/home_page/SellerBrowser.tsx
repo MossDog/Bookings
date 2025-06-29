@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Seller } from "@/types/types";
 import SellerCard from "../seller/SellerCard";
-import { filterSellersByCategory } from "@/utils/filter";
+import { filterSellersByCategory, filterSellersByDistance } from "@/utils/filter";
 import { sortSellers } from "@/utils/sort";
-import { haversineDistance } from "@/utils/distance";
 
 interface SellerBrowserProps {
   sellers: Seller[];
@@ -26,22 +25,15 @@ export default function SellerBrowser({ sellers, coords }: SellerBrowserProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const sellersPerPage = 9;
 
-  // Category filtering
+  // Apply filtering
   const filteredByCategory = filterSellersByCategory(sellers, selectedCategory);
-
-  // Radius filtering (only if we have coords)
   const filteredByDistance = coords
-    ? filteredByCategory.filter((seller) => {
-        if (seller.lat == null || seller.lng == null) return false;
-        const distance = haversineDistance(coords.lat, coords.lng, seller.lat, seller.lng);
-        return distance <= radius;
-      })
+    ? filterSellersByDistance(filteredByCategory, coords, radius)
     : filteredByCategory;
 
-  // Sorting
   const sortedSellers = sortSellers(filteredByDistance, sortBy);
 
-  // Pagination
+  // Pagination logic
   const totalPages = Math.ceil(sortedSellers.length / sellersPerPage);
   const indexOfLast = currentPage * sellersPerPage;
   const indexOfFirst = indexOfLast - sellersPerPage;
