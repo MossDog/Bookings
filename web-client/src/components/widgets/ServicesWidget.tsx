@@ -125,7 +125,7 @@ const ServicesWidget: React.FC<ServicesWidgetProps> = ({
             onClick={() => setSelectedService(service)}
             onMouseEnter={() => setHoveredServiceId(String(service.id))}
             onMouseLeave={() => setHoveredServiceId(null)}
-            className={`card bg-base-100 shadow-md transition-all duration-300 cursor-pointer ${
+            className={`card bg-base-100 shadow-md border border-base-300 hover:scale-105 transition-all duration-300 cursor-pointer ${
               hoveredServiceId === String(service.id) ? "hover:shadow-lg" : ""
             }`}
           >

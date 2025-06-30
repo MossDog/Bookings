@@ -29,7 +29,7 @@ function SellerTitleCard({ seller }: SellerTitleCardProps) {
   const reviews = 143;
 
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card bg-base-100 shadow-xl border border-base-300">
       <div className="card-body items-center text-center space-y-6">
         {/* Header */}
         <div className="space-y-4">
