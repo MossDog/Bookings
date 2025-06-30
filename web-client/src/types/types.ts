@@ -23,6 +23,8 @@ export interface Seller {
   popularity_score: number;
   widget_order?: string[];
   about_us?: string;
+  lat: number;
+  lng: number;
 }
 
 export interface WorkingHours {
@@ -115,6 +117,7 @@ export interface UserProfile {
   profile_picture?: string;
   birthday?: string;
   created_at: string;
+  has_password: boolean;
 }
 
 export interface FAQ {

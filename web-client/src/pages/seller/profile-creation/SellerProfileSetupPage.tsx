@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { days } from "@/utils/availability";
 import SellerOpeningHours from "@/components/seller/profile-creation/SellerOpeningHours";
 import { toast } from "sonner";
+import { geocodeAddress } from "@/utils/geocoding";
 
 function SellerProfileSetupPage() {
   const user = useUser();
@@ -78,39 +79,41 @@ function SellerProfileSetupPage() {
     return true;
   };
 
-  const onSubmit = async () => {
-    if (!user || !profileData || !schedule) {
+  
+const onSubmit = async () => {
+  if (!user || !profileData || !schedule) return;
+
+  const { name, description, address, category } = profileData;
+  if (!name || !description || !address || !category) return;
+
+  try {
+    const coords = await geocodeAddress(address);
+
+    if (!coords) {
+      toast.error("Failed to geocode address. Please enter a valid address.");
       return;
     }
 
-    // Destructure the required fields to ensure they exist
-    const { name, description, address, category } = profileData;
+    const { success } = await createSellerProfile(
+  {
+    ...profileData,
+    services,
+  },
+  schedule,
+  coords.lat,
+  coords.lng
+);
 
-    // Check if all required fields are present
-    if (!name || !description || !address || !category) {
-      return;
+    if (success) {
+      toast.success("Business profile successfully created!");
+    } else {
+      toast.error("Failed to create business profile. Please try again.");
     }
-
-    try {
-      const { success } = await createSellerProfile(
-        {
-          ...profileData,
-          services,
-        },
-        schedule,
-      );
-
-      if (success) {
-        toast.success("Business profile successfully created!");
-      } else {
-        toast.error("Failed to create business profile. Please try again.");
-        throw new Error("Error creating business");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  } catch (error) {
+    console.error(error);
+    toast.error("An error occurred. Please try again.");
+  }
+};
   return (
     <div className="min-h-screen bg-base-100/50 flex flex-col">
       <Navbar />
